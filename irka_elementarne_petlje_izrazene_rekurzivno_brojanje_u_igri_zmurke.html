@@ -1,0 +1,80 @@
+<h1>Brojanje u igri žmurke</h1>
+
+<h2>Motivacija</h2>
+<p>
+Sećate li se igre žmurke? Jedno dete zatvori oči i broji do određenog broja, 
+dok se ostali sakrivaju. Vrlo često, deca broje po pet: 
+„5, 10, 15, 20...“. Ovaj način brojanja nije slučajan – on nam pokazuje 
+kako se mogu brojati samo brojevi koji ispunjavaju određeno pravilo. 
+Hajde da vidimo kako kompjuter može da ponovi isto.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedna ideja bila bi da ručno napišemo sve brojeve: 5, 10, 15, 20... sve do <i>x</i>. 
+Ali to ne bi bilo praktično, naročito ako je <i>x = 1000</i>. 
+Potrebno nam je opštije rešenje koje radi za bilo koji dozvoljeni unos.
+</p>
+
+<div class="napomena">
+Naivno rešenje nas uči da prepoznamo ograničenja ručnog pristupa i 
+da potražimo sistematski metod.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Zadatak možemo posmatrati ovako: 
+da bismo ispisali sve brojeve deljive sa 5 od 5 do <i>x</i>, potrebno je da:
+</p>
+<ul>
+<li>Ispišemo broj 5</li>
+<li>Zatim ispišemo 10, 15, 20... sve do <i>x</i></li>
+</ul>
+<p>
+To možemo opisati induktivno: 
+ako znamo da ispišemo brojeve do <i>k</i>, onda je sledeći broj koji treba dodati upravo <i>k+5</i>. 
+Tako dobijamo jasan obrazac.
+</p>
+
+<h2>Induktivni pristup</h2>
+<p>
+Osnovni slučaj: ako je broj koji treba ispisati veći od <i>x</i>, završavamo.  
+Induktivni korak: ako trenutno ispisujemo broj <i>k</i>, sledeći broj je <i>k+5</i>.  
+Na taj način gradimo algoritam korak po korak.
+</p>
+
+<h2>Primeri i testovi</h2>
+<xmp class="primer_ta">
+    static void Zmurke(int x, int k = 5)
+    {
+        if (k > x)
+            return;
+        Console.WriteLine(k);
+        Zmurke(x, k + 5);
+    }
+
+    static void Main()
+    {
+        int x = int.Parse(Console.ReadLine());
+        Zmurke(x);
+    }
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Ovde vidimo da induktivno-rekurzivna konstrukcija omogućava
+da jednostavno definišemo zadatak: 
+prvo osnovni slučaj (zaustavljanje), zatim pravilo prelaza (dodavanje +5).
+</div>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+<li>Koji je osnovni slučaj u ovom zadatku?</li>
+<li>Šta se menja u odnosu na prethodni zadatak „Brojevi od a do b“?</li>
+<li>Kako bismo izmenili algoritam ako želimo brojanje po deset (10,20,30,...)?</li>
+</ul>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+Napišite algoritam koji ispisuje brojeve deljive sa 7, počevši od 7 i završavajući sa zadatim brojem <i>x</i>.
+</div>

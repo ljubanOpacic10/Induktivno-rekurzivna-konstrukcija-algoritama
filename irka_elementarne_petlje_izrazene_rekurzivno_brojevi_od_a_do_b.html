@@ -1,0 +1,107 @@
+<h1>Brojevi od a do b</h1>
+
+<h2>Motivacija</h2>
+<p>
+Zamislite da želite da na tabli ispišete sve brojeve od jednog do drugog, 
+na primer od 3 do 6. Uradili biste to tako što napišete 3, zatim sledeći broj 4, 
+onda 5, i na kraju 6. Jednostavno, zar ne? 
+Ali, kako kompjuter da „nauči“ da uradi isti zadatak, bez obzira koja dva broja zadamo?
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+"Treba da ispišem sve brojeve od a do b, pa ću napraviti for petlju".
+Ovo je proceduralno razmišljanje — ne postoji nikakva konstrukcija rešenja, već samo direktno izvršavanje.
+Na primer, ako je <i>a=3</i> i <i>b=6</i>, jednostavno napišemo 3,4,5,6. 
+Problem je u tome što ovo rešenje ne razvija algoritamsko razmišljanje,
+ne postoji razumevanje odnosa između manjih i većih instanci problema
+i ne uči se kako se rešenje gradi — samo kako se izvršava.
+</p>
+
+<div class="napomena">
+Naivna rešenja su važna jer nam pokazuju zašto je potrebno bolje razmišljanje.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Problem možemo posmatrati ovako: 
+da bismo ispisali sve brojeve od <i>a</i> do <i>b</i>, potrebno je da:
+</p>
+<ul>
+<li>Ispišemo broj <i>a</i></li>
+<li>Zatim ispišemo brojeve od <i>a+1</i> do <i>b</i></li>
+</ul>
+<p>
+Dakle, veliki zadatak razlažemo na manji, vrlo sličan zadatak. 
+Ovo je suština induktivnog razmišljanja: kako od rešenja manjeg problema 
+doći do rešenja većeg.
+</p>
+<xmp class="primer_ta">
+static void Ispisi(int a, int b)
+{
+    for (int i = a; i <= b; i++)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+// Primer poziva:
+Ispisi(3, 6);
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<h2>Induktivni pristup</h2>
+<p>
+Induktivni pristup, kao što smo rekli, podrazumeva logički proces zaključivanja od pojedinačnog
+ka opštem, pri čemu se na osnovu pojedinačnih slučajeva donosi opšti sud
+Osnovni slučaj: ako je <i>a = b</i>, tada ispisujemo samo jedan broj, i time se zadatak završava.<br>  
+Induktivni korak: ako znamo kako ispisati sve brojeve od <i>a+1</i> do <i>b</i>, 
+onda je dovoljno da pre toga ispišemo broj <i>a</i>.  
+Tako dobija­mo jasan metod za konstrukciju algoritma.
+</p>
+
+<h2>Primeri i testovi</h2>
+<xmp class="primer_ta">
+static void Ispisi(int a, int b)
+{
+    if (a > b)
+        return;
+
+    Console.WriteLine(a);
+    Ispisi(a + 1, b);
+}
+
+// Primer poziva:
+Ispisi(3, 6);
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<xmp class="primer_ta">
+// Ulaz
+3 6
+
+// Izlaz
+3
+4
+5
+6
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Ovaj kod pokazuje suštinu induktivno-rekurzivne konstrukcije:
+prvo rešavamo osnovni slučaj (kada više nema brojeva),
+a zatim gradimo rešenje većeg problema iz manjeg.
+</div>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+<li>Šta znači osnovni slučaj u ovom problemu?</li>
+<li>Zašto nije dobro rešenje unapred ispisati sve brojeve ručno?</li>
+<li>Kako bi izgledao algoritam za ispis brojeva od <i>b</i> do <i>a</i> (u opadajućem redosledu)?</li>
+</ul>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+Napišite algoritam koji ispisuje sve cele brojeve u intervalu [a,b] tako da su brojevi ispisani unazad (od b ka a).
+</div>
