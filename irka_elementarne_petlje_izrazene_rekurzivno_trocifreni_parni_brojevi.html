@@ -1,0 +1,77 @@
+<h1>Trocifreni parni brojevi</h1>
+
+<h2>Motivacija</h2>
+<p>
+Trocifreni brojevi (od 100 do 999) su posebno zanimljivi jer predstavljaju sve moguće kombinacije tri cifre. 
+U ovom zadatku tražimo samo one koji su <b>parni</b> i koji se nalaze u zadatom intervalu [a,b]. 
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Mogli bismo da napišemo sve parne trocifrene brojeve ručno: 100, 102, 104, ... 998. 
+Ali to je predugačko i nepraktično, naročito ako radimo sa intervalima. 
+Zato nam je potreban sistematski pristup.
+</p>
+
+<div class="napomena">
+Naivni pristupi često pomognu da shvatimo obrazac, 
+ali nas takođe navode ka efikasnijem rešenju.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Prvi korak ka uspešnoj realizaciji jeste jasno razumevanje svih zahteva, a zatim planiranje kako ih sprovesti na najefikasniji mogući način.<br>
+Da bismo rešili zadatak:
+</p>
+<ul>
+<li>Prvo moramo proveriti da li je trenutni broj trocifren (100 ≤ n ≤ 999).</li>
+<li>Drugo, da li je broj paran (<i>n % 2 == 0</i>).</li>
+<li>Treće, da li se nalazi unutar zadatog intervala [a,b].</li>
+</ul>
+<p>
+Ako ispunjava sva tri uslova, ispisujemo ga, pa prelazimo na sledeći broj.
+</p>
+
+<h2>Pravilan pristup</h2>
+<p>
+Osnovni slučaj: ako trenutni broj pređe vrednost <i>b</i>, zaustavljamo se.  
+Induktivni korak: ako je broj trocifren i paran, ispisujemo ga; zatim prelazimo na sledeći broj <i>n+1</i>.  
+Tako dobijamo algoritam koji prolazi kroz sve brojeve u intervalu.
+</p>
+
+<h2>Primeri i testovi</h2>
+<xmp class="primer_ta">
+void IspisiParneTrocifrene(int a, int b)
+{
+    if (a > b) return;
+    if (a >= 100 && a <= 999 && a % 2 == 0)
+        Console.WriteLine(a);
+    IspisiParneTrocifrene(a + 1, b);
+}
+
+static void Main()
+{
+    int a = int.Parse(Console.ReadLine());
+    int b = int.Parse(Console.ReadLine());
+    IspisiParneTrocifrene(a, b);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Ovde koristimo induktivno razmišljanje: 
+ako znamo da ispišemo rešenje od <i>a+1</i> do <i>b</i>, 
+onda dodajemo <i>a</i> ako zadovoljava uslove.
+</div>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+<li>Koji su uslovi da broj bude ispisan u ovom zadatku?</li>
+<li>Kako se razlikuje ovaj algoritam od zadatka „Brojevi od a do b“?</li>
+<li>Kako biste modifikovali program da ispisuje sve <i>neparne</i> trocifrene brojeve?</li>
+</ul>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+Napišite algoritam koji ispisuje sve trocifrene brojeve deljive sa 7 u intervalu [a,b].
+</div>

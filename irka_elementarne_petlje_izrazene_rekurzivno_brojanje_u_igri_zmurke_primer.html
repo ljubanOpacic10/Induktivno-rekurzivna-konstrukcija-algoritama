@@ -1,0 +1,22 @@
+<h1>Primer: Brojanje u igri žmurke</h1>
+
+<xmp class="primer_ta">
+    static void Zmurke(int x, int k)
+    {
+        if (k > x)
+            return;
+        Console.WriteLine(k);
+        Zmurke(x, k + 5);
+    }
+
+    static void Main()
+    {
+        Zmurke(30, 5);
+    }
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Primeti kako se svaki sledeći broj dobija dodavanjem +5 
+na prethodni. To je upravo induktivni korak algoritma.
+</div>

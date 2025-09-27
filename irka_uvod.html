@@ -1,0 +1,31 @@
+<h1>Konstrukcija algoritama rekurzijom, tj. indukcijom</h1>
+
+<h2>Uvod i motivacija</h2>
+<p>
+Jedan od osnovnih pristupa u konstrukciji algoritama zasniva se na ideji da se složen problem razloži na manje probleme istog tipa, koji su lakše rešivi. 
+Takav metod omogućava sistematsko razmišljanje i gradnju rešenja korak po korak, čime se smanjuje rizik od grešaka i olakšava razumevanje procesa. 
+Ova metoda nije fokusirana samo na tehničku implementaciju, već pre svega na način razmišljanja koji vodi do rešenja.
+</p>
+
+<h2>Osnovni princip</h2>
+<p>
+Pri konstrukciji algoritma indukcijom, problem mora imati osnovni slučaj koji se rešava direktno, bez daljeg razlaganja. 
+Na primer, problem dimenzije 0 može se odmah rešiti. 
+Za problem dimenzije n, pretpostavljamo da znamo kako da rešimo problem dimenzije n − 1, i na osnovu toga gradimo rešenje za veći problem. 
+Ova ideja odgovara principu matematičke indukcije, gde baza indukcije i induktivna pretpostavka čine temelj korektnog algoritma.
+</p>
+
+<h2>Rekurzivna i iterativna implementacija</h2>
+<p>
+Metodološki pristup se može implementirati na dva načina. 
+Prvi je rekurzivni, gde funkcija poziva samu sebe sa manjim problemom dok se ne stigne do osnovnog slučaja. 
+Drugi je iterativni, gde se rešenje gradi postepeno u petlji, počevši od rešenja najmanjeg problema i proširujući ga korak po korak. 
+I rekurzivno i iterativno rešenje slede isti princip induktivno-rekurzivne konstrukcije i njihova korektnost zasniva se na istom logičkom postupu.
+</p>
+
+<h2>Primena u lekcijama</h2>
+<p>
+U narednim lekcijama prikazaćemo kako se induktivno-rekurzivna konstrukcija primenjuje na različite zadatke, uključujući brojenje, odbrojavanje i druge praktične probleme. 
+Pokazaćemo i rekurzivne i nerekurzivne implementacije, objašnjavajući zašto induktivni pristup vodi do jednostavnijih i jasnijih algoritama. 
+Cilj je da čitaoci razviju sposobnost sistematskog razmišljanja i razumevanja principa gradnje rešenja korak po korak.
+</p>

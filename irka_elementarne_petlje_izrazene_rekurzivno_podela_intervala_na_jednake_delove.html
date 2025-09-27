@@ -1,0 +1,96 @@
+<h1>Podela intervala na jednake delove</h1>
+
+<h2>Motivacija</h2>
+<p>
+Zamislite da imate lenjir dužine od <i>a</i> do <i>b</i> i želite da ga podelite na
+jednake delove. Da li biste crtali sve tačkice unapred ili biste krenuli od
+prve, pa zatim dodavali jednu po jednu? Upravo ovakvo razmišljanje nam pomaže
+da problem rešimo sistematski – induktivno.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Naivno rešenje bi bilo da unapred izračunamo i ispišemo svaku vrednost.
+Međutim, ako želimo da podelimo interval na mnogo delova, ovo postaje
+nepraktično. Potrebno nam je algoritamsko rešenje koje radi za bilo koji
+unos.
+</p>
+<xmp class="primer_ta">
+static void Intervali(int n, double a, double b)
+{
+    double dx = (b - a) / (n - 1);
+    for (int i = 0; i < n; i++)
+    {
+        Console.WriteLine((a + i * dx).ToString("0.00000"));
+    }
+}
+
+// Primer poziva:
+Intervali(5, -1, 1);
+</xmp>
+<button class="button_copy">Vidi primer</button>
+<div class="napomena">
+Naivno rešenje nam daje rezultat, ali nije induktivno konstruisano.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Da bismo ispisali <i>n</i> brojeva ravnomerno raspoređenih od <i>a</i> do <i>b</i>,
+potrebno je:
+</p>
+<ul>
+<li>izračunati razmak <i>dx = (b - a) / (n - 1)</i></li>
+<li>ispisati prvi broj <i>a</i></li>
+<li>zatim ispisati sledeći broj <i>a + dx</i>, pa onda <i>a + 2dx</i>, sve do <i>b</i></li>
+</ul>
+<p>
+Induktivno posmatrano: ako znamo kako da ispišemo prvi broj, onda znamo i kako
+da ispišemo sledećih <i>n-1</i> brojeva – jednostavno dodajemo <i>dx</i>.
+</p>
+
+<h2>Induktivni pristup</h2>
+<p>
+Osnovni slučaj: ako je <i>n = 0</i>, prekidamo.  
+Induktivni korak: ispišemo trenutni broj <i>a</i>, pa zatim pozivamo funkciju za
+<n-1> brojeva počevši od <i>a + dx</i>.
+</p>
+
+<h2>Primeri i testovi</h2>
+<xmp class="primer_ta">
+static void RavnomernoRasporedjeniBrojevi(int n, double a, double dx)
+{
+    if (n > 0)
+    {
+        Console.WriteLine(a.ToString("0.00000"));
+        RavnomernoRasporedjeniBrojevi(n - 1, a + dx, dx);
+    }
+}
+
+static void Main()
+{
+    int n = int.Parse(Console.ReadLine());
+    double a = double.Parse(Console.ReadLine());
+    double b = double.Parse(Console.ReadLine());
+    double dx = (b - a) / (n - 1);
+    RavnomernoRasporedjeniBrojevi(n, a, dx);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Ovde jasno vidimo induktivnu konstrukciju: osnovni slučaj je prekid, a
+induktivni korak dodaje sledeću tačku u intervalu.
+</div>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+<li>Zašto u formuli koristimo <i>(n - 1)</i> u imenitelju?</li>
+<li>Šta bi se desilo kada bismo zaboravili osnovni slučaj u rekurziji?</li>
+<li>Kako biste promenili algoritam da brojevi budu ispisani sa 3 decimale?</li>
+</ul>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+Napišite algoritam koji deli interval [0, 2π] na <i>n</i> jednakih delova i
+ispisuje vrednosti funkcije sin(x) u tim tačkama.
+</div>

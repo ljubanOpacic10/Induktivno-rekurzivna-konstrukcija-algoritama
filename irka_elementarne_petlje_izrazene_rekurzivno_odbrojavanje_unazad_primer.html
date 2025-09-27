@@ -1,0 +1,33 @@
+<h1>Primer: Odbrojavanje unazad</h1>
+
+<h2>Primer implementacije</h2>
+<xmp class="primer_ta">
+static void Odbrojavanje(int a)
+{
+    if (a >= 0)
+    {
+        Console.WriteLine(a);
+        Odbrojavanje(a - 1);
+    }
+}
+
+static void Main()
+{
+    int a = int.Parse(Console.ReadLine());
+    Odbrojavanje(a);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<h2>Ulaz</h2>
+<xmp class="primer_ta">
+3
+</xmp>
+
+<h2>Izlaz</h2>
+<xmp class="primer_ta">
+3
+2
+1
+0
+</xmp>

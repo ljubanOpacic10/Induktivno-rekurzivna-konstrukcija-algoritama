@@ -1,0 +1,41 @@
+<h1>Primer koda – Podela intervala na jednake delove</h1>
+
+<xmp class="primer_ta">
+/* 
+Ulaz: 
+n = broj podela,
+a = početak intervala,
+b = kraj intervala
+
+Izlaz: 
+n ravnomerno raspoređenih tačaka u intervalu [a, b]
+*/
+
+static void RavnomernoRasporedjeniBrojevi(int n, double a, double dx)
+{
+    if (n > 0)
+    {
+        Console.WriteLine(a.ToString("0.00000"));
+        RavnomernoRasporedjeniBrojevi(n - 1, a + dx, dx);
+    }
+}
+
+// Primer korišćenja:
+static void Main()
+{
+    int n = 5;
+    double a = -1;
+    double b = 1;
+    double dx = (b - a) / (n - 1);
+    
+    RavnomernoRasporedjeniBrojevi(n, a, dx);
+}
+
+// Izlaz:
+// -1.00000
+// -0.50000
+//  0.00000
+//  0.50000
+//  1.00000
+</xmp>
+<button class="button_copy">Vidi primer</button>

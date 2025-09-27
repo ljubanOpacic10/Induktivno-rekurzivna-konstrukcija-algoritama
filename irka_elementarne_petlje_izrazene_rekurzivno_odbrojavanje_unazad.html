@@ -1,0 +1,93 @@
+<h1>Odbrojavanje unazad</h1>
+
+<h2>Motivacija</h2>
+<p>
+Da li ste nekada odbrojavali pred početak trke ili igre? 
+Na primer: „3, 2, 1, 0 – KREĆI!“. 
+Ovaj jednostavan postupak nam pokazuje ideju <b>postepenog smanjivanja</b> 
+sve dok ne dođemo do osnovnog slučaja – nule. 
+Hajde da vidimo kako možemo naučiti računar da uradi isto.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan učenik bi mogao da napiše poseban <code>Console.WriteLine()</code> za svaki broj:
+3, 2, 1, 0. To radi ako je broj mali, ali nije praktično 
+ako počinjemo, recimo, od 99 ili nekog drugog većeg broja. 
+Potrebno je pronaći opštije rešenje.
+</p>
+<xmp class="primer_ta">
+static void Naivno()
+{
+    Console.WriteLine(3);
+    Console.WriteLine(2);
+    Console.WriteLine(1);
+    Console.WriteLine(0);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Naivno rešenje nam pokazuje problem ručnog pristupa – 
+nema fleksibilnosti i ne radi za proizvoljan ulaz.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Zadatak možemo opisati ovako:
+</p>
+<ul>
+<li>Ispišemo početni broj <i>a</i></li>
+<li>Smanjimo ga za 1 i ponovimo postupak</li>
+<li>Zaustavimo se kada dođemo do nule</li>
+</ul>
+<p>
+Dakle, da bismo ispisali sve brojeve od <i>a</i> do nule, 
+dovoljno je da najpre ispišemo <i>a</i>, 
+a zatim odbrojimo unazad od <i>a-1</i>.
+</p>
+
+<h2>Induktivni pristup</h2>
+<p>
+Osnovni slučaj: ako je broj manji od 0, prekidamo postupak.  
+Induktivni korak: ako je broj <i>a</i> nenegativan, 
+najpre ga ispišemo, a zatim pozovemo isti postupak za <i>a-1</i>.
+</p>
+
+<h2>Primeri i testovi</h2>
+<xmp class="primer_ta">
+static void Odbrojavanje(int a)
+{
+    if (a >= 0)
+    {
+        Console.WriteLine(a);
+        Odbrojavanje(a - 1);
+    }
+}
+
+static void Main()
+{
+    int a = int.Parse(Console.ReadLine());
+    Odbrojavanje(a);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Ovde vidimo jasan induktivni obrazac: 
+ako znamo da odbrojimo od <i>a-1</i> do nule, 
+onda lako možemo da odbrojimo i od <i>a</i>.
+</div>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+<li>Koji je osnovni slučaj u ovom zadatku?</li>
+<li>Kako se razlikuje odbrojavanje unazad od zadatka „Brojevi od a do b“?</li>
+<li>Kako bismo odbrojavali unazad, ali samo parne brojeve?</li>
+</ul>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+Napišite algoritam koji odbrojava unazad od zadatog broja <i>a</i>, ali samo ispisuje 
+brojeve deljive sa 3. Na primer, ako je <i>a = 10</i>, izlaz treba da bude: 9, 6, 3, 0.
+</div>

@@ -15,7 +15,19 @@ Jedna ideja bila bi da ručno napišemo sve brojeve: 5, 10, 15, 20... sve do <i>
 Ali to ne bi bilo praktično, naročito ako je <i>x = 1000</i>. 
 Potrebno nam je opštije rešenje koje radi za bilo koji dozvoljeni unos.
 </p>
+<xmp class="primer_ta">
+static void Zmurke(int x, int k)
+{
+    for (int i = 0; i <= x; i+=k)
+    {
+        Console.WriteLine(i);
+    }
+}
 
+// Primer poziva:
+Zmurke(100, 5);
+</xmp>
+<button class="button_copy">Vidi primer</button>
 <div class="napomena">
 Naivno rešenje nas uči da prepoznamo ograničenja ručnog pristupa i 
 da potražimo sistematski metod.
@@ -45,7 +57,7 @@ Na taj način gradimo algoritam korak po korak.
 
 <h2>Primeri i testovi</h2>
 <xmp class="primer_ta">
-    static void Zmurke(int x, int k = 5)
+    static void Zmurke(int x, int k)
     {
         if (k > x)
             return;
@@ -56,7 +68,7 @@ Na taj način gradimo algoritam korak po korak.
     static void Main()
     {
         int x = int.Parse(Console.ReadLine());
-        Zmurke(x);
+        Zmurke(x, 5);
     }
 </xmp>
 <button class="button_copy">Vidi primer</button>
