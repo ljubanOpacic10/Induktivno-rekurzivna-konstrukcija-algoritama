@@ -1,0 +1,35 @@
+<h1>Primer - Geometrijska serija</h1>
+
+<xmp class="primer_ta">
+static void GeometrijskaSerija(int a, int b)
+{
+    int x = a;
+    while (x <= b)
+    {
+        Console.WriteLine(x);
+        x *= 3;
+    }
+}
+
+// Primer poziva u Main metodi:
+static void Main()
+{
+  int a = int.Parse(Console.ReadLine());
+  int b = int.Parse(Console.ReadLine());
+  GeometrijskaSerija(a, b);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<p><b>Ulaz:</b></p>
+<xmp class="primer_ta">
+5
+50
+</xmp>
+
+<p><b>Izlaz:</b></p>
+<xmp class="primer_ta">
+5
+15
+45
+</xmp>

@@ -1,0 +1,75 @@
+<h1>Geometrijska serija</h1>
+
+<h2>Motivacija</h2>
+<p>
+Zamislite da imate niz brojeva gde se svaki sledeći dobija množenjem prethodnog sa tri.  
+Ovakav niz nazivamo <b>geometrijska serija</b>. Takve serije se često koriste za modelovanje
+rasta (na primer, bakterija koje se utrostručuju) ili u zadacima sa brojevima koji rastu
+eksponencijalno.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan od naivnih pokušaja bio bi da prolazimo kroz sve brojeve u intervalu [a, b] i proveravamo
+da li pripadaju seriji. Međutim, to je neefikasno, jer proveravamo i mnogo nepotrebnih brojeva.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Ono što primećujemo jeste da brojevi u geometrijskoj seriji nastaju jednostavnim pravilom:  
+prvi broj je <i>a</i>, a svaki sledeći se dobija množenjem prethodnog sa 3.  
+Dakle, dovoljno je da krenemo od <i>a</i> i uvećavamo dok ne pređemo gornju granicu <i>b</i>.
+</p>
+
+<h2>Pravilan pristup</h2>
+<p>
+Umesto da prolazimo kroz ceo interval, možemo koristiti induktivni korak:  
+ako znamo da je prethodni broj u seriji validan, onda je naredni samo 3 puta veći.  
+Na ovaj način gradimo rešenje korak po korak.
+</p>
+
+<xmp class="primer_ta">
+static void GeometrijskaSerija(int a, int b)
+{
+    int x = a;
+    while (x <= b)
+    {
+        Console.WriteLine(x);
+        x *= 3;
+    }
+}
+
+// Primer poziva u Main metodi:
+static void Main()
+{
+  int a = int.Parse(Console.ReadLine());
+  int b = int.Parse(Console.ReadLine());
+  GeometrijskaSerija(a, b);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<h2>Primer</h2>
+<p>Za ulaz <b>a = 5</b>, <b>b = 50</b>, dobijamo:</p>
+<xmp class="primer_ta">
+Ulaz:
+5
+50
+
+Izlaz:
+5
+15
+45
+</xmp>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Zašto nije efikasno ići kroz sve brojeve u intervalu [a, b]?</li>
+  <li>Koji je osnovni slučaj u ovom zadatku?</li>
+  <li>Šta predstavlja induktivni korak?</li>
+</ul>
+
+<div class="zadatak">
+Za vežbu: Implementirati sličan algoritam gde se sledeći broj dobija množenjem sa 2.  
+Isprobajte za ulazni interval [3, 100].
+</div>

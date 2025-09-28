@@ -1,0 +1,73 @@
+<h1>Zbir n brojeva</h1>
+
+<h2>Motivacija</h2>
+<p>
+Često je potrebno izračunati zbir većeg broja elemenata.  
+Na primer, želimo da saberemo rezultate ispita svih učenika u odeljenju da bismo kasnije izračunali prosečan broj bodova.  
+Na prvi pogled, deluje da je dovoljno samo redom sabirati brojeve, ali hajde da vidimo kako ovaj problem
+možemo posmatrati <b>induktivno</b>.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan jednostavan način bio bi da koristimo petlju i redom sabiramo brojeve.  
+Iako radi, ovde ne vidimo induktivnu logiku niti razvijamo sistematski način razmišljanja.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Suma n brojeva može se razložiti na manji problem:  
+zbir prvih n brojeva jednak je zbiru prvih n-1 brojeva plus poslednji broj.  
+
+Dakle, ako znamo rešenje manjeg problema, lako možemo da izgradimo rešenje za ceo problem.
+</p>
+
+<h2>Pravilan pristup</h2>
+<p>
+Osnovni slučaj: zbir jednog broja je sam taj broj.<br>  
+Induktivni korak: zbir n brojeva je zbir prvih n-1 brojeva plus poslednji broj.  
+
+Ovim pristupom dobijamo prirodnu rekurzivnu definiciju algoritma.
+</p>
+
+<xmp class="primer_ta">
+static int Zbir(int[] niz, int n)
+{
+  if (n == 1) return niz[0];             // osnovni slučaj
+  return Zbir(niz, n - 1) + niz[n - 1];  // induktivni korak
+}
+
+// Primer poziva u Main metodi:
+static void Main()
+{
+  int[] brojevi = { 10, -3, 2, 4 };
+  int rezultat = Zbir(brojevi, brojevi.Length);
+  Console.WriteLine(rezultat);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<h2>Primer</h2>
+<p>Za ulaz:</p>
+<xmp class="primer_ta">
+10
+-3
+2
+4
+</xmp>
+
+<p>Dobijamo izlaz:</p>
+<xmp class="primer_ta">
+13
+</xmp>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Koji je osnovni slučaj u ovom zadatku?</li>
+  <li>Kako koristimo rešenje manjeg problema za n-1 elemenata?</li>
+  <li>Kako bi izgledalo rešenje kada bismo koristili iteraciju umesto rekurzije?</li>
+</ul>
+
+<div class="zadatak">
+Za vežbu: Implementirati rekurzivnu metodu koja određuje proizvod n datih brojeva.
+</div>

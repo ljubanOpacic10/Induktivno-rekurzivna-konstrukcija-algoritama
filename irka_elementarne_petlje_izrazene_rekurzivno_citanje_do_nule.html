@@ -1,0 +1,79 @@
+<h1>Čitanje do nule</h1>
+
+<h2>Motivacija</h2>
+<p>
+Ponekad unapred ne znamo koliko brojeva korisnik želi da unese.  
+Na primer, želimo da unos traje sve dok se ne unese poseban znak — u ovom slučaju nula.  
+Zadatak je da prebrojimo koliko je brojeva uneseno pre nego što se naiđe na nulu.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedno rešenje je da koristimo petlju koja traje dok se ne unese nula i da povećavamo brojač.  
+Iako radi, ovde ne ističemo induktivnu logiku.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Možemo razmišljati induktivno:  
+<ul>
+  <li>Osnovni slučaj: ako uneseni broj = 0 → kraj, vraćamo 0.</li>
+  <li>Induktivni korak: ako uneseni broj ≠ 0, dodajemo 1 i rekurzivno pozivamo algoritam za sledeći unos.</li>
+</ul>
+</p>
+
+<h2>Pravilan pristup</h2>
+<p>
+Na ovaj način jasno vidimo kako se problem smanjuje na isti, ali sa manjim brojem unetih elemenata.  
+Ovo je prirodan primer induktivno–rekurzivne konstrukcije algoritma.
+</p>
+
+<xmp class="primer_ta">
+static int Prebroj()
+{
+    int x = int.Parse(Console.ReadLine());
+    if (x == 0) return 0;           // osnovni slučaj
+    return 1 + Prebroj();           // induktivni korak
+}
+
+// Primer poziva u Main metodi:
+static void Main()
+{
+  int rezultat = Prebroj();
+  Console.WriteLine(rezultat);
+}
+</xmp>
+<button class="button_copy">Vidi primer</button>
+
+<h2>Primer 1</h2>
+<xmp class="primer_ta">
+Ulaz:
+5
+-675
+123
+0
+
+Izlaz:
+3
+</xmp>
+
+<h2>Primer 2</h2>
+<xmp class="primer_ta">
+Ulaz:
+0
+
+Izlaz:
+0
+</xmp>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Šta predstavlja osnovni slučaj u ovom zadatku?</li>
+  <li>Kako znamo da se algoritam sigurno završava?</li>
+  <li>Zašto je rekurzivni pristup ovde prirodan?</li>
+</ul>
+
+<div class="zadatak">
+Za vežbu: Napisati rekurzivnu metodu koja računa zbir svih brojeva unetih do nule.  
+Na primer, za ulaz 5, -3, 7, 0 → zbir = 9.
+</div>
