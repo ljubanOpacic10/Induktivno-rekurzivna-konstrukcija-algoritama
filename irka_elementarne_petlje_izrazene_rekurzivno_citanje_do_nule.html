@@ -2,30 +2,46 @@
 
 <h2>Motivacija</h2>
 <p>
-Ponekad unapred ne znamo koliko brojeva korisnik želi da unese.  
-Na primer, želimo da unos traje sve dok se ne unese poseban znak — u ovom slučaju nula.  
-Zadatak je da prebrojimo koliko je brojeva uneseno pre nego što se naiđe na nulu.
+U svakodnevnom programiranju često se susrećemo sa situacijama gde ne znamo unapred koliko će podataka korisnik uneti.  
+Možda unosimo listu ocena studenata, dnevne troškove, ili rezultate eksperimenata. 
+Kako znati kada je unos gotov?<br>
+Jedno od rešenja je korišćenje <b>specijalne vrednosti</b> koja označava kraj unosa.  
+U našem zadatku ta specijalna vrednost je <b>0</b>.  
+Cilj je da prebrojimo koliko je brojeva korisnik uneo pre nego što je došao do nule.<br>
+Ovo je veoma praktičan zadatak jer nas uči kako da pišemo algoritme koji rade sa ulazom čija veličina nije poznata unapred, što je vrlo česta situacija u realnim aplikacijama.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedno rešenje je da koristimo petlju koja traje dok se ne unese nula i da povećavamo brojač.  
-Iako radi, ovde ne ističemo induktivnu logiku.
+Jedan način je da koristimo petlju koja traje dok se ne unese nula i da brojač uvećavamo za 1 pri svakom unosu.  
+Iako je ovakav pristup potpuno ispravan i često korišćen, on ne pomaže da razvijemo <b>induktivno razmišljanje</b>.  
+U njemu algoritam izgleda kao “crna kutija” koja samo ponavlja unos, bez jasne veze između manjeg i većeg problema.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Možemo razmišljati induktivno:  
+Ako pogledamo zadatak iz induktivne perspektive, možemo ga posmatrati ovako:
+</p>
 <ul>
-  <li>Osnovni slučaj: ako uneseni broj = 0 → kraj, vraćamo 0.</li>
-  <li>Induktivni korak: ako uneseni broj ≠ 0, dodajemo 1 i rekurzivno pozivamo algoritam za sledeći unos.</li>
+  <li><b>Osnovni slučaj</b>: Ako uneseni broj = 0, kraj je i vraćamo 0 jer nema više brojeva za brojanje.</li>
+  <li><b>Induktivni korak</b>: Ako uneseni broj ≠ 0, tada smo našli jedan validan broj.  
+  Brojimo ga i rekurzivno nastavljamo sa unosom sledećeg broja, sve dok ne dođemo do nule.</li>
 </ul>
+<p>
+Na ovaj način zadatak se prirodno razlaže na manji problem: “koliko je još brojeva ostalo da se unese do nule?”.  
+Svako rešenje gradi se na osnovu rešenja manjeg problema, što je suština induktivnog pristupa.
 </p>
 
 <h2>Pravilan pristup</h2>
 <p>
-Na ovaj način jasno vidimo kako se problem smanjuje na isti, ali sa manjim brojem unetih elemenata.  
-Ovo je prirodan primer induktivno–rekurzivne konstrukcije algoritma.
+Induktivno–rekurzivna konstrukcija ovde daje izuzetno elegantno rešenje.  
+Svaki put kada unesemo broj, pitamo se: “Da li je 0?”.  
+Ako jeste, završavamo. Ako nije, dodajemo 1 i prosleđujemo kontrolu rekurziji, koja čeka sledeći unos.  
+Na taj način se problem smanjuje korak po korak, dok se prirodno ne završi.  
+</p>
+<p>
+Prednost ovakvog pristupa je što je algoritam jednostavan, čitljiv i prati naš tok misli.  
+Umesto da ručno kontrolišemo petlju, dozvoljavamo rekurziji da “pamti” koliko smo puta pozvali funkciju, što se sabira kao ukupan broj unosa.
 </p>
 
 <xmp class="primer_ta">
@@ -39,8 +55,8 @@ static int Prebroj()
 // Primer poziva u Main metodi:
 static void Main()
 {
-  int rezultat = Prebroj();
-  Console.WriteLine(rezultat);
+    int rezultat = Prebroj();
+    Console.WriteLine(rezultat);
 }
 </xmp>
 <button class="button_copy">Vidi primer</button>
@@ -68,9 +84,10 @@ Izlaz:
 
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-  <li>Šta predstavlja osnovni slučaj u ovom zadatku?</li>
+  <li>Šta predstavlja osnovni slučaj u ovom zadatku i zašto je važan?</li>
   <li>Kako znamo da se algoritam sigurno završava?</li>
-  <li>Zašto je rekurzivni pristup ovde prirodan?</li>
+  <li>Zašto je rekurzivni pristup ovde prirodniji nego iteracija?</li>
+  <li>Kako biste zadatak izmenili ako bismo želeli da ne brojimo sve brojeve, već samo pozitivne?</li>
 </ul>
 
 <div class="zadatak">

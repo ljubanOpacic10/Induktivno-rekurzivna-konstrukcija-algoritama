@@ -3,46 +3,70 @@
 <h2>Motivacija</h2>
 <p>
 Često je potrebno izračunati zbir većeg broja elemenata.  
-Na primer, želimo da saberemo rezultate ispita svih učenika u odeljenju da bismo kasnije izračunali prosečan broj bodova.  
+Na primer, možemo želeti da saberemo rezultate ispita svih učenika u odeljenju da bismo kasnije izračunali prosečan broj bodova.  
+U drugim situacijama, zbir može predstavljati ukupan trošak na računu, broj bodova osvojenih u igri ili zbir svih merenja u eksperimentu.  
 Na prvi pogled, deluje da je dovoljno samo redom sabirati brojeve, ali hajde da vidimo kako ovaj problem
-možemo posmatrati <b>induktivno</b>.
+možemo posmatrati <b>induktivno</b>, korak po korak.
+</p>
+<p>
+Razmišljanje na ovaj način je korisno jer nas uči da složen problem (zbir mnogo brojeva) razložimo na
+jednostavnije podprobleme (zbir manjeg broja brojeva).  
+To je upravo suština induktivno–rekurzivne konstrukcije algoritama.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
 Jedan jednostavan način bio bi da koristimo petlju i redom sabiramo brojeve.  
-Iako radi, ovde ne vidimo induktivnu logiku niti razvijamo sistematski način razmišljanja.
+Iako radi, ovde ne vidimo induktivnu logiku niti razvijamo sistematski način razmišljanja.  
+U ovom pristupu algoritam “mehanički” prolazi kroz sve elemente, ali ne pomaže čitaocu da shvati <em>zašto</em> je problem tako jednostavan za rešavanje.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
 Suma n brojeva može se razložiti na manji problem:  
-zbir prvih n brojeva jednak je zbiru prvih n-1 brojeva plus poslednji broj.  
-
-Dakle, ako znamo rešenje manjeg problema, lako možemo da izgradimo rešenje za ceo problem.
+</p>
+<ul>
+  <li>Zbir prvih n brojeva jednak je zbiru prvih n-1 brojeva plus poslednji broj.</li>
+</ul>
+<p>
+Na primer, zbir 4 broja (10, -3, 2, 4) možemo napisati kao:
+</p>
+<pre>
+Zbir(4) = Zbir(3) + 4
+Zbir(3) = Zbir(2) + 2
+Zbir(2) = Zbir(1) + (-3)
+Zbir(1) = 10
+</pre>
+<p>
+Vidimo da se problem <b>postepeno svodi</b> na manji, dok ne dođemo do osnovnog slučaja – zbira samo jednog broja.
 </p>
 
 <h2>Pravilan pristup</h2>
 <p>
-Osnovni slučaj: zbir jednog broja je sam taj broj.<br>  
-Induktivni korak: zbir n brojeva je zbir prvih n-1 brojeva plus poslednji broj.  
-
-Ovim pristupom dobijamo prirodnu rekurzivnu definiciju algoritma.
+Ovo je idealna situacija za induktivno–rekurzivnu konstrukciju algoritma.  
+Imamo jasno definisan osnovni slučaj i induktivni korak:
+</p>
+<ul>
+  <li><b>Osnovni slučaj</b>: zbir jednog broja je sam taj broj.</li>
+  <li><b>Induktivni korak</b>: zbir n brojeva je zbir prvih n-1 brojeva plus poslednji broj.</li>
+</ul>
+<p>
+Na taj način algoritam gradi rešenje korak po korak, baš kao što mi razmišljamo kad sabiramo redom.
 </p>
 
 <xmp class="primer_ta">
 static int Zbir(int[] niz, int n)
 {
-  if (n == 1) return niz[0];             // osnovni slučaj
-  return Zbir(niz, n - 1) + niz[n - 1];  // induktivni korak
+    if (n == 1) return niz[0];             // osnovni slučaj
+    return Zbir(niz, n - 1) + niz[n - 1];  // induktivni korak
 }
 
 // Primer poziva u Main metodi:
 static void Main()
 {
-  int[] brojevi = { 10, -3, 2, 4 };
-  int rezultat = Zbir(brojevi, brojevi.Length);
-  Console.WriteLine(rezultat);
+    int[] brojevi = { 10, -3, 2, 4 };
+    int rezultat = Zbir(brojevi, brojevi.Length);
+    Console.WriteLine(rezultat); // Ispis: 13
 }
 </xmp>
 <button class="button_copy">Vidi primer</button>
@@ -63,11 +87,13 @@ static void Main()
 
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-  <li>Koji je osnovni slučaj u ovom zadatku?</li>
-  <li>Kako koristimo rešenje manjeg problema za n-1 elemenata?</li>
+  <li>Koji je osnovni slučaj u ovom zadatku i zašto je neophodan?</li>
+  <li>Kako koristimo rešenje manjeg problema za n-1 elemenata da bismo rešili ceo problem?</li>
   <li>Kako bi izgledalo rešenje kada bismo koristili iteraciju umesto rekurzije?</li>
+  <li>Šta bi se desilo da izostavimo osnovni slučaj?</li>
 </ul>
 
 <div class="zadatak">
-Za vežbu: Implementirati rekurzivnu metodu koja određuje proizvod n datih brojeva.
+Za vežbu: Implementirati rekurzivnu metodu koja određuje proizvod n datih brojeva.  
+Na primer, za niz {2, 3, 4} rezultat treba da bude 24.
 </div>
