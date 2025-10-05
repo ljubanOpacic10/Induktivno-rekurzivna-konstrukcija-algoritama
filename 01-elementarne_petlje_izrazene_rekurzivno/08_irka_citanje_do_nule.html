@@ -2,46 +2,49 @@
 
 <h2>Motivacija</h2>
 <p>
-U svakodnevnom programiranju često se susrećemo sa situacijama gde ne znamo unapred koliko će podataka korisnik uneti.  
-Možda unosimo listu ocena studenata, dnevne troškove, ili rezultate eksperimenata. 
-Kako znati kada je unos gotov?<br>
-Jedno od rešenja je korišćenje <b>specijalne vrednosti</b> koja označava kraj unosa.  
-U našem zadatku ta specijalna vrednost je <b>0</b>.  
-Cilj je da prebrojimo koliko je brojeva korisnik uneo pre nego što je došao do nule.<br>
-Ovo je veoma praktičan zadatak jer nas uči kako da pišemo algoritme koji rade sa ulazom čija veličina nije poznata unapred, što je vrlo česta situacija u realnim aplikacijama.
+U programiranju se često dešava da ne znamo unapred koliko podataka korisnik želi da unese.  
+Na primer, unosimo ocene učenika, troškove tokom dana ili temperature merenja u laboratoriji.  
+Kako znati kada je unos gotov?  
 </p>
+
+<p>
+Zamišljajmo to kao razgovor sa računarom — korisnik unosi brojeve, a računar ih „sluša“ dok ne čuje dogovoreni znak za kraj.  
+U ovom zadatku taj znak je broj <b>0</b>.  
+Kada unesemo nulu, unos se završava.  
+Zadatak je da prebrojimo koliko je brojeva korisnik uneo pre nego što je stigao do nule.
+</p>
+
+<div class="napomena">
+U svakodnevnim programima ovakav način unosa se često koristi — recimo, dok unosimo stavke računa i na kraju upišemo <b>0</b> da označimo „nema više“.
+</div>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan način je da koristimo petlju koja traje dok se ne unese nula i da brojač uvećavamo za 1 pri svakom unosu.  
-Iako je ovakav pristup potpuno ispravan i često korišćen, on ne pomaže da razvijemo <b>induktivno razmišljanje</b>.  
-U njemu algoritam izgleda kao “crna kutija” koja samo ponavlja unos, bez jasne veze između manjeg i većeg problema.
+Jednostavno rešenje bi bilo da koristimo petlju: čitamo brojeve sve dok ne dobijemo nulu, i brojač uvećavamo za 1 pri svakom unosu.  
+Ovaj pristup radi, ali ne pokazuje <b>induktivno razmišljanje</b>.  
+Ne razlaže problem na manje korake – samo “vrti” petlju.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Ako pogledamo zadatak iz induktivne perspektive, možemo ga posmatrati ovako:
+Pogledajmo problem na induktivan način.  
+Zamislimo da algoritam razgovara sa korisnikom:
 </p>
+
 <ul>
-  <li><b>Osnovni slučaj</b>: Ako uneseni broj = 0, kraj je i vraćamo 0 jer nema više brojeva za brojanje.</li>
-  <li><b>Induktivni korak</b>: Ako uneseni broj ≠ 0, tada smo našli jedan validan broj.  
-  Brojimo ga i rekurzivno nastavljamo sa unosom sledećeg broja, sve dok ne dođemo do nule.</li>
+  <li><b>Osnovni slučaj:</b> Ako uneseni broj = 0 → unos se završava. Nema više brojeva za brojanje → vraćamo 0.</li>
+  <li><b>Induktivni korak:</b> Ako uneseni broj ≠ 0 → jedan broj smo pronašli. Brojimo ga (dodajemo 1) i zatim ponovo pozivamo istu metodu da pročita sledeći broj.</li>
 </ul>
+
 <p>
-Na ovaj način zadatak se prirodno razlaže na manji problem: “koliko je još brojeva ostalo da se unese do nule?”.  
-Svako rešenje gradi se na osnovu rešenja manjeg problema, što je suština induktivnog pristupa.
+Svaki sledeći korak rešava <b>manju verziju istog problema</b> — „koliko je još brojeva ostalo do nule?“  
+Na taj način zadatak sam po sebi vodi ka rekurzivnom rešenju.
 </p>
 
 <h2>Pravilan pristup</h2>
 <p>
-Induktivno–rekurzivna konstrukcija ovde daje izuzetno elegantno rešenje.  
-Svaki put kada unesemo broj, pitamo se: “Da li je 0?”.  
-Ako jeste, završavamo. Ako nije, dodajemo 1 i prosleđujemo kontrolu rekurziji, koja čeka sledeći unos.  
-Na taj način se problem smanjuje korak po korak, dok se prirodno ne završi.  
-</p>
-<p>
-Prednost ovakvog pristupa je što je algoritam jednostavan, čitljiv i prati naš tok misli.  
-Umesto da ručno kontrolišemo petlju, dozvoljavamo rekurziji da “pamti” koliko smo puta pozvali funkciju, što se sabira kao ukupan broj unosa.
+Rešenje je kratko i elegantno jer koristi rekurziju da „pamti“ koliko smo brojeva pročitali.  
+Računar pamti svaki poziv funkcije dok ne dođe do nule — tada se vraća unazad i sabira 1 po 1, kao da broji unazad korake koje je prešao.
 </p>
 
 <xmp class="primer_ta">
@@ -59,7 +62,11 @@ static void Main()
     Console.WriteLine(rezultat);
 }
 </xmp>
-<button class="button_copy">Vidi primer</button>
+
+<div class="napomena">
+Obratite pažnju: svaki novi poziv funkcije „pamti“ da je pročitao jedan broj više.  
+Tek kada unesemo 0, sve se funkcije redom zatvaraju i sabiraju koliko ih je bilo.
+</div>
 
 <h2>Primer 1</h2>
 <xmp class="primer_ta">
@@ -82,15 +89,57 @@ Izlaz:
 0
 </xmp>
 
+<p>
+U prvom primeru, program broji tri broja pre nego što je unesena nula.  
+U drugom primeru, korisnik odmah unosi nulu, pa program ispisuje 0.
+</p>
+
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
   <li>Šta predstavlja osnovni slučaj u ovom zadatku i zašto je važan?</li>
-  <li>Kako znamo da se algoritam sigurno završava?</li>
-  <li>Zašto je rekurzivni pristup ovde prirodniji nego iteracija?</li>
-  <li>Kako biste zadatak izmenili ako bismo želeli da ne brojimo sve brojeve, već samo pozitivne?</li>
+  <li>Kako znamo da će se program sigurno završiti?</li>
+  <li>Zašto rekurzivni pristup prirodno modeluje unos dok se ne unese nula?</li>
+  <li>Kako biste izmenili algoritam da broji samo pozitivne brojeve?</li>
 </ul>
 
+<h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-Za vežbu: Napisati rekurzivnu metodu koja računa zbir svih brojeva unetih do nule.  
-Na primer, za ulaz 5, -3, 7, 0 → zbir = 9.
+Napiši rekurzivnu metodu koja računa <b>zbir</b> svih brojeva unetih do nule.  
+Na primer, za unos 5, -3, 7, 0 → zbir = 9.
+</div>
+
+<h1>Pomoć – Čitanje do nule</h1>
+
+<div class="napomena">
+Ovde ne znamo koliko će brojeva biti uneto unapred — unos traje dok se ne pojavi nula.
+</div>
+
+<p>
+<b>Osnovni slučaj:</b> ako unesemo 0 → vraćamo 0 (završavamo unos).  
+<br>
+<b>Induktivni korak:</b> ako unesemo broj ≠ 0 → dodajemo 1 i pozivamo funkciju ponovo.
+</p>
+
+<p>
+Zamisli da algoritam kao da se penje stepenicama —  
+svaki novi broj je jedan korak više.  
+Kada dođe nula, staje i počinje da broji koliko je stepenika prešao.
+</p>
+
+<p>
+Na primer, za unos: 7, 4, 9, 0:
+</p>
+
+<ul>
+  <li>Prebroj(7) → 1 + Prebroj(4)</li>
+  <li>Prebroj(4) → 1 + Prebroj(9)</li>
+  <li>Prebroj(9) → 1 + Prebroj(0)</li>
+  <li>Prebroj(0) → 0</li>
+</ul>
+
+<p>Ukupan rezultat = 3.</p>
+
+<div class="napomena">
+Zapamti: <b>rekurzija pamti korake</b> koje je prešla.  
+Kada dostigne osnovni slučaj (nulu), počinje da se „odmotava“ i sabira sve korake unazad.
 </div>

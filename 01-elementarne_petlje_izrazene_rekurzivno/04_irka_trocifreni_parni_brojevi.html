@@ -2,51 +2,54 @@
 
 <h2>Motivacija</h2>
 <p>
-Trocifreni brojevi (od 100 do 999) su posebno zanimljivi jer predstavljaju sve moguće kombinacije tri cifre. 
-U ovom zadatku tražimo samo one koji su <b>parni</b> i koji se nalaze u zadatom intervalu [a,b]. 
+Trocifreni brojevi (od 100 do 999) su posebni jer su to sve kombinacije tri cifre.  
+U ovom zadatku želimo da pronađemo samo one koji su <b>parni</b> i koji se nalaze u zadatom intervalu [a,b].  
+Na primer, ako je interval [95, 110], ispisaćemo: 100, 102, 104, 106, 108, 110.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Mogli bismo da napišemo sve parne trocifrene brojeve ručno: 100, 102, 104, ... 998. 
-Ali to je predugačko i nepraktično, naročito ako radimo sa intervalima. 
-Zato nam je potreban sistematski pristup.
+Mogli bismo da napišemo sve parne trocifrene brojeve ručno: 100, 102, 104, ... 998.  
+Ali to bi bilo dosadno i nepraktično, posebno kada radimo sa promenljivim intervalima.  
+Potrebno nam je pametnije, sistematsko rešenje.
 </p>
 
 <div class="napomena">
-Naivni pristupi često pomognu da shvatimo obrazac, 
-ali nas takođe navode ka efikasnijem rešenju.
+Naivni pristupi su korisni da prepoznamo obrazac,  
+ali obično nisu efikasni kada se zadatak proširi.
 </div>
 
 <h2>Analiza problema</h2>
 <p>
-Prvi korak ka uspešnoj realizaciji jeste jasno razumevanje svih zahteva, a zatim planiranje kako ih sprovesti na najefikasniji mogući način.<br>
-Da bismo rešili zadatak:
+Pre nego što pišemo kod, razjasnimo uslove:
 </p>
 <ul>
-<li>Prvo moramo proveriti da li je trenutni broj trocifren (100 ≤ n ≤ 999).</li>
-<li>Drugo, da li je broj paran (<i>n % 2 == 0</i>).</li>
-<li>Treće, da li se nalazi unutar zadatog intervala [a,b].</li>
+<li>Broj mora biti trocifren: <b>100 ≤ n ≤ 999</b>.</li>
+<li>Broj mora biti paran: <b>n % 2 == 0</b>.</li>
+<li>Broj mora biti u zadatom intervalu <b>[a,b]</b>.</li>
 </ul>
 <p>
-Ako ispunjava sva tri uslova, ispisujemo ga, pa prelazimo na sledeći broj.
+Ako broj ispunjava sva tri uslova, ispisujemo ga i prelazimo na sledeći broj.
 </p>
 
-<h2>Pravilan pristup</h2>
+<h2>Induktivni pristup</h2>
 <p>
-Osnovni slučaj: ako trenutni broj pređe vrednost <i>b</i>, zaustavljamo se.  
-Induktivni korak: ako je broj trocifren i paran, ispisujemo ga; zatim prelazimo na sledeći broj <i>n+1</i>.  
-Tako dobijamo algoritam koji prolazi kroz sve brojeve u intervalu.
+U rekurziji uvek imamo dva ključna dela:
 </p>
+<ul>
+<li><b>Osnovni slučaj:</b> Ako trenutni broj pređe gornju granicu <i>b</i>, zaustavljamo se.</li>
+<li><b>Induktivni korak:</b> Ako trenutni broj ispunjava uslove (trocifren i paran), ispisujemo ga, a zatim pozivamo postupak za <i>a+1</i>.</li>
+</ul>
 
-<h2>Primeri i testovi</h2>
+<h2>Primer koda</h2>
 <xmp class="primer_ta">
 void IspisiParneTrocifrene(int a, int b)
 {
-    if (a > b) return;
+    if (a > b) return;                  // osnovni slučaj
     if (a >= 100 && a <= 999 && a % 2 == 0)
-        Console.WriteLine(a);
-    IspisiParneTrocifrene(a + 1, b);
+        Console.WriteLine(a);           // ispisujemo samo ako je trocifren i paran
+
+    IspisiParneTrocifrene(a + 1, b);     // prelazimo na sledeći broj
 }
 
 static void Main()
@@ -56,22 +59,38 @@ static void Main()
     IspisiParneTrocifrene(a, b);
 }
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
 <div class="napomena">
-Ovde koristimo induktivno razmišljanje: 
-ako znamo da ispišemo rešenje od <i>a+1</i> do <i>b</i>, 
-onda dodajemo <i>a</i> ako zadovoljava uslove.
+Ovaj kod pokazuje induktivno razmišljanje:  
+ako znamo da ispišemo sve parne trocifrene brojeve od <i>a+1</i> do <i>b</i>,  
+onda samo proverimo i dodamo <i>a</i> ako ispunjava uslove.
 </div>
 
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-<li>Koji su uslovi da broj bude ispisan u ovom zadatku?</li>
-<li>Kako se razlikuje ovaj algoritam od zadatka „Brojevi od a do b“?</li>
-<li>Kako biste modifikovali program da ispisuje sve <i>neparne</i> trocifrene brojeve?</li>
+<li>Koji uslovi moraju da budu ispunjeni da bi broj bio ispisan?</li>
+<li>Po čemu se ovaj algoritam razlikuje od zadatka „Brojevi od a do b“?</li>
+<li>Kako bismo promenili kod da ispisuje <b>neparne</b> trocifrene brojeve?</li>
 </ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
 Napišite algoritam koji ispisuje sve trocifrene brojeve deljive sa 7 u intervalu [a,b].
+</div>
+
+<h1>Pomoć: Trocifreni parni brojevi</h1>
+
+<p>
+Ako zapnete, razmislite:
+</p>
+<ul>
+<li>Koji je prvi trocifreni broj? A poslednji?</li>
+<li>Kada broj treba da bude ispisan?</li>
+<li>Šta se dešava kada pređemo gornju granicu <i>b</i>?</li>
+</ul>
+
+<div class="napomena">
+Induktivno razmišljanje:  
+ako možemo da rešimo zadatak od <i>a+1</i> do <i>b</i>,  
+onda je dovoljno da proverimo <i>a</i> i spojimo rezultate.
 </div>

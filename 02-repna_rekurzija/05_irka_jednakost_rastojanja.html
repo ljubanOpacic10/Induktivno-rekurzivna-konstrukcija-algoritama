@@ -2,52 +2,67 @@
 
 <h2>Motivacija</h2>
 <p>
-Zamisli da trebaš da pronađeš tačku koja je „jednako udaljena“ od svih datih tačaka na brojevnoj osi.  
-U matematici se takva tačka naziva <b>aritmetička sredina</b>.  
-Na primer, ako imamo tačke sa koordinatama 2, 4 i 6 — tačka koja se nalazi tačno u sredini između svih njih je 4.  
-Ovaj primer nas vodi do ideje da zbir svih tačaka podeljen sa njihovim brojem daje tu „središnju tačku“.
+Zamisli da pokušavaš da pronađeš tačku koja je „tačno u sredini“ između svih datih tačaka na brojevnoj osi.  
+Ako staviš te tačke na vagu, tačka ravnoteže bila bi ona u kojoj je ukupna težina sa leve i desne strane ista.  
+U matematici, ta tačka se naziva <b>aritmetička sredina</b>.
+</p>
+
+<p>
+Na primer, ako imamo tačke 2, 4 i 6 — tačka koja se nalazi tačno između njih je 4.  
+Do nje dolazimo tako što saberemo sve vrednosti i podelimo sa njihovim brojem:  
+(2 + 4 + 6) / 3 = 4.  
+Ova ideja je važna, jer se koristi u svemu — od fizike i ekonomije do mašinskog učenja.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan jednostavan način je da koristimo petlju koja sabira sve unete brojeve i potom podelimo taj zbir sa njihovim brojem.  
-Iako jednostavno, ovaj pristup ne otkriva <b>induktivni obrazac</b> — ne pokazuje kako se zbir postepeno gradi.
+Najjednostavnije je koristiti petlju: sabiramo sve brojeve i na kraju podelimo sa njihovim brojem.  
+Ovaj pristup je ispravan, ali ne otkriva <b>način razmišljanja</b> koji stoji iza rešenja.  
+Da bismo razvili algoritamsko mišljenje, pokušaćemo da pronađemo <b>induktivni obrazac</b>.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Ako želimo da izračunamo zbir n brojeva, možemo problem posmatrati induktivno:<br> 
-Zbir prvih n brojeva jednak je zbiru prvih n−1 brojeva uvećan za poslednji broj.  
-Na taj način, ponavljanjem ovog postupka, postepeno dolazimo do ukupnog zbira.
+Zamislimo da imamo n brojeva.  
+Ako znamo zbir prvih n−1 brojeva, do ukupnog zbira svih n dolazimo jednostavno:  
+dodamo još poslednji broj.  
+Dakle:
+</p>
+
+<p><b>Zbir(n) = Zbir(n−1) + poslednji_broj</b></p>
+
+<p>
+Na taj način, rešenje većeg problema (sabiranje n brojeva) gradimo iz rešenja manjeg problema (sabiranje n−1 broja).  
+To je upravo induktivni pristup.
 </p>
 
 <div class="napomena">
 <p><b>Osnovni slučaj</b> — kada je n = 0, zbir je 0 jer nema brojeva za sabiranje.</p>
-<p><b>Induktivni korak</b> — ako znamo zbir prvih n−1 brojeva, onda se zbir n brojeva dobija dodavanjem još jednog broja.</p>
+<p><b>Induktivni korak</b> — ako znamo zbir prvih n−1 brojeva, zbir n brojeva dobijamo dodavanjem novog broja.</p>
 </div>
 
 <h2>Pravilan pristup</h2>
 <p>
-Koristićemo repno-rekurzivnu funkciju koja postepeno sabira učitane brojeve.  
+Koristićemo <b>repno–rekurzivnu funkciju</b> koja postepeno sabira brojeve dok ih korisnik unosi.  
 Funkcija ima dva parametra:
 </p>
 
 <div class="napomena">
 <p><b>n</b> — broj preostalih brojeva koji treba da se učitaju,</p>
-<p><b>zbir</b> — trenutni zbir svih dosad učitanih brojeva.</p>
+<p><b>zbir</b> — trenutni zbir svih do sada učitanih brojeva.</p>
 </div>
 
 <p>
-Kada n postane 0, znači da smo učitali sve brojeve i možemo vratiti konačan zbir.
+Kada n postane 0, znači da smo uneli sve brojeve i možemo vratiti konačan zbir.
 </p>
 
 <xmp class="primer_ta">
 double ZbirUcitanihBrojeva(int n, double zbir)
 {
     if (n == 0)
-        return zbir;
+        return zbir; // osnovni slučaj
     double x = double.Parse(Console.ReadLine());
-    return ZbirUcitanihBrojeva(n - 1, zbir + x);
+    return ZbirUcitanihBrojeva(n - 1, zbir + x); // induktivni korak
 }
 
 double ZbirUcitanihBrojeva(int n)
@@ -59,23 +74,20 @@ double ZbirUcitanihBrojeva(int n)
 // Izlaz: aritmetička sredina unetih brojeva
 </xmp>
 
+<h2>Tok izvršavanja</h2>
 <p>
-Tok izvršavanja možemo pratiti na primeru:<br>
-n = 3<br>
-Uneti brojevi: 2, 4, 6
+Za n = 3 i brojeve 2, 4, 6:
 </p>
+<ul>
+  <li>ZbirUcitanihBrojeva(3, 0) → unos: 2 → novi zbir = 2</li>
+  <li>ZbirUcitanihBrojeva(2, 2) → unos: 4 → novi zbir = 6</li>
+  <li>ZbirUcitanihBrojeva(1, 6) → unos: 6 → novi zbir = 12</li>
+  <li>ZbirUcitanihBrojeva(0, 12) → kraj rekurzije → vraća 12</li>
+</ul>
 
 <p>
-ZbirUcitanihBrojeva(3, 0) => učitavamo prvi broj 2, zbir postaje 0 + 2 = 2<br>
-ZbirUcitanihBrojeva(2, 2) => učitavamo sledeći broj 4, zbir postaje 2 + 4 = 6<br>
-ZbirUcitanihBrojeva(1, 6) => učitavamo poslednji broj 6, zbir postaje 6 + 6 = 12<br>
-ZbirUcitanihBrojeva(0, 12) => n = 0, više nema brojeva za unos, rezultat = 12<br>
-</p>
-
-<p>
-Dakle, funkcija se završava kada je <b>n = 0</b> i vraća konačan zbir = 12.  
-Da bismo pronašli aritmetičku sredinu, delimo zbir sa brojem elemenata: 12 / 3 = 4.  
-To znači da je aritmetička sredina unetih brojeva (2, 4, 6) jednaka <b>4</b>.
+Dakle, zbir je 12, a aritmetička sredina se dobija kao 12 / 3 = <b>4</b>.  
+To znači da je tačka jednako udaljena od svih unetih brojeva.
 </p>
 
 <h2>Primeri</h2>
@@ -91,22 +103,29 @@ To znači da je aritmetička sredina unetih brojeva (2, 4, 6) jednaka <b>4</b>.
 </table>
 
 <h2>Pitanja za samoproveru</h2>
-<p>Šta se dešava u funkciji kada je n = 0?</p>
-<p>Kako funkcija „pamti“ prethodno učitane brojeve?</p>
-<p>Zašto koristimo zbir kao parametar koji se prenosi kroz pozive?</p>
-<p>Kako bi izgledalo iterativno rešenje istog problema?</p>
+<ul>
+  <li>Šta funkcija vraća kada je n = 0?</li>
+  <li>Kako funkcija „pamti“ prethodni zbir?</li>
+  <li>Zašto zbir prolazi kroz funkciju kao parametar?</li>
+  <li>Da li bi rezultat bio isti ako bismo koristili petlju umesto rekurzije?</li>
+</ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-1. Napiši funkciju koja računa geometrijsku sredinu n brojeva.<br>
-2. Napiši funkciju koja računa zbir kvadrata n brojeva.<br>
-3. Prilagodi funkciju tako da radi sa celobrojnim nizom umesto da brojevi dolaze sa tastature.<br>
-4. Objasni kako se u svim ovim zadacima koristi induktivni pristup.
+1. Napiši funkciju koja računa geometrijsku sredinu n brojeva.<br><br>
+2. Napiši funkciju koja računa zbir kvadrata n brojeva.<br><br>
+3. Prilagodi funkciju tako da radi sa nizom brojeva umesto unosom sa tastature.<br><br>
+4. Objasni kako se u svim ovim slučajevima primenjuje induktivni korak.
 </div>
 
-<h2>Pomoć</h2>
+<h1>Pomoć – Jednakost rastojanja</h1>
+
 <div class="napomena">
-Kao i u prethodnim zadacima, ključ induktivnog pristupa je u prepoznavanju odnosa između manjih i većih problema.  
-Zbir prvih n brojeva zavisi od zbira prvih n−1 brojeva, a funkcija se završava kada više nema preostalih elemenata.  
-Na taj način dobijamo rezultat postepeno — što je upravo suština induktivno-rekurzivne konstrukcije algoritma.
+Kao i u prethodnim primerima, rešenje se gradi korak po korak.  
+Zbir prvih n brojeva zavisi od zbira prvih n−1, i tako sve dok ne dođemo do osnovnog slučaja (n = 0).  
+Kada se rekurzija „vrati unazad“, rezultat predstavlja ukupni zbir svih brojeva.
 </div>
+
+<p>
+Na kraju samo podelimo zbir sa brojem unetih elemenata i dobijamo aritmetičku sredinu — tačku koja je jednako udaljena od svih vrednosti.
+</p>

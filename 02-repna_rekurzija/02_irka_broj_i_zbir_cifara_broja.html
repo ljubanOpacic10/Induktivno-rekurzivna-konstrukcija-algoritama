@@ -2,60 +2,70 @@
 
 <h2>Motivacija</h2>
 <p>
-Kada posmatramo broj, često nas interesuju njegove cifre – njihov broj i njihov zbir.  
-Na primer, ako imamo broj 1234, on ima 4 cifre, a njihov zbir je 10.  
-Ovakvi zadaci su idealni za vežbanje induktivnog razmišljanja jer broj možemo posmatrati kao niz manjih delova – njegovih cifara.
+Kada pogledamo neki broj, često nas zanima koliko on ima cifara i koliki je njihov zbir.  
+Na primer, broj <b>1234</b> ima <b>4 cifre</b>, a njihov zbir je <b>10</b>.  
+Ovakvi zadaci su idealni za razmišljanje <b>induktivno</b> — korak po korak.  
+</p>
+
+<p>
+Broj možemo posmatrati kao niz manjih delova — njegovih cifara.  
+Slično kao kad rastavljamo slagalicu: svaka cifra je jedan deo koji doprinosi celini.  
+Kroz ovaj zadatak naučićemo kako da broj „razložimo“ i izračunamo osobine poput broja i zbira njegovih cifara.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan način bio bi da broj pretvorimo u string, zatim prolazimo kroz sve karaktere i sabiramo njihove numeričke vrednosti.  
-Iako funkcionalno tačno, ovde ne koristimo algoritamsko razmišljanje o broju kao matematičkoj celini.  
-Naš cilj je da rešenje izvedemo induktivno, bez oslanjanja na tekstualne operacije.
+Jedna ideja bila bi da broj pretvorimo u string, zatim prolazimo kroz sve karaktere i sabiramo njihove numeričke vrednosti.  
+Iako ovo radi, u tom pristupu broj tretiramo kao tekst, a ne kao matematičku celinu.  
+Naš cilj je da naučimo kako računar može da razume cifre broja koristeći čiste brojevne operacije.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Posmatrajmo broj <i>n</i>.  
-Ako brojimo cifre induktivno, broj i zbir cifara broja <i>n</i> jednaki su broju i zbiru cifara broja <i>n/10</i>,  
-uvećanih za doprinos poslednje cifre <i>n % 10</i>.  
-Dakle, možemo reći:
+Ako posmatramo broj <i>n</i>, možemo ga razložiti na:
+</p>
+<ul>
+  <li>Poslednju cifru: <code>n % 10</code></li>
+  <li>Ostatak broja: <code>n / 10</code></li>
+</ul>
+
+<p>
+Dakle, ako znamo broj i zbir cifara broja <i>n / 10</i>, možemo jednostavno dodati doprinos poslednje cifre.
 </p>
 
 <div class="napomena">
-<p><b>Osnovni slučaj</b> — kada je n = 0, broj cifara i zbir cifara su 0.</p>
-<p><b>Induktivni korak</b> — ako znamo broj i zbir cifara broja n/10, onda samo dodajemo još jednu cifru (n % 10).</p>
+<p><b>Osnovni slučaj:</b> Ako je n = 0, broj cifara i zbir cifara su 0.</p>
+<p><b>Induktivni korak:</b> Ako znamo broj i zbir cifara broja n / 10, onda samo dodajemo jednu cifru – n % 10.</p>
 </div>
 
 <h2>Pravilan pristup</h2>
 <p>
-Rešenje možemo ostvariti jednostavnom rekurzijom koja računa od najmanjeg ka većem problemu.  
-Koristićemo dve funkcije — jednu koja broji cifre, i drugu koja računa zbir cifara.
+Rešenje se može ostvariti pomoću jednostavne rekurzije koja svaki put "skida" poslednju cifru broja.  
+U svakom koraku broj postaje manji, sve dok ne ostane 0.
 </p>
 
 <xmp class="primer_ta">
 int BrojCifara(int n)
 {
     if (n == 0)
-        return 0;
-    return 1 + BrojCifara(n / 10);
+        return 0;              // osnovni slučaj
+    return 1 + BrojCifara(n / 10); // induktivni korak
 }
 
 int ZbirCifara(int n)
 {
     if (n == 0)
-        return 0;
-    return (n % 10) + ZbirCifara(n / 10);
+        return 0;                    // osnovni slučaj
+    return (n % 10) + ZbirCifara(n / 10); // induktivni korak
 }
 
 // Ulaz: ceo broj n
 // Izlaz: broj cifara i zbir cifara
 </xmp>
 
-<p>
-Ove dve funkcije ilustruju isti obrazac razmišljanja:  
-polazimo od jednostavnog slučaja (n = 0), zatim u svakom koraku rešavamo manji deo broja, sve dok ne obradimo sve cifre.
-</p>
+<div class="napomena">
+Slično kao kada gulimo slojeve luka – svaka rekurzija „odvaja“ po jednu cifru sa kraja broja, dok ne dođemo do osnove (n = 0).
+</div>
 
 <h2>Primeri</h2>
 <table class="tabela">
@@ -63,29 +73,46 @@ polazimo od jednostavnog slučaja (n = 0), zatim u svakom koraku rešavamo manji
 <tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
 </thead>
 <tbody>
-<tr><td>123</td><td>3 6</td></tr>
-<tr><td>4095</td><td>4 18</td></tr>
-<tr><td>7</td><td>1 7</td></tr>
+<tr><td>123</td><td>3 cifre, zbir = 6</td></tr>
+<tr><td>4095</td><td>4 cifre, zbir = 18</td></tr>
+<tr><td>7</td><td>1 cifra, zbir = 7</td></tr>
 </tbody>
 </table>
 
-<h2>Pitanja za samoproveru</h2>
-<p>Šta predstavlja osnovni slučaj u ovim funkcijama?</p>
-<p>Zašto se koristi deljenje sa 10 i ostatak pri deljenju sa 10?</p>
-<p>Koja vrednost se dodaje zbiru u svakom koraku rekurzije?</p>
-<p>Kako bi se ove funkcije mogle objediniti u jednu koja vraća oba rezultata?</p>
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Šta predstavlja osnovni slučaj i zašto je neophodan?</li>
+  <li>Zašto koristimo deljenje sa 10 i ostatak pri deljenju sa 10?</li>
+  <li>Koja vrednost se dodaje zbiru u svakom koraku rekurzije?</li>
+  <li>Kako bi izgledala jedna funkcija koja vraća i broj i zbir cifara istovremeno?</li>
+</ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-1. Napiši funkciju koja vraća zbir parnih cifara broja.<br>
-2. Napiši funkciju koja računa proizvod cifara broja.<br>
-3. Napiši funkciju koja proverava da li broj ima više parnih ili neparnih cifara.<br>
-4. Objasni kako se induktivni pristup primenjuje u svakom od zadataka.
+1. Napiši funkciju koja vraća zbir samo <b>parnih cifara</b> broja.<br><br>
+2. Napiši funkciju koja računa <b>proizvod svih cifara</b> broja.<br><br>
+3. Napiši funkciju koja proverava da li broj ima više <b>parnih</b> ili <b>neparnih</b> cifara.<br><br>
+4. Objasni kako se induktivni pristup koristi u svakom od ovih zadataka.
 </div>
 
-<h2>Pomoć</h2>
+<h1>Pomoć – Broj i zbir cifara broja</h1>
+
 <div class="napomena">
-Induktivni pristup znači da problem svodimo na jednostavniji oblik.  
-Kada se broj deli sa 10, uklanjamo poslednju cifru, pa svaka sledeća rekurzija obrađuje kraći broj.  
-Kada dostignemo n = 0, vraćamo se kroz sve korake sabirajući ili brojeći cifre.
+Induktivno razmišljanje znači da veliki problem (ceo broj) svodimo na manji (kraći broj) sve dok ne stignemo do trivijalnog slučaja (n = 0).  
+U svakom koraku „odsecamo“ poslednju cifru pomoću operacije <code>/ 10</code> i koristimo <code>% 10</code> da vidimo koju smo cifru uklonili.
+</div>
+
+<p>
+Na primer, za broj <b>4095</b>:
+</p>
+<ul>
+  <li>Poslednja cifra je 5 → zbir = 5</li>
+  <li>Preostaje broj 409 → sledeća cifra 9 → zbir = 14</li>
+  <li>Preostaje broj 40 → sledeća cifra 0 → zbir = 14</li>
+  <li>Preostaje broj 4 → sledeća cifra 4 → zbir = 18</li>
+  <li>Preostaje broj 0 → kraj.</li>
+</ul>
+
+<div class="napomena">
+Kao što vidimo, svaka cifra doprinosi ukupnom zbiru dok rekurzija „putuje“ kroz broj — od zadnje prema prvoj cifri.
 </div>

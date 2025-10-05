@@ -2,19 +2,24 @@
 
 <h2>Motivacija</h2>
 <p>
-Zamislite da imate lenjir dužine od <i>a</i> do <i>b</i> i želite da ga podelite na
-jednake delove. Da li biste crtali sve tačkice unapred ili biste krenuli od
-prve, pa zatim dodavali jednu po jednu? Upravo ovakvo razmišljanje nam pomaže
-da problem rešimo sistematski – induktivno.
+Zamisli da imaš lenjir ili čokoladicu od <i>a</i> do <i>b</i> i želiš da je podeliš
+na jednake delove.  
+Da li bi odmah označio sve podeljene tačke ili bi krenuo od početka i dodavao jednu po jednu?  
+Takvo postupno razmišljanje nam pomaže da problem rešimo sistematski – baš onako kako računar radi.
 </p>
+
+<div class="napomena">
+Uvek je lakše krenuti korak po korak nego pokušati sve odjednom.
+</div>
 
 <h2>Naivno rešenje</h2>
 <p>
-Naivno rešenje bi bilo da unapred izračunamo i ispišemo svaku vrednost.
-Međutim, ako želimo da podelimo interval na mnogo delova, ovo postaje
-nepraktično. Potrebno nam je algoritamsko rešenje koje radi za bilo koji
-unos.
+Jedan način bi bio da unapred izračunamo i ispišemo sve vrednosti.
+Ako je broj delova mali (npr. 3 ili 4), to je izvodljivo,  
+ali ako imamo 100 ili 1000 delova, ručni pristup postaje nepraktičan.
+Zato nam je potreban algoritam koji može da radi za bilo koji <i>n</i>.
 </p>
+
 <xmp class="primer_ta">
 static void Intervali(int n, double a, double b)
 {
@@ -28,41 +33,49 @@ static void Intervali(int n, double a, double b)
 // Primer poziva:
 Intervali(5, -1, 1);
 </xmp>
-<button class="button_copy">Vidi primer</button>
+
 <div class="napomena">
-Naivno rešenje nam daje rezultat, ali nije induktivno konstruisano.
+Ovo daje tačan rezultat, ali ne koristi induktivno razmišljanje
+– mi unapred znamo koliko puta treba da ponovimo postupak.
 </div>
 
 <h2>Analiza problema</h2>
 <p>
-Da bismo ispisali <i>n</i> brojeva ravnomerno raspoređenih od <i>a</i> do <i>b</i>,
-potrebno je:
+Ako želimo da podelimo interval na jednake delove, moramo da shvatimo sledeće:
 </p>
 <ul>
-<li>izračunati razmak <i>dx = (b - a) / (n - 1)</i></li>
-<li>ispisati prvi broj <i>a</i></li>
-<li>zatim ispisati sledeći broj <i>a + dx</i>, pa onda <i>a + 2dx</i>, sve do <i>b</i></li>
+<li>Koliko je <b>veliki razmak</b> između tačaka: <b>dx = (b - a) / (n - 1)</b>.</li>
+<li>Prva tačka je uvek <b>a</b>.</li>
+<li>Svaka sledeća tačka dobija se dodavanjem istog <b>dx</b> na prethodnu tačku.</li>
 </ul>
+
 <p>
-Induktivno posmatrano: ako znamo kako da ispišemo prvi broj, onda znamo i kako
-da ispišemo sledećih <i>n-1</i> brojeva – jednostavno dodajemo <i>dx</i>.
+Možemo da zamislimo kako postavljamo čiode ili crtamo crtice na lenjiru:  
+obeležimo prvu tačku, zatim dodamo još jednu posle <b>dx</b> razmaka, pa još jednu, i tako dalje.
 </p>
+
+<div class="napomena">
+Induktivno razmišljanje: ako znamo gde je prva tačka, onda znamo gde je i sledeća,
+sve dok ne dođemo do kraja.
+</div>
 
 <h2>Induktivni pristup</h2>
 <p>
-Osnovni slučaj: ako je <i>n = 0</i>, prekidamo.  
-Induktivni korak: ispišemo trenutni broj <i>a</i>, pa zatim pozivamo funkciju za
-<n-1> brojeva počevši od <i>a + dx</i>.
+Rekurzija nam omogućava da problem rešimo postepeno:
 </p>
+<ul>
+<li><b>Osnovni slučaj:</b> Ako više nema tačaka za ispisivanje (n = 0), zaustavljamo se.</li>
+<li><b>Induktivni korak:</b> Ispišemo trenutnu tačku, pa ponovo pozovemo funkciju za preostale (n-1) tačaka, ali krećemo iz sledeće tačke <b>a + dx</b>.</li>
+</ul>
 
-<h2>Primeri i testovi</h2>
+<h2>Primer koda</h2>
 <xmp class="primer_ta">
 static void RavnomernoRasporedjeniBrojevi(int n, double a, double dx)
 {
     if (n > 0)
     {
-        Console.WriteLine(a.ToString("0.00000"));
-        RavnomernoRasporedjeniBrojevi(n - 1, a + dx, dx);
+        Console.WriteLine(a.ToString("0.00000"));     // ispisujemo trenutnu tačku
+        RavnomernoRasporedjeniBrojevi(n - 1, a + dx, dx); // prelazimo na sledeću
     }
 }
 
@@ -75,22 +88,43 @@ static void Main()
     RavnomernoRasporedjeniBrojevi(n, a, dx);
 }
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
 <div class="napomena">
-Ovde jasno vidimo induktivnu konstrukciju: osnovni slučaj je prekid, a
-induktivni korak dodaje sledeću tačku u intervalu.
+Ovde lepo vidimo obrazac: ako znamo kako da ispišemo (n-1) brojeva iz sledeće tačke,  
+onda je dovoljno samo da dodamo trenutnu tačku i tako rekurzija rešava problem.
 </div>
 
-<h2>Pitanja za samoevaluaciju</h2>
+<h2>Pitanja za razmišljanje</h2>
 <ul>
-<li>Zašto u formuli koristimo <i>(n - 1)</i> u imenitelju?</li>
-<li>Šta bi se desilo kada bismo zaboravili osnovni slučaj u rekurziji?</li>
-<li>Kako biste promenili algoritam da brojevi budu ispisani sa 3 decimale?</li>
+<li>Zašto u formuli koristimo <b>(n - 1)</b> u imenitelju, a ne <b>n</b>?</li>
+<li>Šta bi se desilo ako bismo zaboravili osnovni slučaj u rekurziji?</li>
+<li>Kako biste izmenili algoritam da brojevi budu ispisani sa samo 3 decimale?</li>
 </ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-Napišite algoritam koji deli interval [0, 2π] na <i>n</i> jednakih delova i
-ispisuje vrednosti funkcije sin(x) u tim tačkama.
+Napišite algoritam koji deli interval [0, 2π] na <i>n</i> jednakih delova  
+i ispisuje vrednosti funkcije <b>sin(x)</b> u tim tačkama.
 </div>
+
+<h1>Pomoć – Podela intervala na jednake delove</h1>
+
+<p>
+Ako niste sigurni kako da krenete, pratite sledeće korake:
+</p>
+<ul>
+<li>Izračunajte rastojanje između tačaka: <b>dx = (b - a) / (n - 1)</b>.</li>
+<li>Ispišite prvu vrednost <b>a</b>.</li>
+<li>Dodajte <b>dx</b> da biste dobili sledeću vrednost.</li>
+<li>Ponavljajte dok ne ispišete sve tačke.</li>
+</ul>
+
+<div class="napomena">
+Induktivno razmišljanje: ako ste pronašli jednu tačku,  
+znate kako da pronađete i sledeću – dok ne stignete do kraja intervala.
+</div>
+
+<p>
+Ako program „ne staje“, proverite da li ste napisali osnovni slučaj
+koji prekida rekurziju (n > 0).
+</p>

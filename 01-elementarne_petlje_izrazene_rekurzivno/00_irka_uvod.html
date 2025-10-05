@@ -1,0 +1,100 @@
+<h1>Poglavlje I: Elementarne petlje izražene rekurzivno</h1>
+
+<h2>Uvod i motivacija</h2>
+<p>
+Gotovo svaki algoritam koji napišemo u programiranju sadrži neku formu <b>ponavljanja</b> — bilo da brojimo, sabiramo, učitavamo podatke ili proveravamo uslove.  
+Takve situacije obično rešavamo pomoću petlji (<i>for</i>, <i>while</i>, <i>do-while</i>), ali u ovom poglavlju naučićemo da <b>svaka petlja može biti izražena i rekurzivno</b>.
+</p>
+
+<p>
+Možda se na prvi pogled čini da su petlje i rekurzija potpuno različite, ali zapravo one rade istu stvar — ponavljaju određeni postupak dok se ne ispuni neki uslov.  
+Razlika je u tome što se kod rekurzije „petlja“ ostvaruje tako što funkcija poziva samu sebe, dok u klasičnim petljama ponavljanje kontrolišemo ručno.
+</p>
+
+<div class="napomena">
+Induktivni pristup nam pomaže da svaku petlju posmatramo kao <b>niz manjih koraka</b> —  
+svaki korak rešava manji deo problema dok ne stignemo do osnovnog slučaja.  
+Na taj način razvijamo sposobnost da prepoznamo obrasce koji se kasnije koriste u složenijim algoritmima.
+</div>
+
+<h2>Šta ćemo naučiti u ovom poglavlju</h2>
+<p>
+U ovom poglavlju bavićemo se jednostavnim zadacima koji prikazuju kako osnovne petlje možemo zapisati rekurzivno.  
+Kroz njih ćemo naučiti da:
+</p>
+<ul>
+  <li>prepoznamo osnovni slučaj i induktivni korak u jednostavnim zadacima,</li>
+  <li>razumemo kako funkcija „pamti“ stanje između poziva,</li>
+  <li>shvatimo da rekurzija i petlje zapravo rešavaju isti tip problema — ponavljanje,</li>
+  <li>i da se rekurzivno razmišljanje može primeniti čak i na najosnovnije algoritme.</li>
+</ul>
+
+<h2>Pregled lekcija</h2>
+
+<table class="tabela">
+<thead>
+<tr><th>Redni broj</th><th>Naziv lekcije</th><th>Šta se uči</th></tr>
+</thead>
+<tbody>
+
+<tr>
+<td>1.</td>
+<td><b>Brojevi od a do b</b></td>
+<td>Učimo kako da ispišemo sve brojeve u zadatom intervalu koristeći rekurziju umesto petlje.</td>
+</tr>
+
+<tr>
+<td>2.</td>
+<td><b>Brojanje u igri žmurke</b></td>
+<td>Praktičan primer koji pokazuje kako rekurzija može oponašati ritam i ponavljanje iz svakodnevnog života.</td>
+</tr>
+
+<tr>
+<td>3.</td>
+<td><b>Odbrojavanje unazad</b></td>
+<td>Vežbamo razumevanje redosleda izvršavanja rekurzivnih poziva – od kraja ka početku.</td>
+</tr>
+
+<tr>
+<td>4.</td>
+<td><b>Trocifreni parni brojevi</b></td>
+<td>Učimo kako da kroz rekurziju filtriramo brojeve na osnovu određenog uslova (parnost, cifre itd.).</td>
+</tr>
+
+<tr>
+<td>5.</td>
+<td><b>Podela intervala na jednake delove</b></td>
+<td>Prvi korak ka kombinovanju aritmetike i rekurzije — kako podeliti opseg na jednake delove bez petlji.</td>
+</tr>
+
+<tr>
+<td>6.</td>
+<td><b>Geometrijska serija</b></td>
+<td>Pokazujemo da se rekurzija ne koristi samo za brojeve, već i za izraze koji se ponavljaju po obrascu.</td>
+</tr>
+
+<tr>
+<td>7.</td>
+<td><b>Zbir n brojeva</b></td>
+<td>Jedan od najklasičnijih primera induktivne konstrukcije – kako sabrati sve elemente bez eksplicitne petlje.</td>
+</tr>
+
+<tr>
+<td>8.</td>
+<td><b>Čitanje do nule</b></td>
+<td>Pokazuje kako se rekurzija može koristiti i kada ne znamo koliko će brojeva biti uneto – unos traje dok se ne ispuni uslov.</td>
+</tr>
+
+</tbody>
+</table>
+
+<h2>Cilj i očekivanja</h2>
+<p>
+Na kraju ovog poglavlja razumećeš kako svaka obična petlja može biti izražena rekurzijom i obrnuto.  
+Naučićeš da prepoznaješ osnovne obrasce rekurzije, da pratiš tok izvršavanja funkcije i da intuitivno razumeš kada i zašto se algoritam zaustavlja.
+</p>
+
+<div class="napomena">
+Ovo poglavlje je temelj za sve što sledi.  
+Kada ovladaš elementarnim rekurzivnim petljama, biće ti mnogo lakše da razumeš <b>repnu rekurziju</b> i kasnije da iz nje izvedeš <b>iterativne algoritme</b>.
+</div>

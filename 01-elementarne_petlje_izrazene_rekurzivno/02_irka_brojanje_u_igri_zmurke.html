@@ -2,23 +2,35 @@
 
 <h2>Motivacija</h2>
 <p>
-Sećate li se igre žmurke? Jedno dete zatvori oči i broji do određenog broja, 
-dok se ostali sakrivaju. Vrlo često, deca broje po pet: 
-„5, 10, 15, 20...“. Ovaj način brojanja nije slučajan – on nam pokazuje 
-kako se mogu brojati samo brojevi koji ispunjavaju određeno pravilo. 
-Hajde da vidimo kako kompjuter može da ponovi isto.
+Sećate li se igre žmurke? 
+Jedno dete zatvori oči i broji do određenog broja dok se ostali sakrivaju.  
+Vrlo često, deca broje po pet:  
+„5, 10, 15, 20...“  
+
+Ovaj način brojanja nije slučajan – on nam pokazuje kako se može brojati samo brojevima
+koji ispunjavaju određeno pravilo.  
+Hajde da vidimo kako možemo naučiti <b>računar</b> da uradi isto.
 </p>
+
+<div class="napomena">
+U programiranju nas često zanimaju brojevi koji imaju određena svojstva:
+deljivi sa nekim brojem, u određenom intervalu i slično.
+Zato je ovo više od igre – pomaže nam da naučimo važan obrazac razmišljanja.
+</div>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedna ideja bila bi da ručno napišemo sve brojeve: 5, 10, 15, 20... sve do <i>x</i>. 
-Ali to ne bi bilo praktično, naročito ako je <i>x = 1000</i>. 
-Potrebno nam je opštije rešenje koje radi za bilo koji dozvoljeni unos.
+Prva ideja mogla bi biti da sve brojeve ručno napišemo u programu: 5, 10, 15, 20... sve do <i>x</i>.  
+Ali zamislite da je <i>x = 1000</i>!  
+To bi bilo veoma nepraktično.
+
+Potrebno nam je <b>opštije rešenje</b> koje radi za svaki dozvoljeni unos.
 </p>
+
 <xmp class="primer_ta">
 static void Zmurke(int x, int k)
 {
-    for (int i = 0; i <= x; i+=k)
+    for (int i = 0; i <= x; i += k)
     {
         Console.WriteLine(i);
     }
@@ -27,66 +39,117 @@ static void Zmurke(int x, int k)
 // Primer poziva:
 Zmurke(100, 5);
 </xmp>
-<button class="button_copy">Vidi primer</button>
+
 <div class="napomena">
-Naivno rešenje nas uči da prepoznamo ograničenja ručnog pristupa i 
-da potražimo sistematski metod.
+Naivno rešenje nam pomaže da vidimo ograničenja „ručnog” pristupa
+i da shvatimo zašto nam je potreban sistematičan, algoritamski pristup.
 </div>
 
 <h2>Analiza problema</h2>
 <p>
-Zadatak možemo posmatrati ovako: 
-da bismo ispisali sve brojeve deljive sa 5 od 5 do <i>x</i>, potrebno je da:
+Razmislimo pažljivije.  
+Da bismo ispisali sve brojeve deljive sa 5 od 5 do <i>x</i>, možemo reći:
 </p>
+
 <ul>
-<li>Ispišemo broj 5</li>
-<li>Zatim ispišemo 10, 15, 20... sve do <i>x</i></li>
+<li>Prvo ispisujemo 5.</li>
+<li>Zatim ispisujemo sledeći broj dobijen dodavanjem 5, dakle 10.</li>
+<li>Nastavljamo sve dok ne dođemo do broja koji je veći od <i>x</i>.</li>
 </ul>
+
 <p>
-To možemo opisati induktivno: 
-ako znamo da ispišemo brojeve do <i>k</i>, onda je sledeći broj koji treba dodati upravo <i>k+5</i>. 
-Tako dobijamo jasan obrazac.
+Ovo možemo da opišemo <b>induktivno</b>:  
+ako znamo da ispišemo sve brojeve do nekog <i>k</i>, 
+onda sledeći broj jednostavno dobijamo dodavanjem još 5.  
+Time otkrivamo jasan obrazac brojanja.
 </p>
+
+<div class="napomena">
+Induktivni pristup uči nas da prepoznamo <b>pravilo prelaza</b>:
+kako da iz rešenja manjeg problema dođemo do rešenja većeg.
+</div>
 
 <h2>Induktivni pristup</h2>
 <p>
-Osnovni slučaj: ako je broj koji treba ispisati veći od <i>x</i>, završavamo.  
-Induktivni korak: ako trenutno ispisujemo broj <i>k</i>, sledeći broj je <i>k+5</i>.  
-Na taj način gradimo algoritam korak po korak.
+Kao i u mnogim algoritamskim problemima, krećemo od dva osnovna dela:
+
+<b>Osnovni slučaj:</b>  
+Ako je trenutni broj koji treba ispisati veći od <i>x</i>, tu se zaustavljamo.
+Nema više brojeva koji ispunjavaju uslov.
+
+<b>Induktivni korak:</b>  
+Ako trenutno ispisujemo broj <i>k</i>, sledeći broj je <i>k + 5</i>.  
+Tako se, korak po korak, gradi čitavo rešenje.
 </p>
+
+<div class="napomena">
+Ovde vidimo kako algoritamsko razmišljanje koristi pravilo:
+„ako znam da ispišem brojeve do <i>k</i>, znam i kako da ispišem sledeći, <i>k+5</i>”.
+</div>
 
 <h2>Primeri i testovi</h2>
 <xmp class="primer_ta">
-    static void Zmurke(int x, int k)
-    {
-        if (k > x)
-            return;
-        Console.WriteLine(k);
-        Zmurke(x, k + 5);
-    }
+static void Zmurke(int x, int k)
+{
+    if (k > x)
+        return;
 
-    static void Main()
-    {
-        int x = int.Parse(Console.ReadLine());
-        Zmurke(x, 5);
-    }
+    Console.WriteLine(k);
+    Zmurke(x, k + 5);
+}
+
+static void Main()
+{
+    int x = int.Parse(Console.ReadLine());
+    Zmurke(x, 5);
+}
 </xmp>
-<button class="button_copy">Vidi primer</button>
+
+<xmp class="primer_ta">
+// Ulaz:
+25
+
+// Izlaz:
+5
+10
+15
+20
+25
+</xmp>
 
 <div class="napomena">
-Ovde vidimo da induktivno-rekurzivna konstrukcija omogućava
-da jednostavno definišemo zadatak: 
-prvo osnovni slučaj (zaustavljanje), zatim pravilo prelaza (dodavanje +5).
+Induktivno-rekurzivna konstrukcija nam omogućava jednostavnu logiku:
+prvo proveravamo <b>osnovni slučaj</b> (da li je broj veći od <i>x</i>),  
+zatim pravilo prelaza (dodavanje +5) vodi nas do sledećeg broja.
 </div>
 
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-<li>Koji je osnovni slučaj u ovom zadatku?</li>
-<li>Šta se menja u odnosu na prethodni zadatak „Brojevi od a do b“?</li>
-<li>Kako bismo izmenili algoritam ako želimo brojanje po deset (10,20,30,...)?</li>
+<li>Koji je osnovni slučaj u ovom zadatku i zašto je važan?</li>
+<li>U čemu je razlika u odnosu na zadatak „Brojevi od a do b”?</li>
+<li>Kako biste prilagodili algoritam da broji po 10 (10, 20, 30...)?</li>
+<li>Zašto je induktivno razmišljanje korisno kada radimo s velikim brojevima?</li>
 </ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-Napišite algoritam koji ispisuje brojeve deljive sa 7, počevši od 7 i završavajući sa zadatim brojem <i>x</i>.
+Napišite algoritam koji ispisuje sve brojeve deljive sa 7,
+počevši od 7 i završavajući sa zadatim brojem <i>x</i>.
+</div>
+
+<h1>Pomoć: Brojanje u igri žmurke</h1>
+
+<p>
+Ako ne znate odakle da počnete, razmislite ovako:
+</p>
+
+<ul>
+<li>Prvi broj koji treba ispisati je uvek 5.</li>
+<li>Sledeći broj dobijamo dodavanjem još 5 na prethodni.</li>
+<li>Prestanemo kad sledeći broj postane veći od <i>x</i>.</li>
+</ul>
+
+<div class="napomena">
+Induktivno razmišljanje nam pokazuje kako <b>jedan korak vodi ka sledećem</b>.
+Ako znamo da ispišemo brojeve do <i>k</i>, znamo i kako da ispišemo <i>k+5</i>.
 </div>

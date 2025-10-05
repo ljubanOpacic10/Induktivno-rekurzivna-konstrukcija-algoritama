@@ -3,33 +3,45 @@
 <h2>Motivacija</h2>
 <p>
 Na takmičenjima i rang listama često nas ne zanima samo najbolji rezultat, već i <b>drugi najbolji</b>.  
-Na primer, ako imamo rezultate 87, 95, 90, 100, 92 – želimo da pronađemo drugi po veličini rezultat, koji je odmah iza najboljeg.  
-Ovaj zadatak nam pokazuje kako se to može uraditi korak po korak, koristeći induktivno-rekurzivni pristup.
+Na primer, ako imamo rezultate <code>87, 95, 90, 100, 92</code> – želimo da pronađemo rezultat koji je odmah ispod najboljeg.  
+Takvi zadaci su važni jer nas uče kako da prepoznamo obrasce i pronađemo rešenje bez dodatnih koraka, poput sortiranja.  
+</p>
+
+<p>
+Ovaj zadatak nam pokazuje kako da <b>postepeno</b> pronađemo drugi maksimum, koristeći <b>induktivno–rekurzivno razmišljanje</b>:  
+rešenje se gradi korak po korak, dok funkcija u svakom koraku pamti samo ono što joj je potrebno — dva najveća broja do tada.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jednostavno rešenje bilo bi da smestimo sve rezultate u niz, sortiramo ga i uzmemo drugi element s kraja.  
-Iako ovo radi, to nije ni najefikasnije ni najpoučnije rešenje.  
-Induktivni pristup nam omogućava da drugi maksimum pronađemo bez sortiranja – tako što u svakom koraku pratimo samo dva najveća broja.
+Najjednostavnije rešenje bilo bi da smestimo sve rezultate u niz, sortiramo ih i uzmemo drugi element s kraja.  
+Iako ovakav pristup funkcioniše, on je <b>neefikasan</b> (zahteva sortiranje svih brojeva) i ne otkriva <em>logiku</em> 
+kako drugi maksimum možemo pronaći „u hodu“.  
+Induktivni pristup nam omogućava da to uradimo <b>bez sortiranja</b>, prateći samo dva broja — najveći i drugi najveći.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Ako imamo n brojeva, dovoljno je da u svakom trenutku znamo samo <b>dva najveća</b> broja do tog trenutka:  
+Ako imamo <i>n</i> brojeva, dovoljno je da u svakom trenutku znamo samo <b>dva najveća</b>:  
 trenutni maksimum i drugi maksimum.  
-Kada učitamo novi broj, proveravamo:
+Kada učitamo novi broj, proveravamo sledeće:
 </p>
 
 <div class="napomena">
-<p>• Ako je novi broj veći od trenutnog maksimuma – postaje novi maksimum, a stari maksimum postaje drugi.</p>
-<p>• Ako je novi broj manji od maksimuma, ali veći od drugog maksimuma – postaje novi drugi maksimum.</p>
+<p>• Ako je novi broj veći od trenutnog maksimuma — on postaje novi maksimum, a stari maksimum postaje drugi.</p>
+<p>• Ako je novi broj manji od maksimuma, ali veći od drugog maksimuma — on postaje novi drugi maksimum.</p>
 <p>• Ako nije veći ni od jednog, ništa se ne menja.</p>
 </div>
 
+<p>
+Na taj način svaki korak zavisi samo od prethodnog stanja —  
+što je suština <b>induktivnog pristupa</b>.
+</p>
+
 <h2>Pravilan pristup</h2>
 <p>
-Koristićemo repno-rekurzivnu funkciju koja u svakom koraku obrađuje po jedan broj i ažurira trenutna dva maksimuma.
+Koristićemo <b>repno–rekurzivnu funkciju</b> koja obrađuje po jedan broj i ažurira trenutna dva maksimuma.  
+Funkcija u svakom koraku „pamti“ samo ono što je važno — najveći i drugi najveći broj do tada.
 </p>
 
 <xmp class="primer_ta">
@@ -41,41 +53,43 @@ int Drugi(int n, int prviMaks, int drugiMaks)
     int x = int.Parse(Console.ReadLine());
 
     if (x > prviMaks)
-        return Drugi(n - 1, x, prviMaks);
+        return Drugi(n - 1, x, prviMaks);      // novi maksimum
     else if (x > drugiMaks)
-        return Drugi(n - 1, prviMaks, x);
+        return Drugi(n - 1, prviMaks, x);      // novi drugi maksimum
     else
-        return Drugi(n - 1, prviMaks, drugiMaks);
+        return Drugi(n - 1, prviMaks, drugiMaks); // ništa se ne menja
 }
 
 int Drugi(int n)
 {
-    return Drugi(n, -1, -1);
+    return Drugi(n, int.MinValue, int.MinValue);
 }
 
-// Ulaz: broj n i n rezultata (celih brojeva)
-// Izlaz: drugi najveći broj u unetoj listi
+// Ulaz: broj n i zatim n rezultata (celih brojeva)
+// Izlaz: drugi najveći broj u listi
 </xmp>
+
+<div class="napomena">
+Kao početne vrednosti koristimo <code>int.MinValue</code> da bi rešenje bilo ispravno i za negativne brojeve.
+</div>
 
 <h2>Objašnjenje toka izvršavanja</h2>
 <p>
-Tok izvršavanja možemo pratiti na primeru:<br>
-n = 5<br>
-Uneti brojevi: 3, 8, 1, 2, 5
+Zamislimo da unosimo 5 brojeva: 3, 8, 1, 2, 5.  
+Funkcija radi ovako:
 </p>
 
-<p>
-Drugi(5, -1, -1) => učitavamo 3, prviMaks = 3, drugiMaks = -1<br>
-Drugi(4, 3, -1) => učitavamo 8, x > prviMaks → novi maksimum = 8, drugi = 3<br>
-Drugi(3, 8, 3) => učitavamo 1, ne menja se ništa (1 < 3)<br>
-Drugi(2, 8, 3) => učitavamo 2, ne menja se ništa (2 < 3)<br>
-Drugi(1, 8, 3) => učitavamo 5, x > drugiMaks → drugiMaks = 5<br>
-Drugi(0, 8, 5) => n = 0, kraj rekurzije, rezultat = 5<br>
-</p>
+<ul>
+  <li>Drugi(5, -∞, -∞) → učitavamo 3 → prviMaks = 3, drugiMaks = -∞</li>
+  <li>Drugi(4, 3, -∞) → učitavamo 8 → novi maksimum = 8, drugiMaks = 3</li>
+  <li>Drugi(3, 8, 3) → učitavamo 1 → ništa se ne menja</li>
+  <li>Drugi(2, 8, 3) → učitavamo 2 → ništa se ne menja</li>
+  <li>Drugi(1, 8, 3) → učitavamo 5 → novi drugi maksimum = 5</li>
+  <li>Drugi(0, 8, 5) → n = 0 → vraća rezultat 5</li>
+</ul>
 
 <p>
-Dakle, funkcija se završava kada je <b>n = 0</b> i vraća vrednost <b>5</b>.  
-To znači da je za unete brojeve 3, 8, 1, 2, 5 drugi najveći broj <b>5</b>.
+Konačan rezultat je <b>5</b>, što znači da je drugi najveći broj među unetima 3, 8, 1, 2, 5 upravo <b>5</b>.
 </p>
 
 <h2>Primeri</h2>
@@ -91,22 +105,31 @@ To znači da je za unete brojeve 3, 8, 1, 2, 5 drugi najveći broj <b>5</b>.
 </table>
 
 <h2>Pitanja za samoproveru</h2>
-<p>Koja su dva ključna parametra funkcije i šta predstavljaju?</p>
-<p>Zašto funkcija mora da poredi novi broj sa oba trenutna maksimuma?</p>
-<p>Kako funkcija zna kada da se zaustavi?</p>
-<p>Šta bi se desilo ako bi svi brojevi bili isti?</p>
+<ul>
+  <li>Koja su dva ključna parametra funkcije i šta oni predstavljaju?</li>
+  <li>Zašto funkcija mora da poredi novi broj sa oba trenutna maksimuma?</li>
+  <li>Kako funkcija zna da se treba zaustaviti?</li>
+  <li>Šta bi se desilo ako bi svi brojevi bili jednaki?</li>
+</ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-1. Napiši funkciju koja pronalazi treći po veličini broj u nizu.<br>
-2. Napiši funkciju koja pronalazi i najmanji i najveći broj istovremeno.<br>
-3. Prilagodi funkciju tako da brojevi budu prosleđeni kroz niz, a ne sa tastature.<br>
+1. Napiši funkciju koja pronalazi <b>treći</b> po veličini broj u nizu.<br><br>
+2. Napiši funkciju koja pronalazi istovremeno <b>najveći i najmanji</b> broj.<br><br>
+3. Prilagodi funkciju tako da brojevi budu <b>u nizu</b> umesto da se unose sa tastature.<br><br>
 4. Objasni kako se u svakom od ovih zadataka koristi induktivni korak.
 </div>
 
-<h2>Pomoć</h2>
+<h1>Pomoć – Drugi na rang listi</h1>
+
 <div class="napomena">
-Induktivni pristup u ovom zadatku ogleda se u tome da svaki novi broj ažurira samo ono što je potrebno –  
-bilo maksimum, bilo drugi maksimum – bez ponovnog prolaska kroz sve prethodne vrednosti.  
-Na taj način funkcija „pamti“ dva ključna podatka i rekurzivno ih prenosi sve dok se ne obrade svi elementi.
+Induktivni pristup u ovom zadatku znači da svaka nova vrednost ažurira samo ono što je potrebno —  
+bilo maksimum, bilo drugi maksimum.  
+Funkcija ne mora da „pamti“ sve brojeve, već samo dva ključna podatka,  
+koja rekurzivno prenosi dok ne obradi sve elemente.
 </div>
+
+<p>
+Ako ti je teško da razumeš tok rekurzije, probaj sam da zapišeš korake za 4 unosa,  
+npr. 7, 5, 9, 8 — i posmatraj kako se maksimum i drugi maksimum menjaju u svakom koraku.
+</p>

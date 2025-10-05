@@ -3,23 +3,35 @@
 <h2>Motivacija</h2>
 <p>
 Računanje stepena broja je jedan od najčešćih zadataka u matematici i programiranju.  
-Na primer, 2³ znači da broj 2 treba pomnožiti sam sa sobom tri puta: 2 × 2 × 2 = 8.  
-Umesto da odmah koristimo ugrađene funkcije, hajde da analiziramo kako se ova operacija može konstruisati <b>induktivno</b>.
+Na primer, izraz <b>2³</b> znači da broj 2 treba pomnožiti sam sa sobom tri puta: 2 × 2 × 2 = 8.  
+Ova ideja se često javlja i u stvarnom životu – recimo, kada se veličina ćelije udvostručava svaka tri sata, ili kada se broj bakterija umnožava svakim ciklusom rasta.  
+To je upravo primer <b>eksponencijalnog rasta</b>.
+</p>
+
+<p>
+Umesto da odmah koristimo ugrađene funkcije (poput <code>Math.Pow()</code>), hajde da otkrijemo kako se ova operacija može izvesti <b>induktivno</b> – korak po korak, kao što to radi računar „iznutra“.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan jednostavan način je korišćenje petlje koja ponavlja množenje x sa samim sobom n puta.  
-Ovakav algoritam radi, ali ne pokazuje <b>način razmišljanja</b> – kako se rezultat gradi korak po korak.  
-Da bismo razumeli suštinu, pokušaćemo da formulišemo algoritam koji sledi induktivnu logiku.
+Jedan očigledan način bio bi da koristimo petlju koja ponavlja množenje broja <b>x</b> sa samim sobom <b>n</b> puta.  
+Ovakav pristup radi, ali ne otkriva <b>logiku iza</b> procesa.  
+Kada znamo *zašto* i *kako* algoritam funkcioniše, možemo ga lako proširiti, optimizovati ili modifikovati — i tu dolazi induktivni pristup.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Posmatrajmo stepen broja xⁿ.  
-Ako želimo da ga izračunamo induktivno, možemo posmatrati odnos između xⁿ i xⁿ⁻¹  
-(xⁿ = x × xⁿ⁻¹).<br>
-Drugim rečima, ako znamo vrednost xⁿ⁻¹, samo je potrebno da rezultat pomnožimo sa još jednim x.
+Posmatrajmo izraz <b>xⁿ</b>.  
+Ako već znamo vrednost <b>xⁿ⁻¹</b>, do rezultata dolazimo jednostavno:
+</p>
+
+<p>
+<b>xⁿ = x × xⁿ⁻¹</b>
+</p>
+
+<p>
+Dakle, problem „stepena n“ možemo svesti na manji problem – „stepen n−1“.  
+Ovo je suština induktivnog razmišljanja: veći problem rešavamo tako što iskoristimo rešenje manjeg.
 </p>
 
 <div class="napomena">
@@ -29,51 +41,52 @@ Drugim rečima, ako znamo vrednost xⁿ⁻¹, samo je potrebno da rezultat pomno
 
 <h2>Pravilan pristup</h2>
 <p>
-Koristićemo repno-rekurzivnu funkciju koja postepeno gradi rezultat.  
-Funkcija prima tri parametra:  
+Rešenje možemo zapisati kao rekurzivnu funkciju koja postepeno „gradi“ rezultat.  
+U ovom primeru koristićemo <b>repnu rekurziju</b> (tail recursion), jer funkcija nakon rekurzivnog poziva više ne obavlja nikakve dodatne izračune — samo vraća rezultat.
+</p>
+
+<p>
+Funkcija prima tri parametra:
 </p>
 
 <div class="napomena">
-<p><b>x</b> — broj koji stepenujemo,</p>
-<p><b>s</b> — trenutna vrednost proizvoda (početno je 1),</p>
-<p><b>n</b> — broj preostalih množenja koja treba obaviti.</p>
+<p><b>x</b> — broj koji stepenujemo</p>
+<p><b>s</b> — trenutni rezultat (početno 1, jer je neutralan element za množenje)</p>
+<p><b>n</b> — preostali broj množenja</p>
 </div>
 
 <p>
-Kada n dostigne 0, rezultat je gotov i funkcija vraća konačnu vrednost.
+Kada n postane 0, to znači da smo uradili sva potrebna množenja i rezultat vraćamo kao gotov.
 </p>
 
 <xmp class="primer_ta">
 double Stepen(double x, double s, int n)
 {
     if (n == 0)
-        return s;
-    return Stepen(x, s * x, n - 1);
+        return s;                 // osnovni slučaj
+    return Stepen(x, s * x, n - 1); // induktivni korak
 }
 
 double Stepen(double x, int n)
 {
-    return Stepen(x, 1.0, n);
+    return Stepen(x, 1.0, n);     // inicijalni poziv
 }
-
-// Ulaz: broj x i stepen n
-// Izlaz: vrednost xⁿ
 </xmp>
 
+<h2>Tok izvršavanja</h2>
 <p>
-Tok izvršavanja možemo pratiti na primeru x = 2 i n = 3:
+Za x = 2 i n = 3:
 </p>
+<ul>
+  <li>Stepen(2, 1, 3) → još 3 koraka, s = 1</li>
+  <li>Stepen(2, 2, 2) → s = 1 × 2 = 2</li>
+  <li>Stepen(2, 4, 1) → s = 2 × 2 = 4</li>
+  <li>Stepen(2, 8, 0) → kraj rekurzije, rezultat = 8</li>
+</ul>
 
 <p>
-Stepen(2, 1, 3) => početni poziv, s = 1, još treba da pomnožimo tri puta<br>
-Stepen(2, 2, 2) => s = 1 × 2 = 2, preostalo množenje: 2 puta<br>
-Stepen(2, 4, 1) => s = 2 × 2 = 4, preostalo množenje: 1 put<br>
-Stepen(2, 8, 0) => s = 4 × 2 = 8, n = 0, kraj rekurzije<br>
-</p>
-
-<p>
-Dakle, funkcija se završava kada <b>n = 0</b> i vraća konačan rezultat <b>s = 8</b>.  
-To znači da je <b>2³ = 8</b>.
+Dakle, funkcija se završava kada <b>n = 0</b> i vraća konačnu vrednost <b>8</b>.  
+I upravo tako „misli“ i računar — korak po korak, od poznatog slučaja ka složenijem.
 </p>
 
 <h2>Primeri</h2>
@@ -88,23 +101,40 @@ To znači da je <b>2³ = 8</b>.
 </tbody>
 </table>
 
-<h2>Pitanja za samoproveru</h2>
-<p>Koji je osnovni slučaj u ovom algoritmu i zašto je potreban?</p>
-<p>Zašto koristimo s kao pomoćni parametar u funkciji?</p>
-<p>Kako funkcija zna kada da se zaustavi?</p>
-<p>Kako bi izgledalo iterativno rešenje istog problema?</p>
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Zašto je osnovni slučaj potreban? Šta bi se desilo da ga izostavimo?</li>
+  <li>Zašto funkcija koristi pomoćni parametar <b>s</b>?</li>
+  <li>Kako znamo da će rekurzija sigurno stati?</li>
+  <li>Kako bi izgledala iterativna verzija ove funkcije?</li>
+  <li>Da li se može optimizovati broj rekurzivnih poziva (na primer, pomoću eksponencijacije kvadriranjem)?</li>
+</ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-1. Napiši funkciju koja računa xⁿ i za slučaj kada je n negativan (x⁻ⁿ = 1 / xⁿ).<br>
-2. Napiši funkciju koja računa kvadrat broja (x²) bez korišćenja rekurzije.<br>
-3. Pokušaj da napišeš funkciju koja koristi samo jednu funkciju (bez pomoćnog parametra s).<br>
-4. Objasni gde se u svakom od ovih zadataka koristi induktivni korak.
+1. Napiši funkciju koja računa xⁿ i kada je n negativan (x⁻ⁿ = 1 / xⁿ).<br><br>
+2. Napiši funkciju koja računa kvadrat broja (x²) bez korišćenja rekurzije.<br><br>
+3. Napiši funkciju koja računa xⁿ bez dodatnog parametra s (klasična rekurzija).<br><br>
+4. Objasni u svakoj varijanti gde se koristi osnovni slučaj, a gde induktivni korak.
 </div>
 
-<h2>Pomoć</h2>
+<h1>Pomoć – Stepen broja</h1>
+
 <div class="napomena">
-Induktivno razmišljanje u ovom zadatku podrazumeva da razumemo kako se svaki sledeći rezultat gradi iz prethodnog.  
-Ako znamo xⁿ⁻¹, jednostavno ga množimo sa x da bismo dobili xⁿ.  
-Repno-rekurzivna funkcija samo automatizuje ovaj proces, bez dodatnih računanja nakon poziva funkcije.
+Induktivno razmišljanje znači da razbijemo veliki problem na manji, koji je istog tipa, ali jednostavniji.  
+Za stepen broja to znači: da bismo dobili xⁿ, najpre izračunamo xⁿ⁻¹ i zatim ga pomnožimo sa x.
 </div>
+
+<p>
+Na primer, ako je x = 3 i n = 4:
+</p>
+<ul>
+  <li>3¹ = 3</li>
+  <li>3² = 3 × 3 = 9</li>
+  <li>3³ = 9 × 3 = 27</li>
+  <li>3⁴ = 27 × 3 = 81</li>
+</ul>
+
+<p>
+Svaki korak koristi rezultat prethodnog — baš kao što indukcija gradi složenije rešenje iz jednostavnijeg.
+</p>

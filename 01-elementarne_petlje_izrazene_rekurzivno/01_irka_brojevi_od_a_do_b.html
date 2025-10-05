@@ -2,21 +2,30 @@
 
 <h2>Motivacija</h2>
 <p>
-Zamislite da želite da na tabli ispišete sve brojeve od jednog do drugog, 
-na primer od 3 do 6. Uradili biste to tako što napišete 3, zatim sledeći broj 4, 
-onda 5, i na kraju 6. Jednostavno, zar ne? 
-Ali, kako kompjuter da „nauči“ da uradi isti zadatak, bez obzira koja dva broja zadamo?
+Zamislite da na času matematike dobijete zadatak da na tabli napišete sve brojeve
+od jednog do drugog, na primer od 3 do 6. Uradili biste to lako: napišete 3, 
+zatim sledeći broj 4, onda 5, i na kraju 6. 
+Jednostavno, zar ne? 
+
+Ali sada razmislite: kako da naučimo <b>računar</b> da uradi isto? 
+Računar ne ume sam da "nastavlja redom", već moramo da mu objasnimo <b>pravilo</b>.
 </p>
+
+<div class="napomena">
+U programiranju je važno ne samo da rešimo zadatak, nego i da razumemo <b>kako</b> 
+dolazimo do rešenja, da bismo sličan pristup mogli da primenimo i na druge probleme.
+</div>
 
 <h2>Naivno rešenje</h2>
 <p>
-"Treba da ispišem sve brojeve od a do b, pa ću napraviti for petlju".
-Ovo je proceduralno razmišljanje — ne postoji nikakva konstrukcija rešenja, već samo direktno izvršavanje.
-Na primer, ako je <i>a=3</i> i <i>b=6</i>, jednostavno napišemo 3,4,5,6. 
-Problem je u tome što ovo rešenje ne razvija algoritamsko razmišljanje,
-ne postoji razumevanje odnosa između manjih i većih instanci problema
-i ne uči se kako se rešenje gradi — samo kako se izvršava.
+Prva ideja koja svima padne na pamet: 
+"Treba da ispišem sve brojeve od a do b, pa ću napraviti for-petlju".
+Ovo je jednostavan, <b>proceduralni</b> pristup — kaže računaru šta da radi, ali ga ne uči da razmišlja.
+
+Na primer, ako je <i>a = 3</i> i <i>b = 6</i>, samo napišemo: 3, 4, 5, 6. 
+Računar će to izvesti, ali mi nismo naučili <b>kako da gradimo rešenje</b>.
 </p>
+
 <xmp class="primer_ta">
 static void Ispisi(int a, int b)
 {
@@ -29,36 +38,53 @@ static void Ispisi(int a, int b)
 // Primer poziva:
 Ispisi(3, 6);
 </xmp>
-<button class="button_copy">Vidi primer</button>
+
 <div class="napomena">
-Naivna rešenja su važna jer nam pokazuju zašto je potrebno bolje razmišljanje.
+Naivno rešenje nije pogrešno — ono nam pomaže da uočimo da zadatak možemo rešiti.
+Ali da bismo razvijali <b>algoritamsko razmišljanje</b>, moramo da shvatimo i unutrašnju logiku zadatka.
 </div>
 
 <h2>Analiza problema</h2>
 <p>
-Problem možemo posmatrati ovako: 
-da bismo ispisali sve brojeve od <i>a</i> do <i>b</i>, potrebno je da:
+Razmislimo malo dublje.  
+Da bismo ispisali sve brojeve od <i>a</i> do <i>b</i>, potrebno je da uradimo dva koraka:
 </p>
+
 <ul>
-<li>Ispišemo broj <i>a</i></li>
-<li>Zatim ispišemo brojeve od <i>a+1</i> do <i>b</i></li>
+<li>Najpre ispišemo prvi broj, tj. <i>a</i>.</li>
+<li>Zatim ispišemo sve ostale brojeve, od <i>a+1</i> do <i>b</i>.</li>
 </ul>
 
 <p>
-Dakle, veliki zadatak razlažemo na manji, vrlo sličan zadatak. 
-Ovo je suština induktivnog razmišljanja: kako od rešenja manjeg problema 
-doći do rešenja većeg.
+Drugim rečima, veliki zadatak (od a do b) možemo da rastavimo na <b>manji zadatak</b>
+(od a+1 do b), koji je skoro isti kao početni, samo malo jednostavniji.  
+
+Ovo je suština <b>induktivnog razmišljanja</b>: ako znamo kako da rešimo manji problem,
+možemo pomoću njega da rešimo i veći.
 </p>
+
+<div class="napomena">
+Zapamtite: kod induktivnog pristupa, uvek se pitamo — <b>možemo li veći problem svesti na manji?</b>
+</div>
 
 <h2>Induktivni pristup</h2>
 <p>
-Induktivni pristup, kao što smo rekli, podrazumeva logički proces zaključivanja od pojedinačnog
-ka opštem, pri čemu se na osnovu pojedinačnih slučajeva donosi opšti sud
-Osnovni slučaj: ako je <i>a = b</i>, tada ispisujemo samo jedan broj, i time se zadatak završava.<br>  
-Induktivni korak: ako znamo kako ispisati sve brojeve od <i>a+1</i> do <i>b</i>, 
-onda je dovoljno da pre toga ispišemo broj <i>a</i>.  
-Tako dobija­mo jasan metod za konstrukciju algoritma.
+Induktivni pristup nam pomaže da uočimo obrazac i da ga pretočimo u algoritam.
+
+Prvo određujemo <b>osnovni slučaj</b>:
+ako je <i>a = b</i>, treba da ispišemo samo jedan broj i završili smo.
+
+Zatim određujemo <b>induktivni korak</b>:
+ako znamo kako da ispišemo sve brojeve od <i>a+1</i> do <i>b</i>,
+onda je dovoljno da pre toga ispišemo broj <i>a</i>.
+
+Tako korak po korak gradimo rešenje većeg problema.
 </p>
+
+<div class="napomena">
+Induktivno razmišljanje nas uči kako da sami izgradimo algoritam,
+a ne samo da prepišemo petlju iz navike.
+</div>
 
 <h2>Primeri i testovi</h2>
 <xmp class="primer_ta">
@@ -74,34 +100,50 @@ static void Ispisi(int a, int b)
 // Primer poziva:
 Ispisi(3, 6);
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
 <xmp class="primer_ta">
-// Ulaz
+// Ulaz:
 3 6
 
-// Izlaz
+// Izlaz:
 3
 4
 5
 6
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
 <div class="napomena">
-Ovaj kod pokazuje suštinu induktivno-rekurzivne konstrukcije:
-prvo rešavamo osnovni slučaj (kada više nema brojeva),
-a zatim gradimo rešenje većeg problema iz manjeg.
+Prvo rešavamo <b>osnovni slučaj</b> (kad više nema brojeva za ispis),
+a onda rešenje većeg problema gradimo na osnovu rešenja manjeg.
+To je srž induktivne konstrukcije algoritama.
 </div>
 
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-<li>Šta znači osnovni slučaj u ovom problemu?</li>
-<li>Zašto nije dobro rešenje unapred ispisati sve brojeve ručno?</li>
-<li>Kako bi izgledao algoritam za ispis brojeva od <i>b</i> do <i>a</i> (u opadajućem redosledu)?</li>
+<li>Šta predstavlja osnovni slučaj u ovom zadatku i zašto je važan?</li>
+<li>Zašto nije dovoljno da brojeve samo ručno ispišemo u kodu?</li>
+<li>Kako biste promenili algoritam da brojeve ispisuje unazad (od <i>b</i> do <i>a</i>)?</li>
+<li>Možete li da zamislite sličan problem koji bismo rešili na isti način?</li>
 </ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-Napišite algoritam koji ispisuje sve cele brojeve u intervalu [a,b] tako da su brojevi ispisani unazad (od b ka a).
+Napišite algoritam koji ispisuje sve cele brojeve u intervalu [a, b], 
+ali tako da ih ispisuje unazad (od <i>b</i> ka <i>a</i>).
+</div>
+
+<h1>Pomoć: Brojevi od a do b</h1>
+
+<p>
+Ako ste se zaglavili, pokušajte da razmišljate ovako:
+</p>
+
+<ul>
+<li>Koji je <b>najjednostavniji slučaj</b> (osnovni slučaj) u kome se odmah zna rezultat?</li>
+<li>Šta radimo posle ispisa jednog broja? Kako prelazimo na sledeći manji podproblem?</li>
+</ul>
+
+<div class="napomena">
+Ne zaboravite: induktivni pristup nas uči da 
+od <b>manjeg problema</b> možemo da dođemo do rešenja <b>većeg problema</b>.
 </div>
