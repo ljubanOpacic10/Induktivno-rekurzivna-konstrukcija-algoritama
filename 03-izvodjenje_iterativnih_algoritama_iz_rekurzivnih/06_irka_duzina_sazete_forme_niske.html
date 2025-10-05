@@ -1,0 +1,227 @@
+<h1>Dužina sažete forme niske</h1>
+
+<h2>Motivacija</h2>
+<p>
+Sažete forme niske koriste mala slova engleskog alfabeta i cifre od 2 do 9.  
+Svaka cifra označava koliko puta se prethodni deo niske ponavlja.  
+</p>
+
+<p class="primer">
+<b>a2b3</b> => prvo <code>a2</code> znači da se „a“ ponavlja 2 puta => <b>aa</b><br>
+zatim <code>b3</code> znači da se <b>aab</b> ponavlja 3 puta => <b>aabaabaab</b>.
+</p>
+
+<p>
+Cilj je da odredimo <b>dužinu niske</b> zadate sažetom formom, bez njenog eksplicitnog razvijanja.  
+Ovo je važno jer sažeta forma može predstavljati veoma dugu nisku (čak i do 10<sup>18</sup> karaktera).
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan jednostavan, ali neefikasan pristup bio bi da se cela niska generiše proširivanjem svake cifre i brojanjem rezultujućih karaktera.  
+</p>
+
+<p>
+Na primer, za <b>a2b3</b> formirali bismo nisku <b>aabaabaab</b> i izračunali dužinu 9.  
+Međutim, kod vrlo dugih formi to nije moguće jer bi se memorija i vreme brzo iscrpeli.
+</p>
+
+<div class="napomena">
+Zato je potrebno naći način da izračunamo dužinu <b>bez razvijanja cele niske</b>.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Sažeta forma niske može biti:
+</p>
+<ul>
+  <li>sastavljena samo od slova – tada joj je dužina broj slova,</li>
+  <li>ili sadrži cifru, npr. <code>s = s₁ c s₂</code>, gde je:
+    <ul>
+      <li><b>s₁</b> – deo pre cifre (može opet biti sažeta forma),</li>
+      <li><b>c</b> – cifra (2–9),</li>
+      <li><b>s₂</b> – ostatak koji ne sadrži cifre.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+Tada važi sledeća relacija:
+</p>
+
+<div class="napomena">
+|s| = c · |s₁| + |s₂|
+</div>
+
+<p>
+Ovaj odnos omogućava jednostavno rekurzivno računanje dužine.
+</p>
+
+<h2>Pravilan pristup</h2>
+
+<h3>Rekurzivno rešenje</h3>
+<p>
+U rekurzivnom pristupu tražimo poslednju cifru u niskoj, razdvajamo je na tri dela (s₁, c, s₂) i primenjujemo formulu:
+<code>|s| = c · |s₁| + |s₂|</code>.
+</p>
+
+<p><b>Primer:</b> za sažetu formu <code>ab2c3d</code>:</p>
+<p>|ab2c3d| = 3|ab2c| + |d| = 3(2|ab| + |c|) + 1 = 3(2·2 + 1) + 1 = <b>16</b></p>
+
+<xmp class="primer_ta">
+static long Duzina(string s)
+{
+    char[] digits = "0123456789".ToCharArray();
+    int p = s.LastIndexOfAny(digits);
+    if (p == -1)
+        return s.Length;
+    else
+        return Duzina(s.Substring(0, p)) * (s[p] - '0')
+             + (s.Length - p - 1);
+}
+
+static void Main()
+{
+    string s = Console.ReadLine();
+    Console.WriteLine(Duzina(s));
+}
+</xmp>
+
+<h3>Iterativno rešenje</h3>
+<p>
+Dužinu možemo izračunati i iterativno – analizom svake cifre po redu.
+</p>
+<p>
+Koristimo promenljive:
+</p>
+<ul>
+  <li><b>rez</b> – trenutna dužina obrađenog dela,</li>
+  <li><b>pp</b> – pozicija prethodne cifre,</li>
+  <li><b>p</b> – pozicija naredne cifre.</li>
+</ul>
+
+<p>Kada naiđemo na cifru, izračunamo koliko je karaktera između pp i p, dodamo ih na rez i pomnožimo odgovarajućom cifrom.</p>
+
+<xmp class="primer_ta">
+static long Duzina(string s)
+{
+    char[] digits = "0123456789".ToCharArray();
+    int pp = 0;
+    int p = s.IndexOfAny(digits);
+    long rez = 0;
+
+    while (p != -1)
+    {
+        rez += p - pp;
+        rez *= s[p] - '0';
+        pp = p + 1;
+        p = s.IndexOfAny(digits, p + 1);
+    }
+
+    rez += s.Length - pp;
+    return rez;
+}
+
+static void Main()
+{
+    string s = Console.ReadLine();
+    Console.WriteLine(Duzina(s));
+}
+</xmp>
+
+<h3>Rekurzija po karakterima</h3>
+<p>
+Umesto pretrage cifara, možemo rekurzivno analizirati svaki karakter s desna na levo:
+</p>
+<ul>
+  <li>Ako je karakter slovo => dužina += 1</li>
+  <li>Ako je karakter cifra => dužina *= vrednost te cifre</li>
+</ul>
+
+<xmp class="primer_ta">
+static long Duzina(string s, int n)
+{
+    if (n == 0) return 0;
+
+    if (!Char.IsDigit(s[n - 1]))
+        return Duzina(s, n - 1) + 1;
+    else
+        return Duzina(s, n - 1) * (s[n - 1] - '0');
+}
+
+static long Duzina(string s)
+{
+    return Duzina(s, s.Length);
+}
+</xmp>
+
+<h3>Iterativna varijanta po karakterima</h3>
+<p>
+Jednostavnije, možemo karaktere obrađivati <b>s leva na desno</b>:
+</p>
+<ul>
+  <li>ako je slovo => povećavamo dužinu za 1</li>
+  <li>ako je cifra => množimo trenutnu dužinu tom cifrom</li>
+</ul>
+
+<xmp class="primer_ta">
+static long Duzina(string s)
+{
+    long rez = 0;
+    foreach (char c in s)
+    {
+        if (Char.IsDigit(c))
+            rez *= c - '0';
+        else
+            rez++;
+    }
+    return rez;
+}
+
+static void Main()
+{
+    string s = Console.ReadLine();
+    Console.WriteLine(Duzina(s));
+}
+</xmp>
+
+<h2>Primeri i testovi</h2>
+<table class="tabela">
+<thead><tr><th>Ulaz</th><th>Izlaz</th></tr></thead>
+<tbody>
+<tr><td>a2bb3c</td><td>13</td></tr>
+<tr><td>a2b32c</td><td>19</td></tr>
+<tr><td>ab2c3d</td><td>16</td></tr>
+</tbody>
+</table>
+
+<h3>Tok izvršavanja (primer)</h3>
+<p>
+Za <code>a2b3c</code>:
+</p>
+<p>
+|a| = 1<br>
+|a2| = 1·2 = 2<br>
+|a2b| = 2 + 1 = 3<br>
+|a2b3| = 3·3 = 9<br>
+|a2b3c| = 9 + 1 = <b>10</b>
+</p>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<p>Kako razlikujemo da li cifra množi ceo prethodni deo ili samo jedno slovo?</p>
+<p>Šta znači izraz <code>rez *= (c - '0')</code> u iterativnom kodu?</p>
+<p>Koja je vremenska složenost ovog algoritma?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Izmeni program tako da, pored dužine, ispisuje i koliko puta se ponovilo prvo slovo.<br>
+2. Napiši program koji iz sažete forme generiše celu nisku (za kraće primere).<br>
+3. Napravi funkciju koja izračunava zbir dužina za više sažetih formi unetih iz niza.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ideja je da se svaka cifra u sažetoj formi odnosi na <b>čitav prefiks pre nje</b>.  
+Zato se dužina prefiksa množi cifrom.  
+Ovim pristupom izbegavamo generisanje stvarne niske i značajno ubrzavamo računanje.
+</div>

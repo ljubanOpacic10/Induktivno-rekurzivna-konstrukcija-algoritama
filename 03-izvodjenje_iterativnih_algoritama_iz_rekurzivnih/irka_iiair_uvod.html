@@ -1,0 +1,94 @@
+<h1>Poglavlje III: Izvođenje iterativnih algoritama iz rekurzivnih</h1>
+
+<h2>Uvod i motivacija</h2>
+<p>
+U prethodnim poglavljima naučili smo kako da konstruisemo algoritme pomoću rekurzije i repne rekurzije.  
+Sada prelazimo na sledeći važan korak — <b>izvođenje iterativnih algoritama iz rekurzivnih</b>.  
+Ovo poglavlje pokazuje kako se rekurzivno razmišljanje može prevesti u praktična, efikasna i brza rešenja koja ne zahtevaju dodatnu memoriju.
+</p>
+
+<p>
+Rekurzija je odličan način da razumemo strukturu problema, ali ponekad može biti spora ili zahtevna po pitanju resursa.  
+Kada naučimo da prepoznamo obrasce repne rekurzije, možemo ih lako pretvoriti u <b>iterativne algoritme</b> — algoritme koji koriste petlje umesto poziva funkcija.  
+Na taj način dobijamo kod koji je istovremeno jednostavan i efikasan.
+</p>
+
+<div class="napomena">
+U ovom poglavlju povezaćemo teorijsko razumevanje rekurzije sa njenom praktičnom primenom.  
+Cilj je da naučimo kako se elegantna rekurzivna rešenja mogu pretvoriti u brze, iterativne algoritme koji su spremni za realne zadatke u programiranju.
+</div>
+
+<h2>Šta ćemo naučiti</h2>
+<p>
+U ovom poglavlju ćemo:
+</p>
+<ul>
+  <li>naučiti kako se rekurzivni algoritmi prevode u iterativne,</li>
+  <li>razumeti kako funkcioniše mehanizam „steka poziva” i kako ga možemo zameniti sopstvenom logikom,</li>
+  <li>videti kako induktivno razmišljanje ostaje osnova i kada koristimo petlje,</li>
+  <li>i primeniti sve dosadašnje znanje na složenije i zanimljive primere.</li>
+</ul>
+
+<h2>Pregled lekcija</h2>
+<table class="tabela">
+<thead>
+<tr><th>Redni broj</th><th>Naziv lekcije</th><th>Šta se uči</th></tr>
+</thead>
+<tbody>
+
+<tr>
+<td>1.</td>
+<td><b>Grejov kod</b></td>
+<td>Upoznajemo se sa algoritmom koji generiše niz binarnih brojeva tako da se svaka sledeća vrednost razlikuje od prethodne samo u jednoj cifri — odličan primer prelaska sa rekurzivnog na iterativno razmišljanje.</td>
+</tr>
+
+<tr>
+<td>2.</td>
+<td><b>Abacaba</b></td>
+<td>Jedan od najpoznatijih rekurzivnih obrazaca, koji se lako može izraziti i iterativno. Učimo kako da prepoznamo strukturu i ponavljanje unutar niza.</td>
+</tr>
+
+<tr>
+<td>3.</td>
+<td><b>Morzeov niz</b></td>
+<td>Kombinovanje znakova i generisanje niza prema pravilima — primer koji pokazuje prelazak sa rekurzije na sistematično iterativno generisanje.</td>
+</tr>
+
+<tr>
+<td>4.</td>
+<td><b>Izbacivanje cifara na sve načine</b></td>
+<td>Vežbamo rekurzivno razmišljanje u problemima sa grananjem — svaki korak vodi ka više mogućih rešenja, a zatim ga prevodimo u iterativni proces.</td>
+</tr>
+
+<tr>
+<td>5.</td>
+<td><b>Ne sadrže cifru 3</b></td>
+<td>Generisanje brojeva uz ograničenja — učimo kako da izbegnemo neželjene vrednosti koristeći iterativni pristup izveden iz rekurzivnog obrasca.</td>
+</tr>
+
+<tr>
+<td>6.</td>
+<td><b>Dužina sažete forme niske</b></td>
+<td>Rad sa tekstom i nizovima znakova — pokazuje kako se rekurzivno analiziranje niske može prevesti u petlju koja „sažima” string u kraći oblik.</td>
+</tr>
+
+<tr>
+<td>7.</td>
+<td><b>Slovo u sažetoj formi niske</b></td>
+<td>Proširenje prethodnog zadatka: učimo kako da pronađemo određeno slovo u komprimovanoj formi niske, bez njenog ponovnog razvijanja.</td>
+</tr>
+
+</tbody>
+</table>
+
+<h2>Cilj i očekivanja</h2>
+<p>
+Na kraju ovog poglavlja razumećeš ne samo kako da pišeš rekurzivne funkcije, već i kako da ih transformišeš u iterativne algoritme koji troše manje memorije i brže se izvršavaju.  
+Naučićeš da prepoznaješ obrasce u problemima, da misliš u koracima, i da samostalno pretvaraš teorijska rešenja u praktična.
+</p>
+
+<div class="napomena">
+Ovo poglavlje predstavlja <b>kulminaciju celokupnog znanja o rekurziji</b>.  
+Nakon njega, bićeš u stanju da prepoznaš induktivnu strukturu gotovo svakog problema i da iz nje konstrušeš kako rekurzivni, tako i iterativni algoritam.  
+To je suština algoritamskog razmišljanja — sposobnost da problem vidiš i „iznutra“ i „izvana“.
+</div>

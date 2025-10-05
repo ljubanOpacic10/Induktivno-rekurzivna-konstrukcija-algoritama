@@ -1,0 +1,275 @@
+<h1>Slovo u sažetoj formi niske</h1>
+
+<h2>Motivacija</h2>
+<p>
+Sažete forme niske koriste mala slova engleskog alfabeta i cifre od 2 do 9.  
+Svaka cifra označava koliko puta se prethodni deo niske ponavlja.  
+</p>
+
+<p class="primer">
+Na primer:  
+<b>a2b3</b> => prvo <code>a2</code> znači „a se ponavlja 2 puta“ => <b>aa</b><br>
+zatim <code>b3</code> znači da se <b>aab</b> ponavlja 3 puta => <b>aabaabaab</b>.
+</p>
+
+<p>
+Zadatak: pronaći <b>slovo na poziciji k</b> u niskoj zadatoj sažetom formom —  
+bez potrebe da se cela niska eksplicitno generiše (jer može imati dužinu i do 10<sup>18</sup> karaktera).
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jednostavan, ali neefikasan pristup bio bi da se cela niska generiše i zatim samo uzme karakter na poziciji <code>k</code>.  
+Ovaj pristup troši ogromnu količinu memorije i vremena ako je dužina niske velika.
+</p>
+
+<div class="napomena">
+Potrebno je pronaći rešenje koje <b>računa poziciju k</b> bez stvarnog formiranja cele niske.
+</div>
+
+<h2>Analiza problema</h2>
+<p>
+Sažeta forma niske može biti:
+</p>
+<ul>
+  <li>sastavljena samo od malih slova — tada se traženi karakter trivijalno čita po indeksu,</li>
+  <li>ili oblika <code>s₁ c s₂</code>, gde je <code>c</code> cifra, a <code>s₂</code> deo bez cifara.</li>
+</ul>
+
+<p>
+Forma <code>s₁ c s₂</code> predstavlja nisku koja se sastoji od <code>c</code> kopija niske predstavljene <code>s₁</code>  
+i zatim nadovezanog dela <code>s₂</code>.
+</p>
+
+<p>
+Ako je <b>d = |s₁|</b> dužina niske predstavljene s₁, postoje dva slučaja:
+</p>
+
+<ol>
+  <li>Ako je <b>k &lt; c·d</b> => traženo slovo je u delu koji se ponavlja,  
+      pa se traži slovo na poziciji <b>k mod d</b> unutar s₁.</li>
+  <li>Ako je <b>k ≥ c·d</b> => slovo pripada delu s₂,  
+      na poziciji <b>k − c·d</b>.</li>
+</ol>
+
+<h2>Pravilan pristup</h2>
+
+<h3>Rekurzivno rešenje</h3>
+<p>
+U rekurzivnom pristupu se svaki put niska razdvaja na tri dela — <code>s₁</code>, <code>c</code>, <code>s₂</code> —  
+i u zavisnosti od položaja <code>k</code>, ili se ulazi dublje u rekurziju,  
+ili se karakter direktno uzima iz <code>s₂</code>.
+</p>
+
+<h3>Primer</h3>
+<p>
+Tražimo karakter na poziciji <b>k = 40</b> u sažetoj formi <b>a2b3ca3d2f</b>.
+</p>
+
+<ol>
+  <li>s = a2b3ca3d2f => s₁ = a2b3ca3d, c = 2, s₂ = f, d = 34 => k &lt; 68 => tražimo <b>k mod 34 = 6</b> u s₁.</li>
+  <li>s₁ = a2b3ca3d => s₁ = a2b3ca, c = 3, s₂ = d, d = 11 => k &lt; 33 => tražimo <b>k mod 11 = 6</b> u s₁.</li>
+  <li>s₁ = a2b3ca => s₁ = a2b, c = 3, s₂ = ca, d = 3 => k &lt; 9 => tražimo <b>k mod 3 = 0</b> u s₁.</li>
+  <li>s₁ = a2b => s₁ = a, c = 2, s₂ = b, d = 1 => k &lt; 2 => tražimo <b>k mod 1 = 0</b> u s₁ = a.</li>
+  <li>Niska s₁ = a => rezultat je <b>a</b>.</li>
+</ol>
+
+<h3>Prikaz koda (rekurzivna varijanta)</h3>
+
+<xmp class="primer_ta">
+using System;
+
+class Program
+{
+    static char[] digits = "0123456789".ToCharArray();
+
+    static long Duzina(string s)
+    {
+        int p = s.LastIndexOfAny(digits);
+        if (p == -1)
+            return s.Length;
+        else
+            return Duzina(s.Substring(0, p)) * (s[p] - '0')
+                 + (s.Length - p - 1);
+    }
+
+    static char KToSlovo(string s, long k)
+    {
+        int p = s.LastIndexOfAny(digits);
+        if (p == -1)
+            return s[(int)k];
+
+        long d = Duzina(s.Substring(0, p));
+        int m = s[p] - '0';
+
+        if (k >= m * d)
+            return s.Substring(p + 1)[(int)(k - m * d)];
+        else
+            return KToSlovo(s.Substring(0, p), k % d);
+    }
+
+    static void Main()
+    {
+        string s = Console.ReadLine();
+        long k = long.Parse(Console.ReadLine());
+        Console.WriteLine(KToSlovo(s, k));
+    }
+}
+</xmp>
+
+<h3>Primeri</h3>
+<table class="tabela">
+<thead><tr><th>Ulaz</th><th>Izlaz</th></tr></thead>
+<tbody>
+<tr><td><code>zdravo2svima3<br>30</code></td><td><b>v</b></td></tr>
+<tr><td><code>a2b3ca3d2f<br>40</code></td><td><b>a</b></td></tr>
+</tbody>
+</table>
+
+<h2>Iterativno rešenje</h2>
+<p>
+Iterativni pristup deli sažetu formu na parove <code>(niska, broj_ponavljanja)</code>.  
+Ako se forma ne završava cifrom, dodaje se cifra 1 da bi se uniformno obradila.
+</p>
+
+<p>
+Na primer: <b>a2b3ca3d2f</b> => (a,2), (b,3), (ca,3), (d,2), (f,1)
+</p>
+
+<h3>Izračunavanje dužina</h3>
+<p>
+Ako imamo parove (s₀, c₀), (s₁, c₁), …, (sₘ, cₘ), računamo dužine:
+</p>
+
+<ul>
+  <li>d₀ = |s₀|</li>
+  <li>dᵢ = dᵢ₋₁ * cᵢ₋₁ + |sᵢ|</li>
+</ul>
+
+<p>
+Za primer <b>a2b3ca3d2f</b>:
+</p>
+
+<table class="tabela">
+<thead><tr><th>i</th><th>Par (sᵢ, cᵢ)</th><th>dᵢ</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>(a, 2)</td><td>1</td></tr>
+<tr><td>1</td><td>(b, 3)</td><td>3</td></tr>
+<tr><td>2</td><td>(ca, 3)</td><td>11</td></tr>
+<tr><td>3</td><td>(d, 2)</td><td>34</td></tr>
+<tr><td>4</td><td>(f, 1)</td><td>69</td></tr>
+</tbody>
+</table>
+
+<h3>Traženje slova (kretanje unazad)</h3>
+<p>
+Kada znamo dužine svakog dela, krećemo od poslednjeg segmenta ka prvom:
+</p>
+
+<ul>
+  <li>Ako je <b>k ≥ cᵢ·dᵢ</b> => slovo je u sledećem delu niske.</li>
+  <li>Ako je <b>k &lt; cᵢ·dᵢ</b> => slovo se ponavlja; postavljamo <b>k = k mod dᵢ</b>.</li>
+</ul>
+
+<p>
+Na kraju, karakter se nalazi u prvom segmentu s₀ na poziciji k.
+</p>
+
+<h3>Primer</h3>
+<p>
+Za <b>a2b3ca3d2f</b> i <b>k = 40</b>:
+</p>
+
+<table class="tabela">
+<thead><tr><th>i</th><th>cᵢ</th><th>dᵢ</th><th>k</th><th>Nova vrednost k</th></tr></thead>
+<tbody>
+<tr><td>4</td><td>1</td><td>69</td><td>40</td><td>40</td></tr>
+<tr><td>3</td><td>2</td><td>34</td><td>40</td><td>6</td></tr>
+<tr><td>2</td><td>3</td><td>11</td><td>6</td><td>6</td></tr>
+<tr><td>1</td><td>3</td><td>3</td><td>6</td><td>0</td></tr>
+<tr><td>0</td><td>2</td><td>1</td><td>0</td><td>0</td></tr>
+</tbody>
+</table>
+
+<p>Rezultat je slovo <b>a</b>.</p>
+
+<h3>Prikaz koda (iterativna varijanta)</h3>
+
+<xmp class="primer_ta">
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static char[] digits = "0123456789".ToCharArray();
+
+    static List<Tuple<string, int>> Podeli(string s)
+    {
+        var rez = new List<Tuple<string, int>>();
+        int pp = 0, p = s.IndexOfAny(digits);
+
+        while (p != -1)
+        {
+            rez.Add(Tuple.Create(s.Substring(pp, p - pp), s[p] - '0'));
+            pp = p + 1;
+            p = s.IndexOfAny(digits, p + 1);
+        }
+
+        if (pp < s.Length)
+            rez.Add(Tuple.Create(s.Substring(pp), 1));
+
+        return rez;
+    }
+
+    static char KToSlovo(string s, long k)
+    {
+        var delovi = Podeli(s);
+        long[] duzine = new long[delovi.Count];
+        duzine[0] = delovi[0].Item1.Length;
+
+        for (int i = 1; i < delovi.Count; i++)
+            duzine[i] = duzine[i - 1] * delovi[i - 1].Item2 + delovi[i].Item1.Length;
+
+        for (int i = delovi.Count - 1; i >= 0; i--)
+        {
+            if (k >= duzine[i] * delovi[i].Item2)
+                return delovi[i + 1].Item1[(int)(k - duzine[i] * delovi[i].Item2)];
+
+            k %= duzine[i];
+        }
+
+        return delovi[0].Item1[(int)k];
+    }
+
+    static void Main()
+    {
+        string s = Console.ReadLine();
+        long k = long.Parse(Console.ReadLine());
+        Console.WriteLine(KToSlovo(s, k));
+    }
+}
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za <b>a2b3ca3d2f</b> i <b>k = 40</b> rezultat je <b>a</b> jer se pozicija 40 u ponavljanjima svodi na 0 u osnovnoj niskoj „a“.
+</p>
+
+<h2>Pitanja za samoevaluaciju</h2>
+<p>Šta znači kada je k &lt; c·d u rekurzivnom slučaju?</p>
+<p>Zašto nije potrebno eksplicitno graditi nisku?</p>
+<p>Kako se izračunava dužina svakog prefiksa u iterativnom rešenju?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Izmeni program tako da vraća i <b>dužinu niske</b> uz traženo slovo.<br>
+2. Testiraj kod sa primerima gde sažeta forma sadrži više cifara zaredom.<br>
+3. Napravi funkciju koja ispisuje prvih 10 slova posle zadatog k.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ovaj zadatak je nastavak zadatka <b>„Dužina sažete forme niske“</b> —  
+sada, umesto da brojimo ukupnu dužinu, određujemo konkretno slovo  
+bez generisanja cele niske, korišćenjem operacija deljenja i modula.
+</div>

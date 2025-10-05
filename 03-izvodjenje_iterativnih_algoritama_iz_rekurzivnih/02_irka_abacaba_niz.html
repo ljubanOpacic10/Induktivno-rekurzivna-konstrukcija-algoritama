@@ -1,0 +1,169 @@
+<h1>Abacaba niz</h1>
+
+<h2>Motivacija</h2>
+<p>
+Niz <b>ABACABADABACABAEABACABADABACABAF...</b> poznat kao <b>Abacaba niz</b> jedan je od najlepših primera induktivne konstrukcije.  
+Ovaj niz se gradi tako da se pri svakom koraku dopisuje novo slovo engleskog alfabeta, a zatim ponavlja ceo dosadašnji niz.  
+Takav princip formiranja pokazuje kako iz male strukture (kraćeg niza) gradimo sve složeniju, zadržavajući u sebi sve prethodne oblike.  
+U ovoj lekciji prikazaćemo kako se iz rekurzivne ideje izvodi efikasniji iterativni algoritam.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Najlakši način bio bi da se niz gradi doslovno — spajanjem slova i ponavljanjem već postojećeg niza.  
+Na primer:
+</p>
+<p>
+A => ABA => ABACABA => ABACABADABACABA => ...
+</p>
+<p>
+Ovo rešenje brzo postaje neefikasno jer niz dužine raste eksponencijalno.  
+Da bismo pronašli samo jedno slovo (npr. 1000. po redu), nepotrebno bismo generisali ogromnu količinu karaktera.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Posmatrajmo pozicije na kojima se svako slovo prvi put pojavljuje:
+</p>
+
+<table class="tabela">
+<thead>
+<tr><th>Slovo</th><th>Pozicija prvog pojavljivanja</th></tr>
+</thead>
+<tbody>
+<tr><td>A</td><td>1</td></tr>
+<tr><td>B</td><td>2</td></tr>
+<tr><td>C</td><td>4</td></tr>
+<tr><td>D</td><td>8</td></tr>
+<tr><td>E</td><td>16</td></tr>
+</tbody>
+</table>
+
+<p>
+Vidimo da se prvo pojavljivanje svakog novog slova dešava na pozicijama koje su stepeni dvojke:  
+<code>1, 2, 4, 8, 16, 32, ...</code>  
+To znači da se novo slovo pojavljuje na poziciji 2<sup>k</sup>, a zatim se ceo prethodni niz kopira iza njega.
+</p>
+
+<div class="napomena">
+<p><b>Osnovni slučaj</b> — kada je n = 1, na poziciji 1 se nalazi slovo A.</p>
+<p><b>Induktivni korak</b> — ako je 2<sup>k</sup> ≤ n &lt; 2<sup>k+1</sup>, onda je karakter na poziciji n jednak karakteru na poziciji n − 2<sup>k</sup>.</p>
+</div>
+
+<h2>Rekurzivno rešenje</h2>
+<p>
+Rekurzivna funkcija koja sledi ovaj obrazac mogla bi izgledati ovako:
+</p>
+
+<xmp class="primer_ta">
+char SlovoNaPoziciji(int n)
+{
+    if ((n & (n - 1)) == 0) // ako je n stepen dvojke
+        return (char)('A' + (int)Math.Log(n, 2));
+    int k = 1;
+    while (k * 2 < n)
+        k *= 2;
+    return SlovoNaPoziciji(n - k);
+}
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za bolji uvid, pratimo pozive za n = 23:
+</p>
+
+<p>
+SlovoNaPoziciji(23) => k = 16 → SlovoNaPoziciji(23 − 16 = 7)<br>
+SlovoNaPoziciji(7) => k = 4 → SlovoNaPoziciji(7 − 4 = 3)<br>
+SlovoNaPoziciji(3) => k = 2 → SlovoNaPoziciji(3 − 2 = 1)<br>
+SlovoNaPoziciji(1) => n = 1 (stepen dvojke) → vrati 'A'<br>
+</p>
+
+<p>
+Dakle, rezultat je <b>A</b> (isto kao i u originalnom Abacaba nizu).
+</p>
+
+<h2>Izvođenje iterativnog algoritma iz rekurzivnog</h2>
+<p>
+Umesto da koristimo rekurziju, možemo direktno posmatrati broj n i pronaći njegovu <b>najmanju jedinicu u binarnom zapisu</b> — tj. poziciju krajnje desne jedinice.
+Ta pozicija određuje koje se slovo nalazi na poziciji n.
+</p>
+
+<xmp class="primer_ta">
+int n = int.Parse(Console.ReadLine());
+int k = 0;
+while ((n & 1) == 0) // dok je broj paran
+{
+    n >>= 1; // pomeramo bitove udesno
+    k++;
+}
+Console.WriteLine((char)('A' + k));
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za primer n = 40:
+</p>
+
+<p>
+n = 40 (101000)<br>
+(n & 1) == 0 → pomeramo n >>= 1 → n = 20, k = 1<br>
+n = 20 (10100)<br>
+(n & 1) == 0 → n = 10, k = 2<br>
+n = 10 (1010)<br>
+(n & 1) == 0 → n = 5, k = 3<br>
+n = 5 (101)<br>
+(n & 1) == 1 → zaustavljamo, rezultat = 'A' + 3 = 'D'<br>
+</p>
+
+<p>
+Dakle, na poziciji 40 se nalazi slovo <b>D</b>.
+</p>
+
+<h2>Efikasnije rešenje (upotreba biblioteke)</h2>
+<p>
+U novijim verzijama C# jezika moguće je koristiti funkciju <code>BitOperations.TrailingZeroCount(n)</code> iz biblioteke <code>System.Numerics</code>, koja direktno vraća broj nula iza poslednje jedinice u binarnom zapisu (tj. vrednost k).
+</p>
+
+<xmp class="primer_ta">
+using System;
+using System.Numerics;
+
+int n = int.Parse(Console.ReadLine());
+int k = BitOperations.TrailingZeroCount(n);
+Console.WriteLine((char)('A' + k));
+</xmp>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>8</td><td>D</td></tr>
+<tr><td>65</td><td>A</td></tr>
+<tr><td>100</td><td>C</td></tr>
+<tr><td>23</td><td>A</td></tr>
+<tr><td>40</td><td>D</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Zašto se prvo pojavljivanje svakog slova dešava na poziciji koja je stepen dvojke?</p>
+<p>Kako rekurzivna formula f(n) = f(n − 2^k) funkcioniše u praksi?</p>
+<p>Šta predstavlja pozicija krajnje desne jedinice u binarnom zapisu broja?</p>
+<p>Kako se iz rekurzivne definicije izvodi iterativni algoritam?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja za dato n vraća i sva prethodna slova do te pozicije (npr. za n=8, ispiši ABACABAD).<br>
+2. Izmeni algoritam tako da radi i za mala slova (a, b, c...).<br>
+3. Pokušaj da pronađeš sličnu pravilnost za niz formiran kao ABAABABA... — da li postoji slična rekurzivna formula?<br>
+4. Analiziraj kompleksnost svakog rešenja (naivno, rekurzivno, iterativno, bitovsko).
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ključni uvid: svaka nova faza niza duplo je duža od prethodne i počinje novim slovom.  
+Rekurzivna struktura se vidi u relaciji f(n) = f(n − 2^k), dok iterativni algoritam postiže isto jednostavnim pomeranjem bitova.
+</div>

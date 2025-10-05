@@ -1,0 +1,143 @@
+<h1>Grejov kod</h1>
+
+<h2>Motivacija</h2>
+<p>
+Grejov kod (Gray code) je poredak binarnih nizova dužine n takav da se svaka dva susedna niza razlikuju tačno u jednom bitu.
+Ovakav poredak je koristan u elektronici (enkoderi položaja), digitalnoj komunikaciji i kombinatornim generisanjima.
+U ovoj lekciji pokazujemo kako se iz <b>rekurzivne</b> definicije Grejovog koda izvede <b>iterativni</b> algoritam, zadržavajući istu logiku.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Mogli bismo generisati sve binarne brojeve i potom ih preslagati dok se susedni ne razlikuju u jednom bitu.
+To je neefikasno i ne koristi prirodnu strukturu Grejovog koda.
+Bolji pristup je da iskoristimo <b>induktivnu konstrukciju</b> (0-prefiks + 1-prefiks obrnutog niza) i iz nje dobijemo i rekurzivno i iterativno rešenje.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Grejov kod dužine 0 je prazna niska. Ako poznajemo Grejov kod dužine n−1, Grejov kod dužine n dobijamo tako što:
+</p>
+<div class="napomena">
+<p>Prvo ispred svih elemenata starog koda dodamo cifru 0.</p>
+<p>Zatim uzmemo isti taj stari kod, ali u obrnutom redosledu, i ispred svakog elementa dodamo cifru 1.</p>
+<p>Na kraju spojimo ta dva bloka i dobijemo poredak dužine n.</p>
+</div>
+<p>
+Zadatak: Za dato n i poziciju k (0 ≤ k &lt; 2^n) vratiti n-bitni Grejov kod na toj poziciji.
+</p>
+
+<h2>Pravilan pristup (rekurzija)</h2>
+<p>
+Induktivna ideja se direktno prevodi u rekurzivnu funkciju: razlikujemo prvu polovinu (prefiks 0) i drugu polovinu (prefiks 1 uz obrtanje indeksa).
+</p>
+
+<xmp class="primer_ta">
+string GrejRekurzivno(int n, uint k)
+{
+    if (n == 0)
+        return "";
+    uint polovina = 1u << (n - 1);
+    if (k < polovina)
+        return "0" + GrejRekurzivno(n - 1, k);
+    else
+        return "1" + GrejRekurzivno(n - 1, (uint)((1ul << n) - 1 - k));
+}
+// Ulaz: n (1 ≤ n ≤ 32), k (0 ≤ k < 2^n)
+// Izlaz: n-bitna niska Grejovog koda na poziciji k
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za bolji uvid, pratimo pozive za n = 3:
+</p>
+<p>
+Glejmo pozicije k = 0..7 i produkte funkcije:
+</p>
+<p>
+GrejRekurzivno(3, 0) => "0" + GrejRekurzivno(2, 0) => "00" + GrejRekurzivno(1, 0) => "000"<br>
+GrejRekurzivno(3, 1) => "0" + GrejRekurzivno(2, 1) => "00" + GrejRekurzivno(1, 1) => "001"<br>
+GrejRekurzivno(3, 2) => "0" + GrejRekurzivno(2, 2) => "01" + GrejRekurzivno(1, 1) => "011"<br>
+GrejRekurzivno(3, 3) => "0" + GrejRekurzivno(2, 3) => "01" + GrejRekurzivno(1, 0) => "010"<br>
+GrejRekurzivno(3, 4) => "1" + GrejRekurzivno(2, 3) => "11" + GrejRekurzivno(1, 0) => "110"<br>
+GrejRekurzivno(3, 5) => "1" + GrejRekurzivno(2, 2) => "11" + GrejRekurzivno(1, 1) => "111"<br>
+GrejRekurzivno(3, 6) => "1" + GrejRekurzivno(2, 1) => "10" + GrejRekurzivno(1, 1) => "101"<br>
+GrejRekurzivno(3, 7) => "1" + GrejRekurzivno(2, 0) => "10" + GrejRekurzivno(1, 0) => "100"
+</p>
+
+<h2>Izvođenje iterativnog algoritma iz rekurzivnog</h2>
+<p>
+Rekurzivni korak „prefiks + ažuriranje (n, k)“ možemo pretočiti u petlju: u svakom prolazu određujemo da li je k u donjoj ili gornjoj polovini.
+Ako je u gornjoj, prefiks je 1 i indeks „preslikamo“ formulom k <= (2^n − 1 − k); inače prefiks 0 i k ostaje isti. Zatim smanjimo n.
+</p>
+
+<xmp class="primer_ta">
+string GrejIterativno(int n, uint k)
+{
+    string rez = "";
+    while (n > 0)
+    {
+        uint polovina = 1u << (n - 1);
+        if (k < polovina)
+        {
+            rez += "0";
+        }
+        else
+        {
+            rez += "1";
+            k = (uint)((1ul << n) - 1 - k); // preslikavanje uz obrtanje poretka
+        }
+        n--;
+    }
+    return rez;
+}
+// Ulaz: n (1 ≤ n ≤ 32), k (0 ≤ k < 2^n)
+// Izlaz: n-bitna niska Grejovog koda na poziciji k
+</xmp>
+
+<h2>Direktna formula (uvid)</h2>
+<p>
+Poznato je da se k-ti Grejov kod može izračunati i direktno kao <b>k ^ (k >> 1)</b>, a zatim prikazati kao n-bitna binarna niska.
+Ova formula je korisna za proveru i za slučajeve kada ne želite ni rekurziju ni iteraciju.
+</p>
+
+<xmp class="primer_ta">
+string GrejDirektno(int n, uint k)
+{
+    return Convert.ToString(k ^ (k >> 1), 2).PadLeft(n, '0');
+}
+// Ulaz: n (1 ≤ n ≤ 32), k (0 ≤ k < 2^n)
+// Izlaz: n-bitna niska Grejovog koda na poziciji k
+</xmp>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>n = 3<br>k = 2</td><td>011</td></tr>
+<tr><td>n = 2<br>k = 0..3</td><td>00, 01, 11, 10</td></tr>
+<tr><td>n = 30<br>k = 999999999</td><td>100110010101111010110100000000</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Zašto rekurzivno rešenje deli opseg na „donju“ i „gornju“ polovinu?</p>
+<p>Kako iz rekurzivnog poziva dobijamo iterativni korak sa istim ažuriranjem (n, k)?</p>
+<p>Šta radi preslikavanje k ← (2^n − 1 − k)? Zašto je potrebno obrtanje poretka?</p>
+<p>Kako formula k ^ (k >> 1) „ugrađuje“ logiku prefiksa 0 i 1 bez eksplicitne rekurzije?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja vraća indeks (k) za dati Grejov kod (obrnuta operacija).<br>
+2. Prikaži prvih 2^n kodova u koloni (za malo n), i proveri da li se susedni razlikuju u tačno jednom bitu.<br>
+3. Izvedi i implementiraj verziju koja računa samo j-ti bit Grejovog koda na poziciji k, bez kreiranja cele niske.<br>
+4. Uporedi performanse rekurzivne, iterativne i direktne varijante na većim n i slučajnim k.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ključni uvid: rekurzivni poziv je „prefiks + preslikavanje indeksa“. Kada taj obrazac prepišeš u petlju, dobiješ iterativni algoritam sa istim ponašanjem.
+Za proveru tačnosti uvek možeš uporediti rezultat sa direktnom formulom k ^ (k >> 1).
+</div>

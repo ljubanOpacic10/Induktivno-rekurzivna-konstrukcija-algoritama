@@ -1,0 +1,235 @@
+<h1>Morzeov niz</h1>
+
+<h2>Motivacija</h2>
+<p>
+Morzeov niz je beskonačan niz od nula i jedinica koji se gradi tako da se svaki novi segment dobija negacijom
+(preokretanjem) svih prethodnih elemenata.  
+Počinje ovako:
+</p>
+
+<p><code>1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, ...</code></p>
+
+<p>
+Prvi element je 1. Zatim se negira — dobijamo 0.  
+Zatim negiramo prva dva elementa (1 i 0) i dobijamo 0, 1.  
+Zatim negiramo prva četiri (1, 0, 0, 1) i dobijamo 0, 1, 1, 0.  
+Tako svaki sledeći segment dužine 2<sup>k</sup> nastaje negacijom prethodnog segmenta iste dužine.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Najjednostavniji način jeste da se niz formira „ručno“ — element po element — sve dok se ne dođe do n-tog člana.
+</p>
+
+<xmp class="primer_ta">
+int n = int.Parse(Console.ReadLine());
+bool[] a = new bool[n + 1];
+a[1] = true;
+int upisano = 1;
+int duzina = 1;
+
+while (upisano < n)
+{
+    for (int i = 1; i <= duzina && upisano < n; i++)
+    {
+        a[duzina + i] = !a[i];
+        upisano++;
+    }
+    duzina *= 2;
+}
+
+Console.WriteLine(a[n] ? "1" : "0");
+</xmp>
+
+<p>
+Ovaj pristup je ispravan, ali zahteva <b>O(n)</b> memorije i vremena, što nije efikasno za velike vrednosti n (npr. 10<sup>9</sup>).
+</p>
+
+<h2>Analiza obrasca</h2>
+<p>
+Posmatrajmo nekoliko primera kako bi uočili pravilnost:
+</p>
+
+<p>
+x<sub>2</sub> = NOT(x<sub>1</sub>)  
+x<sub>3</sub> = NOT(x<sub>1</sub>), x<sub>4</sub> = NOT(x<sub>2</sub>)  
+x<sub>5</sub> = NOT(x<sub>1</sub>), x<sub>6</sub> = NOT(x<sub>2</sub>), x<sub>7</sub> = NOT(x<sub>3</sub>), x<sub>8</sub> = NOT(x<sub>4</sub>)  
+</p>
+
+<p>
+Dakle, za <b>n > 1</b> važi rekurentna formula:
+</p>
+
+<p>
+x<sub>n</sub> = NOT(x<sub>n − m</sub>),<br>  
+gde je m najveći stepen broja 2 koji je strogo manji od n.
+</p>
+
+<h2>Rekurzivno rešenje</h2>
+<xmp class="primer_ta">
+static int MaxStepen2(int n)
+{
+    int max = 1;
+    while (max * 2 < n)
+        max *= 2;
+    return max;
+}
+
+static bool Morzeov(int n)
+{
+    if (n == 1)
+        return true;
+    return !Morzeov(n - MaxStepen2(n));
+}
+
+int n = int.Parse(Console.ReadLine());
+Console.WriteLine(Morzeov(n) ? "1" : "0");
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za bolji uvid, pratimo pozive za n = 15:
+</p>
+
+<p>
+Morzeov(15) => MaxStepen2(15) = 8 => Morzeov(15 − 8 = 7) => NOT<br>
+Morzeov(7) => MaxStepen2(7) = 4 => Morzeov(7 − 4 = 3) => NOT<br>
+Morzeov(3) => MaxStepen2(3) = 2 => Morzeov(3 − 2 = 1) => NOT<br>
+Morzeov(1) = true<br>
+</p>
+
+<p>
+Zbog tri negacije dobijamo:  
+true => NOT => false => NOT => true => NOT => false  
+Rezultat: <b>0</b>
+</p>
+
+<h2>Iterativno izvođenje iz rekurzije</h2>
+<p>
+Pošto se svaka rekurzija u prethodnom algoritmu zasniva na smanjenju n za najveći stepen dvojke, lako je uočiti da možemo
+isti proces sprovesti pomoću jedne petlje:
+</p>
+
+<xmp class="primer_ta">
+static int MaxStepen2(int n)
+{
+    int max = 1;
+    while (max * 2 < n)
+        max *= 2;
+    return max;
+}
+
+int n = int.Parse(Console.ReadLine());
+bool x = true;
+
+while (n > 1)
+{
+    n -= MaxStepen2(n);
+    x = !x;
+}
+
+Console.WriteLine(x ? "1" : "0");
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za primer n = 15:
+</p>
+
+<p>
+n = 15 => MaxStepen2(15) = 8 => n = 7 => x = NOT(true) = false<br>
+n = 7 => MaxStepen2(7) = 4 => n = 3 => x = NOT(false) = true<br>
+n = 3 => MaxStepen2(3) = 2 => n = 1 => x = NOT(true) = false<br>
+n = 1 => kraj<br>
+</p>
+
+<p>
+Rezultat: <b>0</b>
+</p>
+
+<h2>Elegantnije binarno rešenje</h2>
+<p>
+Umesto da računamo najveći stepen dvojke, možemo raditi direktno na binarnom zapisu broja.
+Ako brojimo pozicije od 0, svaka iteracija jednostavno uklanja poslednji bit 1 u binarnom zapisu pomoću izraza:<br>
+<code>n = n & (n - 1)</code>
+</p>
+
+<xmp class="primer_ta">
+int n = int.Parse(Console.ReadLine());
+n--; // brojenje od 0
+bool x = true;
+
+while (n != 0)
+{
+    n = n & (n - 1);
+    x = !x;
+}
+
+Console.WriteLine(x ? "1" : "0");
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za primer n = 44:
+</p>
+
+<p>
+n = 44 - 1 = 43 (101011)<br>
+n & (n-1): 101011 & 101010 = 101010 (42) => negacija<br>
+101010 & 101001 = 101000 (40) => negacija<br>
+101000 & 100111 = 100000 (32) => negacija<br>
+100000 & 011111 = 000000 (0) => negacija<br>
+Ukupno četiri negacije => rezultat: 1<br>
+</p>
+
+<p>
+Rezultat: <b>1</b>
+</p>
+
+<h2>Najefikasnije rešenje (koristeći ugrađenu funkciju)</h2>
+<p>
+U novijim verzijama C# jezika možemo koristiti funkciju <code>BitOperations.PopCount()</code> koja broji broj jedinica u binarnom zapisu broja.
+Ako je broj jedinica paran => rezultat je 1, a ako je neparan => 0.
+</p>
+
+<xmp class="primer_ta">
+using System;
+using System.Numerics;
+
+uint n = uint.Parse(Console.ReadLine());
+n--; // brojenje od 0
+Console.WriteLine((BitOperations.PopCount(n) & 1) != 0 ? 0 : 1);
+</xmp>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>15</td><td>0</td></tr>
+<tr><td>1234</td><td>0</td></tr>
+<tr><td>12345678</td><td>1</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Šta predstavlja najveći stepen broja 2 manji od n u kontekstu Morzeovog niza?</p>
+<p>Zašto je dovoljno brojati broj jedinica u binarnom zapisu broja n−1?</p>
+<p>Kako izraz n = n & (n - 1) utiče na binarni zapis broja?</p>
+<p>Kako se rekurzivna definicija prevodi u iterativnu implementaciju?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja za dato n ispisuje svih prethodnih 10 elemenata niza.<br>
+2. Analiziraj koliko puta se negacija izvrši za svako n do 16 — uoči obrazac.<br>
+3. Isprobaj sve četiri verzije algoritma i izmeri njihovo vreme izvršavanja za n = 1.000.000.<br>
+4. Pronađi vezu između Morzeovog niza i binarne parnosti.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ključni uvid: n-ti element Morzeovog niza zavisi samo od broja jedinica u binarnom zapisu broja n−1.  
+Ako ih je paran broj => rezultat je 1, ako ih je neparan => 0.  
+Tako je rekurzija elegantno zamenjena jednostavnom binarnom operacijom.
+</div>

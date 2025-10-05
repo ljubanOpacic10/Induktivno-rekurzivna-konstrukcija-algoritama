@@ -1,0 +1,208 @@
+<h1>Ne sadrže cifru 3</h1>
+
+<h2>Motivacija</h2>
+<p>
+Zadatak je da za dati broj <b>n</b> odredimo koliko brojeva iz intervala <b>[0, n]</b> ne sadrži cifru 3 u svom dekadnom zapisu.  
+Na primer, za <b>n = 15</b> svi brojevi osim <b>3</b> i <b>13</b> su dozvoljeni, što znači da ih ima <b>14</b>.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jednostavan način rešavanja je da proverimo svaki broj od 0 do n i proverimo da li sadrži cifru 3.  
+Ako ne sadrži, povećavamo brojač.
+</p>
+
+<xmp class="primer_ta">
+static bool SadrziCifru3(int n)
+{
+    do
+    {
+        if (n % 10 == 3)
+            return true;
+        n /= 10;
+    } while (n > 0);
+    return false;
+}
+
+static void Main()
+{
+    int n = int.Parse(Console.ReadLine());
+    int br = 0;
+    for (int i = 0; i <= n; i++)
+        if (!SadrziCifru3(i))
+            br++;
+    Console.WriteLine(br);
+}
+</xmp>
+
+<p>
+Ovaj pristup radi tačno, ali je spor — potrebno je proveriti sve brojeve do n, što za n = 2·10⁹ znači i dve milijarde provera.
+</p>
+
+<h2>Induktivna analiza</h2>
+<p>
+Da bismo došli do efikasnog rešenja, razmotrimo kako se brojevi koji ne sadrže cifru 3 mogu induktivno izračunati.
+</p>
+
+<p>
+Na primer, ako želimo da izračunamo <b>f₀(4251)</b>, broj brojeva od 0 do 4251 koji ne sadrže cifru 3, možemo posmatrati:
+</p>
+
+<p><code>[0, 999], [1000, 1999], [2000, 2999], [3000, 3999], [4000, 4251]</code></p>
+
+<p>
+Uočavamo da su svi brojevi iz segmenta [3000, 3999] isključeni jer sadrže cifru 3, dok su ostali segmenti slični podsegmentima [0, 999], [0, 999], [0, 999], [0, 251].
+</p>
+
+<div class="napomena">
+Dakle, <b>f₀(4251) = 3·f₀(999) + f₀(251)</b>.
+</div>
+
+<p>
+Ponovnim razlaganjem ovih segmenata po ciframa, dobijamo opštu rekurzivnu definiciju:
+</p>
+
+<div class="napomena">
+Ako broj n ima početnu cifru c i ostatak n′:
+<ul>
+<li>ako je c &lt; 3 => f₀(n) = c·f₀(9…9) + f₀(n′)</li>
+<li>ako je c = 3 => f₀(n) = c·f₀(9…9)</li>
+<li>ako je c &gt; 3 => f₀(n) = (c−1)·f₀(9…9) + f₀(n′)</li>
+</ul>
+</div>
+
+<p>
+Rekurzija se završava u slučaju <b>f₀(0) = 1</b>.
+</p>
+
+<h2>Rekurzivno rešenje</h2>
+<xmp class="primer_ta">
+static int f(int n, int d)
+{
+    if (n == 0)
+        return 1;
+
+    int c = n % 10;
+
+    if (c < 3)
+        return c * f(d / 10, d / 10) + f(n / 10, d / 10);
+    else if (c == 3)
+        return c * f(d / 10, d / 10);
+    else
+        return (c - 1) * f(d / 10, d / 10) + f(n / 10, d / 10);
+}
+
+static int f(int n)
+{
+    int nObrnuto = 0;
+    int devetke = 0;
+    do {
+        nObrnuto = nObrnuto * 10 + n % 10;
+        devetke = devetke * 10 + 9;
+        n /= 10;
+    } while (n > 0);
+
+    return f(nObrnuto, devetke);
+}
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za n = 4251:
+</p>
+
+<p>
+f₀(4251) = 3·f₀(999) + f₀(251)<br>
+f₀(999) = 9·f₀(99)<br>
+f₀(99) = 9·f₀(9) = 9·9 = 81<br>
+f₀(999) = 9·81 = 729<br>
+f₀(251) = 2·f₀(99) + f₀(51) = 2·81 + f₀(51)<br>
+f₀(51) = 4·f₀(9) + f₀(1) = 4·9 + 2 = 38<br>
+f₀(251) = 162 + 38 = 200<br>
+f₀(4251) = 3·729 + 200 = 2387
+</p>
+
+<p>
+Rezultat: <b>2387 brojeva</b> iz intervala [0, 4251] ne sadrži cifru 3.
+</p>
+
+<h2>Iterativno izvođenje</h2>
+<p>
+Rekurzija se može lako prevesti u iteraciju — obrađujemo cifre broja n s desna na levo, uz održavanje dve vrednosti:
+</p>
+
+<ul>
+<li><b>t</b> — predstavlja f₀(9...9) = 9ᵏ</li>
+<li><b>br</b> — predstavlja trenutnu vrednost f₀(n′)</li>
+</ul>
+
+<xmp class="primer_ta">
+int n = int.Parse(Console.ReadLine());
+int t = 1, br = 1;
+
+while (n > 0)
+{
+    int c = n % 10;
+    if (c < 3)
+        br = c * t + br;
+    else if (c == 3)
+        br = c * t;
+    else
+        br = (c - 1) * t + br;
+
+    t = 9 * t;
+    n /= 10;
+}
+
+Console.WriteLine(br);
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za n = 4251:
+</p>
+
+<p>
+c = 1 => br = 1×1 + 1 = 2, t = 9<br>
+c = 5 => br = (5−1)×9 + 2 = 38, t = 81<br>
+c = 2 => br = 2×81 + 38 = 200, t = 729<br>
+c = 4 => br = (4−1)×729 + 200 = 2387, t = 6561<br>
+</p>
+
+<p>
+Konačan rezultat: <b>br = 2387</b>.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>15</td><td>14</td></tr>
+<tr><td>999</td><td>729</td></tr>
+<tr><td>12345</td><td>8262</td></tr>
+<tr><td>4251</td><td>2387</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Zašto se pri svakom koraku vrednost <i>t</i> množi sa 9?</p>
+<p>Šta znači promenljiva <i>br</i> u trenutnom koraku algoritma?</p>
+<p>Kako bismo rekurzivnu funkciju pretvorili u iterativnu?</p>
+<p>Koja je vremenska složenost iterativne implementacije?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Izmeni program da računa koliko brojeva u intervalu [0, n] <b>sadrži</b> cifru 3.<br>
+2. Generalizuj algoritam tako da računa brojeve koji ne sadrže zadatu cifru k.<br>
+3. Napiši verziju koja umesto 3 isključuje cifre 3 i 7.<br>
+4. Pokušaj da objasniš algoritam koristeći stablo rekurzivnog pozivanja.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ideja algoritma je induktivna:  
+na osnovu cifara manje težine izračunavamo koliko brojeva bez cifre 3 postoji za sve sufixe broja n.  
+Korišćenjem promenljivih <b>br</b> i <b>t</b> izbegavamo rekurziju i omogućavamo iterativno, efikasno rešavanje.
+</div>

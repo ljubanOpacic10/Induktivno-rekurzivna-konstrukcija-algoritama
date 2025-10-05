@@ -1,0 +1,210 @@
+<h1>Izbacivanje cifara na sve načine</h1>
+
+<h2>Motivacija</h2>
+<p>
+Za dati broj <i>n</i> želimo da pronađemo <b>zbir svih brojeva</b> koji se mogu dobiti tako što iz njega izbacujemo neke (ili nijednu) cifru.  
+Na primer, za broj <b>123</b> svi mogući brojevi koji se mogu dobiti su:
+</p>
+
+<p><code>123, 12, 13, 23, 1, 2, 3, 0</code></p>
+
+<p>
+Njihov zbir je <b>177</b>.  
+Cilj je pronaći ovaj zbir bez generisanja svih kombinacija cifara.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Na prvi pogled, možemo pokušati da generišemo sve moguće kombinacije uklanjanja cifara, sabrati ih i dobiti rezultat.  
+Međutim, broj mogućih podbrojeva za broj sa <i>k</i> cifara je <b>2<sup>k</sup></b> — što za veće brojeve postaje izuzetno neefikasno.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Posmatrajmo broj <b>1234</b>.  
+Ako znamo rešenje za broj <b>123</b> (pretpostavimo da je zbir = 177), razmislimo šta se dešava kada dodamo novu cifru 4.
+</p>
+
+<p>
+Na svaki od prethodnih sabiraka (123, 12, 13, 23, 1, 2, 3, 0) možemo dodati cifru 4 na kraj.  
+Tada dobijamo nove brojeve:
+</p>
+
+<p><code>1234, 124, 134, 234, 14, 24, 34, 4</code></p>
+
+<p>
+Zbir ovih novih brojeva biće jednak <b>10 × 177 + 8 × 4 = 1802</b>.  
+Konačan zbir svih mogućnosti za 1234 je tada <b>177 + 1802 = 1979</b>.
+</p>
+
+<div class="napomena">
+Dakle, za svaku novu cifru <i>d</i>:
+<p><b>zbir(n) = zbir(prethodni) + 10 × zbir(prethodni) + d × broj_prethodnih_kombinacija</b></p>
+</div>
+
+<p>
+Broj prethodnih kombinacija je <b>2<sup>k</sup></b>, gde je <i>k</i> broj cifara u prefiksu.  
+Zato funkcija mora čuvati i trenutni zbir i odgovarajući stepen dvojke.
+</p>
+
+<h2>Rekurzivno rešenje</h2>
+<xmp class="primer_ta">
+public static void Zbir(int n, out int zbir, out int b)
+{
+    if (n == 0)
+    {
+        zbir = 0;
+        b = 1;
+    }
+    else
+    {
+        int zbirR, bR;
+        Zbir(n / 10, out zbirR, out bR);
+        zbir = zbirR + 10 * zbirR + (n % 10) * bR;
+        b = bR * 2;
+    }
+}
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za primer n = 123:
+</p>
+
+<p>
+Zbir(0) => (zbir=0, b=1)<br>
+Zbir(1) => zbir = 0 + 10×0 + 1×1 = 1, b = 2<br>
+Zbir(12) => zbir = 1 + 10×1 + 2×2 = 15, b = 4<br>
+Zbir(123) => zbir = 15 + 10×15 + 3×4 = 177, b = 8<br>
+</p>
+
+<p>
+Konačan rezultat: <b>177</b>
+</p>
+
+<h2>Iterativno izvođenje iz rekurzije</h2>
+<p>
+Isti proces možemo izraziti jednostavno pomoću petlje koja prolazi kroz cifre broja s leva nadesno.
+</p>
+
+<xmp class="primer_ta">
+string broj = Console.ReadLine();
+int zbir = 0, b = 1;
+
+foreach (char c in broj)
+{
+    zbir += 10 * zbir + b * (c - '0');
+    b *= 2;
+}
+
+Console.WriteLine(zbir);
+</xmp>
+
+<p>
+Ovako je eliminisana rekurzija, ali pošto se od korisnika očekuje broj do 1000 cifara, standardni tipovi podataka nisu dovoljni.
+</p>
+
+<h2>Rad sa velikim brojevima</h2>
+<p>
+Jedno od rešenja je implementacija sabiranja i množenja nad listama cifara:
+</p>
+
+<xmp class="primer_ta">
+static List<int> Saberi(List<int> a, List<int> b)
+{
+    List<int> rez = new List<int>();
+    int p = 0;
+    for (int i = 0; i < a.Count || i < b.Count; i++)
+    {
+        int c = (i < a.Count ? a[i] : 0) +
+                (i < b.Count ? b[i] : 0) + p;
+        rez.Add(c % 10);
+        p = c / 10;
+    }
+    if (p > 0)
+        rez.Add(p);
+    return rez;
+}
+</xmp>
+
+<p>
+Ovim pristupom, sabiranje i množenje se obavlja ručno, cifra po cifra.
+</p>
+
+<h2>Najefikasnije rešenje uz <code>BigInteger</code></h2>
+<p>
+U modernim verzijama C# možemo koristiti tip <code>System.Numerics.BigInteger</code>, koji omogućava rad sa praktično neograničeno velikim brojevima.
+</p>
+
+<xmp class="primer_ta">
+using System;
+using System.Numerics;
+
+class Program
+{
+    public static void Main(String[] args)
+    {
+        string broj = Console.ReadLine();
+        BigInteger zbir = 0, b = 1;
+
+        foreach (char c in broj)
+        {
+            zbir += 10 * zbir + b * (c - '0');
+            b *= 2;
+        }
+
+        Console.WriteLine(zbir);
+    }
+}
+</xmp>
+
+<h2>Tok izvršavanja (korak po korak)</h2>
+<p>
+Za primer n = 123:
+</p>
+
+<p>
+c = '1': zbir = 0 + 10×0 + 1×1 = 1, b = 2<br>
+c = '2': zbir = 1 + 10×1 + 2×2 = 15, b = 4<br>
+c = '3': zbir = 15 + 10×15 + 3×4 = 177, b = 8<br>
+</p>
+
+<p>
+Rezultat: <b>177</b>
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>123</td><td>177</td></tr>
+<tr><td>45</td><td>99</td></tr>
+<tr><td>305</td><td>525</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Zašto broj brojeva koji se mogu dobiti iz k-cifrenog broja iznosi 2<sup>k</sup>?</p>
+<p>Kako je moguće izračunati zbir svih tih brojeva bez njihovog eksplicitnog generisanja?</p>
+<p>Koja je razlika u redosledu prolaska cifara između rekurzivne i iterativne verzije?</p>
+<p>Zašto je potreban tip <code>BigInteger</code> za ovaj zadatak?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Modifikuj algoritam tako da ispisuje i broj mogućih kombinacija.<br>
+2. Napiši verziju koja računa proizvod svih brojeva dobijenih izbacivanjem cifara.<br>
+3. Ispitaj kako se rezultat menja ako broj sadrži nule.<br>
+4. Implementiraj rekurzivnu verziju koristeći <code>BigInteger</code> umesto običnih tipova podataka.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ideja zadatka zasniva se na tome da svaka nova cifra doprinosi postojećem zbiru na dva načina:
+<ul>
+<li>Pomera sve prethodne brojeve ulevo (×10).</li>
+<li>Dodaje svoju vrednost onoliko puta koliko ima prethodnih kombinacija (2<sup>k</sup> puta).</li>
+</ul>
+Ova induktivna logika omogućava efikasno izvođenje iterativnog algoritma bez generisanja svih brojeva.
+</div>
