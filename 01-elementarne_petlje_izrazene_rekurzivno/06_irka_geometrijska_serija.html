@@ -2,56 +2,70 @@
 
 <h2>Motivacija</h2>
 <p>
-Zamislite da imate niz brojeva gde se svaki sledeći dobija množenjem prethodnog sa tri.  
-Ovakav niz nazivamo <b>geometrijska serija</b>. Takvi nizovi se pojavljuju u mnogim
-realnim situacijama. Na primer, bakterije u laboratoriji se mogu utrostručavati svakih nekoliko sati,
-ili se vrednost nekog ulaganja može uvećavati tri puta u određenim vremenskim periodima.  
-Ideja geometrijske serije je važna jer nam omogućava da modelujemo i razumemo pojave koje rastu 
-<em>eksponencijalno</em>, mnogo brže nego što to može aritmetički niz (sabiranje).<br>
-Naš zadatak je da prikažemo sve brojeve iz intervala [a, b] koji pripadaju jednoj ovakvoj
-geometrijskoj seriji. Prvi broj uvek je a, a svaki naredni dobijamo tako što prethodni pomnožimo sa 3,
-sve dok ne pređemo gornju granicu b.  
+Zamislite da imate broj i da ga svaki put pomnožite sa tri.  
+Dobijate sledeći broj, pa sledeći... i tako nastaje <b>geometrijska serija</b>.  
+</p>
+
+<p>
+Ovakvi nizovi su svuda oko nas! 🌱  
+Na primer:
+<ul>
+  <li>Bakterije u laboratoriji se mogu utrostručavati svakih nekoliko sati.</li>
+  <li>Ulaganje u banci može rasti tri puta u određenom periodu ako se kamata obračunava složeno.</li>
+</ul>
+Ovakav rast nazivamo <b>eksponencijalni rast</b> – jer brojevi rastu mnogo brže nego kod običnog sabiranja.  
+</p>
+
+<p>
+Naš zadatak je jednostavan:  
+želite da ispišete sve brojeve iz intervala <b>[a, b]</b> koji pripadaju geometrijskoj seriji.  
+Prvi broj je <b>a</b>, a svaki sledeći dobijamo množenjem sa 3, sve dok ne pređemo granicu <b>b</b>.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Prva ideja može biti da jednostavno prolazimo kroz sve brojeve u intervalu [a, b] 
-i za svaki proveravamo da li je deo geometrijske serije.  
-Na primer, možemo krenuti od a i proveravati za svaki broj do b: 
-"Da li se on može dobiti kao a * 3^k za neko k?".  
-Iako je ovo moguće, veoma je neefikasno jer proveravamo mnogo brojeva koji nam uopšte ne trebaju.
-U velikim intervalima, takav pristup bi bio spor i nepotreban.
+Možemo krenuti „grubo“ — prolaziti kroz sve brojeve od <b>a</b> do <b>b</b>  
+i za svaki proveravati da li je deo serije, tj. da li se može napisati kao <b>a × 3<sup>k</sup></b> za neko <b>k</b>.
 </p>
+
+<p>
+Ovaj pristup radi, ali je <b>neefikasan</b>.  
+Zamislite da tražite brojeve u intervalu od 1 do milion — proveravaćete ogroman broj beskorisnih kandidata.  
+Računar bi se nepotrebno mučio, iako zapravo postoji jednostavno pravilo koje „skače“ direktno na tačne brojeve.
+</p>
+
+<div class="napomena">
+Kao da tražite svaku treću osobu u masi od 1000 ljudi tako što pitate svakog redom — umesto da jednostavno brojite: treći, šesti, deveti...
+</div>
 
 <h2>Analiza problema</h2>
 <p>
-Umesto da nasumično proveravamo sve brojeve, hajde da pažljivo analiziramo strukturu problema.  
-Primećujemo da postoji jednostavno pravilo koje nam daje elemente serije:
+Da ne bismo proveravali sve, posmatrajmo kako izgleda sama serija.  
+Vidimo da se svaki sledeći broj lako dobija od prethodnog:
 </p>
 <ul>
-  <li>Prvi broj je <i>a</i>.</li>
-  <li>Sledeći broj dobijamo množenjem prethodnog sa 3.</li>
-  <li>Stajemo onog trenutka kada pređemo granicu <i>b</i>.</li>
+  <li>Prvi broj je <b>a</b>.</li>
+  <li>Sledeći broj dobijamo množenjem sa 3.</li>
+  <li>Stajemo čim pređemo granicu <b>b</b>.</li>
 </ul>
+
 <p>
-Dakle, nije potrebno gledati sve brojeve. Dovoljno je da <b>korak po korak</b> gradimo niz tako što
-uvek znamo sledeći element. Ovo je upravo ono što radi induktivno razmišljanje — 
-ako znamo rešenje za manji problem (brojeve do sada), znamo i kako da napravimo sledeći broj.
+Dakle, ne moramo „nasumično“ tražiti brojeve — samo pratimo pravilo rasta.  
+Ovo je suština <b>induktivnog razmišljanja</b>: ako znamo rešenje za manji slučaj, znamo i kako da dođemo do sledećeg.
 </p>
 
 <h2>Pravilan pristup</h2>
 <p>
-Korišćenjem <b>induktivno–rekurzivnog pristupa</b> problem postaje elegantan:  
+Koristićemo <b>rekurzivni pristup</b> — funkcija poziva samu sebe za sledeći broj u nizu.
 </p>
 <ul>
-  <li><b>Osnovni slučaj</b>: ako je trenutni broj veći od b, završavamo.</li>
-  <li><b>Induktivni korak</b>: ispisujemo trenutni broj i pozivamo istu metodu za naredni broj
-  (koji je tri puta veći).</li>
+  <li><b>Osnovni slučaj:</b> Ako je trenutni broj veći od <b>b</b>, zaustavi se.</li>
+  <li><b>Induktivni korak:</b> Ispiši trenutni broj, zatim pozovi funkciju za <b>tri puta veći</b> broj.</li>
 </ul>
+
 <p>
-Na ovaj način dobijamo prirodno i jasno rešenje. 
-Umesto da “lutamo” kroz ceo interval, direktno skačemo na sledeći broj serije, čime štedimo vreme 
-i resurse.
+Ovim pristupom dobijamo elegantno i brzo rešenje.  
+Računar u svakom trenutku zna gde je i odmah prelazi na sledeći broj serije — bez gubljenja vremena.
 </p>
 
 <xmp class="primer_ta">
@@ -70,30 +84,71 @@ static void Main()
     GeometrijskaSerija(a, b);
 }
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
 <h2>Primer</h2>
-<p>Za ulaz <b>a = 5</b>, <b>b = 50</b>, dobijamo:</p>
+<p>
+Za ulaz:
+</p>
+
 <xmp class="primer_ta">
-Ulaz:
 5
 50
+</xmp>
 
-Izlaz:
+<p>
+Izlaz će biti:
+</p>
+
+<xmp class="primer_ta">
 5
 15
 45
 </xmp>
 
+<p>
+Brojevi 5, 15 i 45 pripadaju seriji jer se svaki sledeći dobija množenjem prethodnog sa 3, a sledeći (135) već prelazi gornju granicu 50.
+</p>
+
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-  <li>Zašto nije efikasno ići kroz sve brojeve u intervalu [a, b]?</li>
-  <li>Koji je osnovni slučaj u ovom zadatku?</li>
-  <li>Šta predstavlja induktivni korak?</li>
-  <li>Zašto je rekurzija ovde prirodniji pristup nego iteracija?</li>
+  <li>Zašto nije efikasno proveravati sve brojeve od <b>a</b> do <b>b</b>?</li>
+  <li>Šta znači „osnovni slučaj“ u ovom zadatku?</li>
+  <li>Kako funkcija zna kada da prestane?</li>
+  <li>Zašto je rekurzija ovde prirodniji izbor od petlje?</li>
+  <li>Šta bi se desilo ako zaboravimo osnovni slučaj?</li>
 </ul>
 
 <div class="zadatak">
-Za vežbu: Implementirati sličan algoritam gde se sledeći broj dobija množenjem sa 2.  
-Na primer, za ulazni interval [3, 100] izlaz treba da bude: 3, 6, 12, 24, 48, 96.
+<b>Zadatak za vežbu:</b><br>
+Implementiraj sličan algoritam gde se sledeći broj dobija množenjem sa 2.  
+<br><br>
+Na primer, za interval [3, 100], izlaz treba da bude:<br>
+<code>3, 6, 12, 24, 48, 96</code>
 </div>
+
+<h1>Pomoć – Geometrijska serija</h1>
+
+<div class="napomena">
+Seti se: uvek množimo sa 3 dok broj ne pređe gornju granicu <b>b</b>.  
+To je ceo algoritam.
+</div>
+
+<p>
+Osnovni slučaj: kada broj pređe <b>b</b>, više ga ne ispisujemo.  
+<br>
+Induktivni korak: svaki sledeći broj dobijamo množenjem prethodnog sa 3.
+</p>
+
+<p>
+Na primer, ako su <b>a = 2</b> i <b>b = 100</b>, niz izgleda ovako:  
+<code>2, 6, 18, 54</code>.
+</p>
+
+<p>
+Ako nisi siguran kako da kreneš, zamisli sledeće korake:
+</p>
+<ul>
+  <li>Počni od broja <b>a</b>.</li>
+  <li>Ispiši ga.</li>
+  <li>Pomnoži ga sa 3 i ponovi sve dok ne pređe <b>b</b>.</li>
+</ul>

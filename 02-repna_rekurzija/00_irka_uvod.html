@@ -1,0 +1,101 @@
+<h1>Poglavlje II: Repna rekurzija</h1>
+
+<h2>Uvod i motivacija</h2>
+<p>
+U prethodnom poglavlju naučili smo kako se jednostavne petlje mogu izraziti rekurzijom.  
+Sada idemo korak dalje — upoznaćemo se sa <b>repnom rekurzijom</b> (engl. <i>tail recursion</i>), posebnom vrstom rekurzije koja je izuzetno važna u praksi.  
+Ona nam omogućava da pišemo algoritme koji su elegantni poput rekurzivnih, ali i efikasni kao iterativni.
+</p>
+
+<p>
+Kod obične rekurzije, svaka funkcija mora da „zapamti“ svoj rezultat i čeka na povratnu vrednost sledećeg poziva.  
+Kod repne rekurzije, međutim, <b>nema čekanja</b> — rezultat se prenosi odmah kroz parametre,  
+što omogućava prevodiocu da ovakve pozive optimizuje i zameni ih petljama.  
+Na taj način dobijamo rekurzivne algoritme koji troše isto memorije kao i obične petlje!
+</p>
+
+<div class="napomena">
+Repna rekurzija je idealan korak između čiste teorije i praktičnog programiranja.  
+Pomaže nam da razumemo kako računari „pamte“ rekurzivne pozive i kako to možemo iskoristiti za stvaranje efikasnijih rešenja.
+</div>
+
+<h2>Šta ćemo naučiti u ovom poglavlju</h2>
+<p>
+U ovom poglavlju ćemo kroz konkretne primere naučiti:
+</p>
+<ul>
+  <li>kako da prepoznamo repno-rekurzivne algoritme,</li>
+  <li>kako da „prenoseći“ parcijalne rezultate kroz parametre izbegnemo nepotrebno čuvanje stanja,</li>
+  <li>kako repna rekurzija funkcioniše kao most ka iterativnim rešenjima,</li>
+  <li>i kako ovakav pristup čini kod bržim, čitljivijim i lakšim za razumevanje.</li>
+</ul>
+
+<h2>Pregled lekcija</h2>
+<table class="tabela">
+<thead>
+<tr><th>Redni broj</th><th>Naziv lekcije</th><th>Šta se uči</th></tr>
+</thead>
+<tbody>
+
+<tr>
+<td>1.</td>
+<td><b>Zbir n brojeva</b></td>
+<td>Prvi primer repne rekurzije — pokazuje kako se parcijalni rezultat (trenutni zbir) prenosi kroz svaki poziv funkcije.</td>
+</tr>
+
+<tr>
+<td>2.</td>
+<td><b>Broj i zbir cifara broja</b></td>
+<td>Učimo kako da broj rastavimo na cifre i računamo njihov zbir i broj bez petlji, korak po korak.</td>
+</tr>
+
+<tr>
+<td>3.</td>
+<td><b>Faktorijel</b></td>
+<td>Klasičan primer repno-rekurzivne funkcije — svaki korak čuva samo trenutni proizvod, bez čekanja na sledeći poziv.</td>
+</tr>
+
+<tr>
+<td>4.</td>
+<td><b>Stepen</b></td>
+<td>Primena repne rekurzije na problem stepenovanja broja — jednostavno i efikasno množenje ponavljanjem.</td>
+</tr>
+
+<tr>
+<td>5.</td>
+<td><b>Jednakost rastojanja</b></td>
+<td>Učimo kako da računski problem (npr. aritmetička sredina) izrazimo kroz iterativno sabiranje implementirano rekurzijom.</td>
+</tr>
+
+<tr>
+<td>6.</td>
+<td><b>Najniža temperatura</b></td>
+<td>Pokazuje kako rekurzija može služiti ne samo za računanje, već i za pretragu minimuma u nizu vrednosti.</td>
+</tr>
+
+<tr>
+<td>7.</td>
+<td><b>Drugi na rang listi</b></td>
+<td>Primer praktičnog zadatka – pronalaženje drugog maksimuma kroz prenošenje dva parametra koji „pamte“ najbolje rezultate.</td>
+</tr>
+
+<tr>
+<td>8.</td>
+<td><b>Prva negativna temperatura</b></td>
+<td>Prvi primer rekurzivne pretrage — pronalazak prvog elementa koji zadovoljava uslov (negativna vrednost) bez korišćenja petlje.</td>
+</tr>
+
+</tbody>
+</table>
+
+<h2>Cilj i očekivanja</h2>
+<p>
+Na kraju ovog poglavlja razumećeš razliku između obične i repne rekurzije, kao i prednosti koje ona donosi u pogledu efikasnosti.  
+Naučićeš da prepoznaješ situacije kada se parcijalni rezultat može preneti kroz parametre funkcije i kako to čini tvoj kod bržim i stabilnijim.
+</p>
+
+<div class="napomena">
+Ovo poglavlje predstavlja most između rekurzivnog razmišljanja i iterativne logike.  
+Kada ovladaš repnom rekurzijom, bićeš spreman za sledeći korak — <b>izvođenje iterativnih algoritama iz rekurzivnih</b>,  
+što je tema sledećeg poglavlja.
+</div>

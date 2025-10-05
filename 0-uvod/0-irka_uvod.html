@@ -2,30 +2,97 @@
 
 <h2>Uvod i motivacija</h2>
 <p>
-Jedan od osnovnih pristupa u konstrukciji algoritama zasniva se na ideji da se složen problem razloži na manje probleme istog tipa, koji su lakše rešivi. 
-Takav metod omogućava sistematsko razmišljanje i gradnju rešenja korak po korak, čime se smanjuje rizik od grešaka i olakšava razumevanje procesa. 
-Ova metoda nije fokusirana samo na tehničku implementaciju, već pre svega na način razmišljanja koji vodi do rešenja.
+Kada rešavamo neki složen problem, prirodno je da ga pokušamo razložiti na manje i jednostavnije delove.  
+Na isti način na koji se velika slagalica sklapa deo po deo, i u programiranju složen algoritam nastaje iz jednostavnih koraka.  
+Ovaj način razmišljanja zove se <b>induktivna konstrukcija algoritma</b>.
 </p>
+
+<p>
+Induktivni pristup ne uči nas samo „kako“ da napišemo algoritam, već i <b>kako da razmišljamo o problemu</b>.  
+Umesto da odmah tražimo konačno rešenje, mi postavljamo pitanje:  
+„Ako znam da rešim jednostavniju verziju istog problema — kako mogu to znanje da iskoristim za veći slučaj?“  
+Tako algoritam nastaje korak po korak, prirodno i logično.
+</p>
+
+<div class="napomena">
+Ovakav način razmišljanja veoma je sličan <b>matematičkoj indukciji</b>,  
+gde dokazujemo da ako tvrdnja važi za neki slučaj, važi i za sledeći.  
+U programiranju, ako znamo rešenje manjeg problema (n−1), možemo izgraditi rešenje većeg (n).
+</div>
 
 <h2>Osnovni princip</h2>
 <p>
-Pri konstrukciji algoritma indukcijom, problem mora imati osnovni slučaj koji se rešava direktno, bez daljeg razlaganja. 
-Na primer, problem dimenzije 0 može se odmah rešiti. 
-Za problem dimenzije n, pretpostavljamo da znamo kako da rešimo problem dimenzije n − 1, i na osnovu toga gradimo rešenje za veći problem. 
-Ova ideja odgovara principu matematičke indukcije, gde baza indukcije i induktivna pretpostavka čine temelj korektnog algoritma.
+Da bi algoritam konstruisan indukcijom bio potpun, mora imati dva ključna dela:
+</p>
+<ul>
+  <li><b>Osnovni slučaj</b> — najmanji mogući problem koji se rešava direktno, bez daljeg razlaganja (na primer, kada je n = 0 ili n = 1).</li>
+  <li><b>Induktivni korak</b> — deo koji objašnjava kako da se reši problem dimenzije n na osnovu rešenja problema dimenzije n−1.</li>
+</ul>
+
+<p>
+Zahvaljujući ovakvom pristupu, algoritam uvek ima jasnu logiku i završava se kada dođe do osnovnog slučaja.
 </p>
 
 <h2>Rekurzivna i iterativna implementacija</h2>
 <p>
-Metodološki pristup se može implementirati na dva načina. 
-Prvi je rekurzivni, gde funkcija poziva samu sebe sa manjim problemom dok se ne stigne do osnovnog slučaja. 
-Drugi je iterativni, gde se rešenje gradi postepeno u petlji, počevši od rešenja najmanjeg problema i proširujući ga korak po korak. 
-I rekurzivno i iterativno rešenje slede isti princip induktivno-rekurzivne konstrukcije i njihova korektnost zasniva se na istom logičkom postupu.
+Induktivni pristup može se sprovesti na dva načina:
 </p>
 
-<h2>Primena u lekcijama</h2>
+<ul>
+  <li><b>Rekurzivno</b> — funkcija poziva samu sebe sa manjim problemom, dok se ne stigne do osnovnog slučaja.</li>
+  <li><b>Iterativno</b> — rešenje se gradi korak po korak pomoću petlje, počevši od najjednostavnijeg slučaja.</li>
+</ul>
+
 <p>
-U narednim lekcijama prikazaćemo kako se induktivno-rekurzivna konstrukcija primenjuje na različite zadatke, uključujući brojenje, odbrojavanje i druge praktične probleme. 
-Pokazaćemo i rekurzivne i nerekurzivne implementacije, objašnjavajući zašto induktivni pristup vodi do jednostavnijih i jasnijih algoritama. 
-Cilj je da čitaoci razviju sposobnost sistematskog razmišljanja i razumevanja principa gradnje rešenja korak po korak.
+Iako deluju različito, oba pristupa slede istu ideju.  
+Rekurzivno rešenje je često prirodnije za razumevanje, jer bolje odražava proces razmišljanja,  
+dok je iterativno efikasnije u izvršavanju i koristi manje memorije.  
+Zato je važno razumeti vezu između njih.
 </p>
+
+<h2>Šta ćemo naučiti</h2>
+<p>
+U sledećim poglavljima naučićemo kako se induktivno–rekurzivni pristup primenjuje na razne tipove zadataka.  
+Svako poglavlje sadrži primere, kod, analizu toka izvršavanja, pitanja za razumevanje i zadatke za vežbu.
+</p>
+
+<table class="tabela">
+<thead>
+<tr><th>Poglavlje</th><th>Opis</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><b>Poglavlje I: Elementarne petlje izražene rekurzivno</b></td>
+<td>U ovom delu upoznajemo osnovne obrasce — kako se jednostavne petlje (brojanje, sabiranje, čitanje dok ne unesemo nulu) mogu izraziti rekurzijom.  
+Naučićemo da prepoznamo osnovni slučaj i induktivni korak u svakodnevnim zadacima.</td>
+</tr>
+
+<tr>
+<td><b>Poglavlje II: Repna rekurzija</b></td>
+<td>U drugom delu istražujemo efikasniji oblik rekurzije — <b>repnu rekurziju</b>.  
+Videćemo kako funkcija može da "pamti" rezultate pomoću parametara, bez dodatnog memorijskog opterećenja.  
+Zadaci kao što su faktorijel, stepen broja ili traženje minimuma biće odlični primeri za to.</td>
+</tr>
+
+<tr>
+<td><b>Poglavlje III: Izvođenje iterativnih algoritama iz rekurzivnih</b></td>
+<td>U poslednjem delu prelazimo sa rekurzivnog na iterativni način razmišljanja.  
+Naučićemo kako da svaku rekurzivnu funkciju pretvorimo u ekvivalentnu petlju i time razumemo unutrašnju logiku rekurzije.  
+Ovo poglavlje povezuje sve naučeno i pokazuje kako iz apstraktnog načina razmišljanja prelazimo u praktičnu implementaciju.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Cilj i očekivanja</h2>
+<p>
+Cilj ovog poglavlja nije samo da naučiš da pišeš rekurzivne funkcije,  
+već da <b>razviješ algoritamski način razmišljanja</b> —  
+da umeš da prepoznaš obrasce, povežeš manji i veći problem i sistematski gradiš rešenje.  
+Kada savladaš ovaj način razmišljanja, mnogi složeniji algoritmi postaće ti intuitivni i logični.
+</p>
+
+<div class="napomena">
+U svakom zadatku pokušaćemo da odgovorimo na pitanja:  
+<b>„Šta je osnovni slučaj?“</b>, <b>„Koji je induktivni korak?“</b> i <b>„Kako algoritam zna da se zaustavi?“</b>  
+Odgovori na ta pitanja biće ključ razumevanja rekurzije.
+</div>

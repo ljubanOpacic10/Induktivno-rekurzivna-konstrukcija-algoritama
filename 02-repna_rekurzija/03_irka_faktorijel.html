@@ -2,78 +2,85 @@
 
 <h2>Motivacija</h2>
 <p>
-Faktorijel je jedan od najpoznatijih matematičkih izraza koji se često pojavljuje u kombinatorici, statistici i programiranju.  
-Označava proizvod svih prirodnih brojeva od 1 do n, i zapisuje se kao n!.  
-Na primer, 5! = 1 × 2 × 3 × 4 × 5 = 120.  
-Iako se može lako izračunati pomoću petlje, faktorijel je odličan primer za induktivno razmišljanje i primenu rekurzije.
+Faktorijel je jedan od najpoznatijih matematičkih izraza i često se pojavljuje u kombinatorici, statistici i programiranju.  
+Označava proizvod svih prirodnih brojeva od 1 do n i zapisuje se kao <b>n!</b>.  
+Na primer:  
+<b>5! = 1 × 2 × 3 × 4 × 5 = 120</b>.  
+</p>
+
+<p>
+Zanimljivo je da se faktorijel pojavljuje svuda — od računanja mogućih kombinacija karata, do broja načina da se ljudi rasporede u red.  
+Iako se lako može izračunati pomoću petlje, faktorijel je sjajan primer kako <b>induktivno razmišljanje</b> i <b>rekurzija</b> mogu elegantno rešiti problem korak po korak.
 </p>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan jednostavan način je korišćenje petlje koja računa proizvod svih brojeva od 1 do n.  
-Iako ovakav pristup funkcioniše, ne pokazuje <b>kako</b> se rešenje gradi korak po korak, niti razvija sposobnost induktivnog razmišljanja.
+Najjednostavniji način bio bi da koristimo petlju i redom množimo sve brojeve od 1 do n.  
+Ovaj pristup funkcioniše, ali ne pokazuje <b>zašto</b> to radi, niti kako se rešenje prirodno gradi.  
+Rekurzivni (induktivni) pristup nam pomaže da bolje razumemo kako se svaki korak nadovezuje na prethodni.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Faktorijel broja n može se prirodno izraziti induktivno:  
-f(n) = n × f(n − 1), dok je osnovni slučaj f(0) = 1.  
-To znači da ako znamo rezultat za n−1, lako možemo izračunati rezultat za n.
+Faktorijel broja n možemo izraziti <b>induktivno</b>:
+</p>
+
+<p>
+\( f(n) = n \times f(n - 1) \)
+</p>
+
+<p>
+Dakle, da bismo izračunali n!, dovoljno je da znamo (n−1)! i da ga pomnožimo sa n.  
+Kada stignemo do 1, više nemamo šta da množimo — to je osnovni slučaj.
 </p>
 
 <div class="napomena">
-<p><b>Osnovni slučaj</b> — kada je n = 0 ili n = 1, rezultat je 1.</p>
-<p><b>Induktivni korak</b> — ako znamo faktorijel broja n−1, onda je faktorijel broja n jednak n × (n−1)!.</p>
+<p><b>Osnovni slučaj:</b> Ako je n = 0 ili n = 1, tada je f(n) = 1.</p>
+<p><b>Induktivni korak:</b> Ako znamo faktorijel broja (n−1), tada je f(n) = n × f(n−1).</p>
 </div>
 
 <h2>Pravilan pristup</h2>
 <p>
 Funkciju možemo zapisati rekurzivno.  
-Svaki rekurzivni poziv računa manji problem (faktorijel od n−1), dok se osnovni slučaj završava kad n dostigne 1.  
-U ovom primeru koristićemo repno-rekurzivni pristup, koji se po strukturi ponaša kao i iteracija.
+U svakom pozivu funkcija računa faktorijel manjeg broja dok ne dođe do osnovnog slučaja.  
+Postoji i repno–rekurzivna verzija koja je efikasnija, jer se ne mora „pamti“ više poziva.
 </p>
 
 <xmp class="primer_ta">
 int Faktorijel(int i, int n, int f)
 {
     if (i > n)
-        return f;
-    return Faktorijel(i + 1, n, f * i);
+        return f;               // osnovni slučaj: nema više brojeva
+    return Faktorijel(i + 1, n, f * i); // induktivni korak
 }
 
 int Faktorijel(int n)
 {
     return Faktorijel(1, n, 1);
 }
-
-// Ulaz: ceo broj n
-// Izlaz: faktorijel broja n (n!)
 </xmp>
 
-<p>
-Rekurzivna funkcija <b>Faktorijel(i, n, f)</b> ima tri parametra, a svaki od njih ima svoju jasnu ulogu:
-</p>
-
 <div class="napomena">
-<p><b>i</b> — trenutni broj koji obrađujemo (počinje od 1 i povećava se pri svakom rekurzivnom pozivu).</p>
-<p><b>n</b> — krajnja vrednost do koje računamo (npr. ako želimo 5!, tada je n = 5).</p>
-<p><b>f</b> — trenutni proizvod svih brojeva do i−1, odnosno „privremeni rezultat“ koji se prosleđuje sledećem pozivu.</p>
+<p><b>i</b> — trenutni broj koji trenutno množimo (počinje od 1).</p>
+<p><b>n</b> — broj do kog računamo faktorijel.</p>
+<p><b>f</b> — privremeni rezultat koji sadrži proizvod svih prethodnih brojeva.</p>
 </div>
 
+<h2>Praćenje izvršavanja</h2>
 <p>
-Tok izvršavanja možemo pratiti na primeru n = 3:
+Za n = 3, tok funkcije izgleda ovako:
 </p>
 
-<p>
-Faktorijel(1, 3, 1) => poziv za broj 1, trenutno f = 1<br>
-Faktorijel(2, 3, 1) => sledeći korak, sada množimo f × i = 1 × 1<br>
-Faktorijel(3, 3, 2) => i = 3, množimo f × i = 2 × 3<br>
-Faktorijel(4, 3, 6) => sada je i > n, pa se vraćamo rezultat = 6<br>
-</p>
+<ul>
+  <li>Faktorijel(1, 3, 1) → prelazimo na sledeći broj (1 × 1 = 1)</li>
+  <li>Faktorijel(2, 3, 1) → sada množimo 1 × 2 = 2</li>
+  <li>Faktorijel(3, 3, 2) → sada množimo 2 × 3 = 6</li>
+  <li>Faktorijel(4, 3, 6) → i > n → vraćamo 6</li>
+</ul>
 
 <p>
-Dakle, funkcija rekurzivno gradi rezultat, prenoseći kroz parametar <b>f</b> delimičan proizvod iz prethodnih koraka.  
-Kada broj <b>i</b> pređe <b>n</b>, više nema novih brojeva za množenje — i tada se dobija konačan rezultat, koji je n!.
+Dakle, funkcija „prenosi“ delimičan rezultat kroz parametar <b>f</b>, sve dok ne pređe granicu <b>n</b>.  
+Na kraju dobijamo n! = 6.
 </p>
 
 <h2>Primeri</h2>
@@ -88,24 +95,40 @@ Kada broj <b>i</b> pređe <b>n</b>, više nema novih brojeva za množenje — i 
 </tbody>
 </table>
 
-<h2>Pitanja za samoproveru</h2>
-<p>Šta predstavlja osnovni slučaj u ovom algoritmu?</p>
-<p>Zašto rekurzija prestaje kada je i > n?</p>
-<p>Koja je razlika između repne rekurzije i obične rekurzije?</p>
-<p>Kako bi izgledalo iterativno rešenje istog problema?</p>
+<h2>Pitanja za samoevaluaciju</h2>
+<ul>
+  <li>Zašto rekurzija prestaje kada je i > n?</li>
+  <li>Kako se osnovni slučaj razlikuje od induktivnog koraka?</li>
+  <li>Zašto kažemo da je ova funkcija <b>repno–rekurzivna</b>?</li>
+  <li>Kako bi izgledala obična rekurzivna verzija funkcije za faktorijel?</li>
+  <li>Šta bi se desilo ako zaboravimo da definišemo osnovni slučaj?</li>
+</ul>
 
 <h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-1. Napiši funkciju koja računa dvostruki faktorijel broja n (n!!).<br>
-2. Napiši funkciju koja vraća zbir svih faktorijela brojeva od 1 do n.<br>
-3. Napravi rekurzivnu funkciju koja računa n! bez pomoćnih parametara (i, f).<br>
-4. Objasni kako se u svakoj varijanti koristi induktivno razmišljanje.
+1. Napiši funkciju koja računa <b>dvostruki faktorijel</b> broja n (n!! = n × (n−2) × (n−4) × ...).<br><br>
+2. Napravi funkciju koja računa <b>zbir svih faktorijela</b> brojeva od 1 do n.<br><br>
+3. Napiši jednostavniju verziju funkcije bez pomoćnih parametara (i, f).<br><br>
+4. Objasni kako se induktivno razmišljanje koristi u svakoj od ovih funkcija.
 </div>
 
-<h2>Pomoć</h2>
+<h1>Pomoć – Faktorijel</h1>
+
 <div class="napomena">
-Podseti se da induktivno razmišljanje polazi od najjednostavnijeg slučaja i gradi ka složenijem.  
-Za faktorijel, osnovni slučaj je n = 1.  
-Zatim u svakom sledećem koraku rešenje „nasleđuje“ prethodno i samo se pomnoži novim brojem n.  
-To je upravo princip induktivne konstrukcije algoritma.
+Induktivno razmišljanje uvek kreće od najjednostavnijeg slučaja (n = 1), pa zatim gradi rešenje korak po korak.  
+Za faktorijel, to znači da znamo da je 1! = 1, a zatim svaki sledeći rezultat dobijamo množenjem prethodnog sa sledećim brojem.
 </div>
+
+<p>
+Na primer, ako računamo 4!:
+</p>
+<ul>
+  <li>1! = 1</li>
+  <li>2! = 2 × 1 = 2</li>
+  <li>3! = 3 × 2 = 6</li>
+  <li>4! = 4 × 6 = 24</li>
+</ul>
+
+<p>
+Dakle, svaka nova vrednost koristi rezultat prethodne — baš kao što rekurzija koristi rešenje manjeg problema za sledeći korak.
+</p>

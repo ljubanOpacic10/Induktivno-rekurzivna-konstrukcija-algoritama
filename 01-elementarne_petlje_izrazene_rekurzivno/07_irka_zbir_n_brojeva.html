@@ -2,56 +2,79 @@
 
 <h2>Motivacija</h2>
 <p>
-Često je potrebno izračunati zbir većeg broja elemenata.  
-Na primer, možemo želeti da saberemo rezultate ispita svih učenika u odeljenju da bismo kasnije izračunali prosečan broj bodova.  
-U drugim situacijama, zbir može predstavljati ukupan trošak na računu, broj bodova osvojenih u igri ili zbir svih merenja u eksperimentu.  
-Na prvi pogled, deluje da je dovoljno samo redom sabirati brojeve, ali hajde da vidimo kako ovaj problem
-možemo posmatrati <b>induktivno</b>, korak po korak.
+Zamislimo da u dnevniku ocena imamo mnogo brojeva i želimo da znamo njihov zbir.  
+To može biti ukupan broj bodova koje je učenik osvojio na testovima, ukupna potrošnja električne energije po mesecima, ili zbir svih rezultata merenja u laboratoriji.  
+U svim ovim slučajevima ideja je ista — sabrati više brojeva na sistematičan način.
 </p>
+
 <p>
-Razmišljanje na ovaj način je korisno jer nas uči da složen problem (zbir mnogo brojeva) razložimo na
-jednostavnije podprobleme (zbir manjeg broja brojeva).  
-To je upravo suština induktivno–rekurzivne konstrukcije algoritama.
+Na prvi pogled, deluje da je rešenje jednostavno: redom sabiramo sve brojeve.  
+Ali ako malo razmislimo, shvatićemo da zbir n brojeva ne moramo računati odjednom —  
+možemo ga graditi <b>korak po korak</b>, dodajući po jedan broj.  
+Ovo je osnova induktivnog pristupa — svodi složen problem na jednostavniji oblik.
 </p>
+
+<div class="napomena">
+Razmišljanje u koracima — od manjeg ka većem — pomaže nam da razumemo ne samo <i>šta</i> računamo, nego i <i>kako</i> i <i>zašto</i>.
+</div>
 
 <h2>Naivno rešenje</h2>
 <p>
-Jedan jednostavan način bio bi da koristimo petlju i redom sabiramo brojeve.  
-Iako radi, ovde ne vidimo induktivnu logiku niti razvijamo sistematski način razmišljanja.  
-U ovom pristupu algoritam “mehanički” prolazi kroz sve elemente, ali ne pomaže čitaocu da shvati <em>zašto</em> je problem tako jednostavan za rešavanje.
+Najjednostavnije bismo mogli sabrati sve brojeve u petlji.  
+Ovaj pristup radi, ali ne pokazuje pravu ideju indukcije — ne razlaže problem, već ga rešava “u komadu”.
+</p>
+
+<xmp class="primer_ta">
+static int ZbirIterativno(int[] niz)
+{
+    int suma = 0;
+    for (int i = 0; i < niz.Length; i++)
+        suma += niz[i];
+    return suma;
+}
+</xmp>
+
+<p>
+Iako ovaj kod ispravno računa zbir, ne pomaže nam da shvatimo <b>princip postepenog građenja rešenja</b>.  
+U induktivnim algoritmima, želimo da vidimo kako se rešenje gradi na osnovu manjeg dela problema.
 </p>
 
 <h2>Analiza problema</h2>
 <p>
-Suma n brojeva može se razložiti na manji problem:  
+Razmotrimo kako se zbir više brojeva može svesti na manji problem:
 </p>
 <ul>
-  <li>Zbir prvih n brojeva jednak je zbiru prvih n-1 brojeva plus poslednji broj.</li>
+  <li>Zbir 1 broja = sam taj broj.</li>
+  <li>Zbir 2 broja = prvi broj + drugi broj.</li>
+  <li>Zbir 3 broja = zbir prva dva + treći broj.</li>
 </ul>
+
 <p>
-Na primer, zbir 4 broja (10, -3, 2, 4) možemo napisati kao:
+Dakle, za n brojeva važi:
 </p>
-<pre>
-Zbir(4) = Zbir(3) + 4
-Zbir(3) = Zbir(2) + 2
-Zbir(2) = Zbir(1) + (-3)
-Zbir(1) = 10
-</pre>
+
 <p>
-Vidimo da se problem <b>postepeno svodi</b> na manji, dok ne dođemo do osnovnog slučaja – zbira samo jednog broja.
+<b>Zbir(n) = Zbir(n−1) + aₙ</b>
+</p>
+
+<p>
+Drugim rečima, ako već znamo zbir prvih n−1 brojeva, novi zbir dobijamo jednostavnim dodavanjem poslednjeg broja.  
+Ovo razmišljanje je srž induktivnog pristupa.
 </p>
 
 <h2>Pravilan pristup</h2>
 <p>
-Ovo je idealna situacija za induktivno–rekurzivnu konstrukciju algoritma.  
-Imamo jasno definisan osnovni slučaj i induktivni korak:
+Rekurzija je prirodan način da se opiše induktivno razmišljanje.  
+Definišemo dva koraka:
 </p>
+
 <ul>
-  <li><b>Osnovni slučaj</b>: zbir jednog broja je sam taj broj.</li>
-  <li><b>Induktivni korak</b>: zbir n brojeva je zbir prvih n-1 brojeva plus poslednji broj.</li>
+  <li><b>Osnovni slučaj:</b> zbir jednog broja je sam taj broj.</li>
+  <li><b>Induktivni korak:</b> zbir n brojeva = zbir prvih n−1 brojeva + poslednji broj.</li>
 </ul>
+
 <p>
-Na taj način algoritam gradi rešenje korak po korak, baš kao što mi razmišljamo kad sabiramo redom.
+Ovim pristupom program “razmišlja” kao i mi – svodi veliki problem na manji, dok ne dođe do osnovnog slučaja.
 </p>
 
 <xmp class="primer_ta">
@@ -69,10 +92,10 @@ static void Main()
     Console.WriteLine(rezultat); // Ispis: 13
 }
 </xmp>
-<button class="button_copy">Vidi primer</button>
 
-<h2>Primer</h2>
-<p>Za ulaz:</p>
+<h2>Primeri i testovi</h2>
+
+<p><b>Ulaz:</b></p>
 <xmp class="primer_ta">
 10
 -3
@@ -80,20 +103,64 @@ static void Main()
 4
 </xmp>
 
-<p>Dobijamo izlaz:</p>
+<p><b>Izlaz:</b></p>
 <xmp class="primer_ta">
 13
 </xmp>
 
+<p>
+Objašnjenje:  
+Zbir prvih brojeva računa se postepeno:
+</p>
+
+<table class="tabela">
+  <thead>
+    <tr><th>Korak</th><th>Računanje</th><th>Rezultat</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>10</td><td>10</td></tr>
+    <tr><td>2</td><td>10 + (-3)</td><td>7</td></tr>
+    <tr><td>3</td><td>7 + 2</td><td>9</td></tr>
+    <tr><td>4</td><td>9 + 4</td><td>13</td></tr>
+  </tbody>
+</table>
+
 <h2>Pitanja za samoevaluaciju</h2>
 <ul>
-  <li>Koji je osnovni slučaj u ovom zadatku i zašto je neophodan?</li>
-  <li>Kako koristimo rešenje manjeg problema za n-1 elemenata da bismo rešili ceo problem?</li>
-  <li>Kako bi izgledalo rešenje kada bismo koristili iteraciju umesto rekurzije?</li>
-  <li>Šta bi se desilo da izostavimo osnovni slučaj?</li>
+  <li>Zašto nam je potreban osnovni slučaj u rekurziji?</li>
+  <li>Kako funkcija koristi rezultat manjeg problema?</li>
+  <li>Šta bi se desilo ako bismo izostavili osnovni slučaj?</li>
+  <li>Kako bi izgledala iterativna verzija istog algoritma?</li>
 </ul>
 
+<h2>Zadaci za vežbu</h2>
 <div class="zadatak">
-Za vežbu: Implementirati rekurzivnu metodu koja određuje proizvod n datih brojeva.  
+Napiši rekurzivnu funkciju koja računa <b>proizvod</b> n brojeva.  
 Na primer, za niz {2, 3, 4} rezultat treba da bude 24.
+</div>
+
+<h1>Pomoć – Zbir n brojeva</h1>
+
+<div class="napomena">
+Seti se da u svakom koraku sabiraš samo poslednji broj sa već poznatim zbirом.  
+To je suština induktivnog načina razmišljanja.
+</div>
+
+<p>
+Osnovni slučaj: kada postoji samo jedan broj, zbir je taj broj.  
+Induktivni korak: dodaj sledeći broj i pozovi funkciju ponovo za manji skup brojeva.
+</p>
+
+<p>
+Na primer, za niz [10, -3, 2, 4]:
+</p>
+<ul>
+  <li>Zbir(1) = 10</li>
+  <li>Zbir(2) = Zbir(1) + (-3) = 7</li>
+  <li>Zbir(3) = Zbir(2) + 2 = 9</li>
+  <li>Zbir(4) = Zbir(3) + 4 = 13</li>
+</ul>
+
+<div class="napomena">
+Induktivno rekurzivni pristup ne samo da rešava problem, već nas uči <b>kako da razmišljamo algoritamski</b> — korak po korak, koristeći ranije dobijene rezultate.
 </div>
