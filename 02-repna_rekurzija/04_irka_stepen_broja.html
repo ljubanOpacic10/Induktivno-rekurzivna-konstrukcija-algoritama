@@ -1,0 +1,110 @@
+<h1>Stepen broja</h1>
+
+<h2>Motivacija</h2>
+<p>
+Računanje stepena broja je jedan od najčešćih zadataka u matematici i programiranju.  
+Na primer, 2³ znači da broj 2 treba pomnožiti sam sa sobom tri puta: 2 × 2 × 2 = 8.  
+Umesto da odmah koristimo ugrađene funkcije, hajde da analiziramo kako se ova operacija može konstruisati <b>induktivno</b>.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan jednostavan način je korišćenje petlje koja ponavlja množenje x sa samim sobom n puta.  
+Ovakav algoritam radi, ali ne pokazuje <b>način razmišljanja</b> – kako se rezultat gradi korak po korak.  
+Da bismo razumeli suštinu, pokušaćemo da formulišemo algoritam koji sledi induktivnu logiku.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Posmatrajmo stepen broja xⁿ.  
+Ako želimo da ga izračunamo induktivno, možemo posmatrati odnos između xⁿ i xⁿ⁻¹  
+(xⁿ = x × xⁿ⁻¹).<br>
+Drugim rečima, ako znamo vrednost xⁿ⁻¹, samo je potrebno da rezultat pomnožimo sa još jednim x.
+</p>
+
+<div class="napomena">
+<p><b>Osnovni slučaj</b> — kada je n = 0, rezultat je 1 (jer je svaki broj na nultom stepenu jednak 1).</p>
+<p><b>Induktivni korak</b> — ako znamo xⁿ⁻¹, tada je xⁿ = x × xⁿ⁻¹.</p>
+</div>
+
+<h2>Pravilan pristup</h2>
+<p>
+Koristićemo repno-rekurzivnu funkciju koja postepeno gradi rezultat.  
+Funkcija prima tri parametra:  
+</p>
+
+<div class="napomena">
+<p><b>x</b> — broj koji stepenujemo,</p>
+<p><b>s</b> — trenutna vrednost proizvoda (početno je 1),</p>
+<p><b>n</b> — broj preostalih množenja koja treba obaviti.</p>
+</div>
+
+<p>
+Kada n dostigne 0, rezultat je gotov i funkcija vraća konačnu vrednost.
+</p>
+
+<xmp class="primer_ta">
+double Stepen(double x, double s, int n)
+{
+    if (n == 0)
+        return s;
+    return Stepen(x, s * x, n - 1);
+}
+
+double Stepen(double x, int n)
+{
+    return Stepen(x, 1.0, n);
+}
+
+// Ulaz: broj x i stepen n
+// Izlaz: vrednost xⁿ
+</xmp>
+
+<p>
+Tok izvršavanja možemo pratiti na primeru x = 2 i n = 3:
+</p>
+
+<p>
+Stepen(2, 1, 3) => početni poziv, s = 1, još treba da pomnožimo tri puta<br>
+Stepen(2, 2, 2) => s = 1 × 2 = 2, preostalo množenje: 2 puta<br>
+Stepen(2, 4, 1) => s = 2 × 2 = 4, preostalo množenje: 1 put<br>
+Stepen(2, 8, 0) => s = 4 × 2 = 8, n = 0, kraj rekurzije<br>
+</p>
+
+<p>
+Dakle, funkcija se završava kada <b>n = 0</b> i vraća konačan rezultat <b>s = 8</b>.  
+To znači da je <b>2³ = 8</b>.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>x = 2<br>n = 3</td><td>8.00000</td></tr>
+<tr><td>x = 5<br>n = 0</td><td>1.00000</td></tr>
+<tr><td>x = 3<br>n = 4</td><td>81.00000</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Koji je osnovni slučaj u ovom algoritmu i zašto je potreban?</p>
+<p>Zašto koristimo s kao pomoćni parametar u funkciji?</p>
+<p>Kako funkcija zna kada da se zaustavi?</p>
+<p>Kako bi izgledalo iterativno rešenje istog problema?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja računa xⁿ i za slučaj kada je n negativan (x⁻ⁿ = 1 / xⁿ).<br>
+2. Napiši funkciju koja računa kvadrat broja (x²) bez korišćenja rekurzije.<br>
+3. Pokušaj da napišeš funkciju koja koristi samo jednu funkciju (bez pomoćnog parametra s).<br>
+4. Objasni gde se u svakom od ovih zadataka koristi induktivni korak.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Induktivno razmišljanje u ovom zadatku podrazumeva da razumemo kako se svaki sledeći rezultat gradi iz prethodnog.  
+Ako znamo xⁿ⁻¹, jednostavno ga množimo sa x da bismo dobili xⁿ.  
+Repno-rekurzivna funkcija samo automatizuje ovaj proces, bez dodatnih računanja nakon poziva funkcije.
+</div>

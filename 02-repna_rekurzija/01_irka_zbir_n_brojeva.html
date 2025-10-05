@@ -1,0 +1,84 @@
+<h1>Zbir n brojeva</h1>
+
+<h2>Motivacija</h2>
+<p>
+Često je potrebno izračunati zbir većeg broja elemenata.  
+Na primer, želimo da saberemo rezultate ispita svih učenika u odeljenju da bismo kasnije izračunali prosečan broj bodova.  
+Na prvi pogled, deluje da je dovoljno samo redom sabirati brojeve, ali hajde da vidimo kako ovaj problem
+možemo posmatrati <b>induktivno</b>.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan jednostavan način bio bi da koristimo petlju i redom sabiramo brojeve.  
+Iako radi, ovde ne vidimo induktivnu logiku niti razvijamo sistematski način razmišljanja.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Suma <i>n</i> brojeva može se razložiti na manji problem:  
+zbir prvih <i>n</i> brojeva jednak je zbiru prvih <i>n−1</i> brojeva plus poslednji broj.  
+Tako dobijamo prirodnu osnovu za induktivnu konstrukciju algoritma:
+</p>
+
+<div class="napomena">
+Za svaki problem treba pronaći:
+<p><b>Osnovni slučaj</b> — kada je n = 0 (zbir je 0).</p>
+<p><b>Induktivni korak</b> — ako znamo zbir prvih n−1 brojeva, dodajemo poslednji i dobijamo zbir prvih n brojeva.</p>
+</div>
+
+<h2>Pravilan pristup</h2>
+<p>
+Umesto iteracije, možemo formulisati isti postupak rekurzivno.  
+Na taj način jasno pratimo induktivnu strukturu — polazimo od poznatog slučaja i nadovezujemo novi.
+</p>
+
+<xmp class="primer_ta">
+int UcitajISaberiNBrojeva(int n, int zbir)
+{
+    if (n == 0)
+        return zbir;
+    int broj = int.Parse(Console.ReadLine());
+    return UcitajISaberiNBrojeva(n - 1, zbir + broj);
+}
+
+// Ulaz: n (broj elemenata), a zatim n brojeva
+// Izlaz: zbir svih brojeva
+</xmp>
+
+<p>
+Ovo je primer <b>repno-rekurzivne funkcije</b> – nakon rekurzivnog poziva nema više izračunavanja.
+To omogućava kompajleru da ovaj oblik lako prevede u iteraciju, čime algoritam postaje efikasniji.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>3<br>1 2 3</td><td>6</td></tr>
+<tr><td>4<br>2 2 2 2</td><td>8</td></tr>
+<tr><td>5<br>1 2 3 4 5</td><td>15</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Šta predstavlja osnovni slučaj u ovom algoritmu?</p>
+<p>Šta je induktivni korak i kako se primenjuje?</p>
+<p>Zašto je ova funkcija repno-rekurzivna?</p>
+<p>Kako bi se ovaj algoritam mogao napisati iterativno?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Izmeni algoritam tako da umesto zbira računa proizvod n brojeva.<br>
+2. Napiši novu funkciju koja izračunava zbir samo parnih brojeva.<br>
+3. Objasni kako se induktivni pristup primenjuje u svakom od ova tri slučaja.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Podseti se da je indukcija način razmišljanja gde se polazi od poznatog (jednostavnog) slučaja
+i dodaje korak kojim se izgrađuje opšte rešenje.  
+U ovom primeru, ako znaš zbir prvih n−1 brojeva, jedino što treba da uradiš jeste da dodaš poslednji broj.
+</div>

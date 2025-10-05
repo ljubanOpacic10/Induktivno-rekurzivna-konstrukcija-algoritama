@@ -1,0 +1,91 @@
+<h1>Broj i zbir cifara broja</h1>
+
+<h2>Motivacija</h2>
+<p>
+Kada posmatramo broj, često nas interesuju njegove cifre – njihov broj i njihov zbir.  
+Na primer, ako imamo broj 1234, on ima 4 cifre, a njihov zbir je 10.  
+Ovakvi zadaci su idealni za vežbanje induktivnog razmišljanja jer broj možemo posmatrati kao niz manjih delova – njegovih cifara.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan način bio bi da broj pretvorimo u string, zatim prolazimo kroz sve karaktere i sabiramo njihove numeričke vrednosti.  
+Iako funkcionalno tačno, ovde ne koristimo algoritamsko razmišljanje o broju kao matematičkoj celini.  
+Naš cilj je da rešenje izvedemo induktivno, bez oslanjanja na tekstualne operacije.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Posmatrajmo broj <i>n</i>.  
+Ako brojimo cifre induktivno, broj i zbir cifara broja <i>n</i> jednaki su broju i zbiru cifara broja <i>n/10</i>,  
+uvećanih za doprinos poslednje cifre <i>n % 10</i>.  
+Dakle, možemo reći:
+</p>
+
+<div class="napomena">
+<p><b>Osnovni slučaj</b> — kada je n = 0, broj cifara i zbir cifara su 0.</p>
+<p><b>Induktivni korak</b> — ako znamo broj i zbir cifara broja n/10, onda samo dodajemo još jednu cifru (n % 10).</p>
+</div>
+
+<h2>Pravilan pristup</h2>
+<p>
+Rešenje možemo ostvariti jednostavnom rekurzijom koja računa od najmanjeg ka većem problemu.  
+Koristićemo dve funkcije — jednu koja broji cifre, i drugu koja računa zbir cifara.
+</p>
+
+<xmp class="primer_ta">
+int BrojCifara(int n)
+{
+    if (n == 0)
+        return 0;
+    return 1 + BrojCifara(n / 10);
+}
+
+int ZbirCifara(int n)
+{
+    if (n == 0)
+        return 0;
+    return (n % 10) + ZbirCifara(n / 10);
+}
+
+// Ulaz: ceo broj n
+// Izlaz: broj cifara i zbir cifara
+</xmp>
+
+<p>
+Ove dve funkcije ilustruju isti obrazac razmišljanja:  
+polazimo od jednostavnog slučaja (n = 0), zatim u svakom koraku rešavamo manji deo broja, sve dok ne obradimo sve cifre.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>123</td><td>3 6</td></tr>
+<tr><td>4095</td><td>4 18</td></tr>
+<tr><td>7</td><td>1 7</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Šta predstavlja osnovni slučaj u ovim funkcijama?</p>
+<p>Zašto se koristi deljenje sa 10 i ostatak pri deljenju sa 10?</p>
+<p>Koja vrednost se dodaje zbiru u svakom koraku rekurzije?</p>
+<p>Kako bi se ove funkcije mogle objediniti u jednu koja vraća oba rezultata?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja vraća zbir parnih cifara broja.<br>
+2. Napiši funkciju koja računa proizvod cifara broja.<br>
+3. Napiši funkciju koja proverava da li broj ima više parnih ili neparnih cifara.<br>
+4. Objasni kako se induktivni pristup primenjuje u svakom od zadataka.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Induktivni pristup znači da problem svodimo na jednostavniji oblik.  
+Kada se broj deli sa 10, uklanjamo poslednju cifru, pa svaka sledeća rekurzija obrađuje kraći broj.  
+Kada dostignemo n = 0, vraćamo se kroz sve korake sabirajući ili brojeći cifre.
+</div>

@@ -1,0 +1,101 @@
+<h1>Prva negativna temperatura</h1>
+
+<h2>Motivacija</h2>
+<p>
+Na meteorološkoj stanici svakog dana meri se temperatura.  
+Želimo da pronađemo <b>prvu negativnu temperaturu</b> — prvi dan kada je temperatura bila ispod nule.  
+Ovaj zadatak pokazuje kako rekurzija može da se koristi za pretragu elemenata, a ne samo za računanje zbirnih vrednosti.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Jedan jednostavan način je da koristimo petlju i proveravamo redom svaku temperaturu dok ne naiđemo na prvu negativnu.  
+Takvo rešenje radi, ali induktivni pristup nam omogućava da isto postignemo <b>bez eksplicitne petlje</b> —  
+kroz logiku koja sama „pamti“ gde se trenutno nalazi.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Funkcija prima dve vrednosti: trenutnu poziciju <i>i</i> i ukupan broj elemenata <i>n</i>.  
+Ako je i > n, nema više elemenata i funkcija vraća -1.  
+U suprotnom, učitavamo sledeću temperaturu:
+</p>
+
+<div class="napomena">
+<p>• Ako je negativna, odmah vraćamo trenutnu poziciju (to je prva negativna vrednost).</p>
+<p>• Ako nije negativna, prelazimo na sledeću poziciju, tj. pozivamo funkciju za i + 1.</p>
+</div>
+
+<h2>Pravilan pristup</h2>
+<p>
+Koristimo repno-rekurzivnu funkciju koja korak po korak proverava svaku temperaturu.
+</p>
+
+<xmp class="primer_ta">
+int PrviNegativan(int i, int n)
+{
+    if (i > n)
+        return -1;
+
+    int x = int.Parse(Console.ReadLine());
+    return x < 0 ? i : PrviNegativan(i + 1, n);
+}
+
+int PrviNegativan(int n)
+{
+    return PrviNegativan(1, n);
+}
+
+// Ulaz: broj n i n temperatura
+// Izlaz: pozicija prve negativne temperature ili -1 ako nema negativnih
+</xmp>
+
+<h2>Objašnjenje toka izvršavanja</h2>
+<p>
+Tok izvršavanja možemo pratiti na primeru:<br>
+n = 5<br>
+Uneti brojevi: 3, 8, -2, 1, 0
+</p>
+
+<p>
+PrviNegativan(1, 5) => učitavamo 3 (nije negativna) → prelazimo na i = 2<br>
+PrviNegativan(2, 5) => učitavamo 8 (nije negativna) → prelazimo na i = 3<br>
+PrviNegativan(3, 5) => učitavamo -2 (negativna!) → vraćamo poziciju 3<br>
+</p>
+
+<p>
+Dakle, funkcija se završava kada pronađe prvi negativan broj i vraća njegovu poziciju — u ovom slučaju <b>3</b>.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>5<br>3 8 -2 1 0</td><td>3</td></tr>
+<tr><td>4<br>1 2 3 4</td><td>-1</td></tr>
+<tr><td>6<br>5 4 3 2 -1 -5</td><td>5</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Koji je osnovni slučaj u ovom algoritmu?</p>
+<p>Zašto funkcija odmah vraća poziciju kada pronađe negativan broj?</p>
+<p>Kako funkcija zna kada da se zaustavi?</p>
+<p>Kako bi izgledalo iterativno rešenje istog problema?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja pronalazi prvu pozitivnu temperaturu.<br>
+2. Napiši funkciju koja pronalazi poslednju negativnu temperaturu.<br>
+3. Napiši funkciju koja vraća koliko ukupno ima negativnih temperatura.<br>
+4. Objasni kako se u svim ovim zadacima koristi induktivni pristup.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Induktivno razmišljanje u ovom zadatku znači da svaki korak rešava manji deo problema:  
+ako trenutna temperatura nije negativna, problem se svodi na preostale temperature.  
+Kada dođemo do prve negativne vrednosti ili do kraja liste, imamo rešenje.
+</div>

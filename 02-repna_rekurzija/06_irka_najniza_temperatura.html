@@ -1,0 +1,113 @@
+<h1>Najniža temperatura</h1>
+
+<h2>Motivacija</h2>
+<p>
+Zamisli da svakog dana meriš temperaturu i želiš da pronađeš najhladniji dan u mesecu.  
+Možeš lako da napišeš petlju koja prolazi kroz sve vrednosti i pamti najmanju,  
+ali hajde da vidimo kako se ovaj problem može rešiti <b>induktivno</b> — korak po korak, rekurzijom.
+</p>
+
+<h2>Naivno rešenje</h2>
+<p>
+Najjednostavnije je koristiti petlju i promenljivu koja pamti trenutni minimum.  
+Međutim, taj pristup ne pokazuje kako se rešenje gradi postupno — od jednostavnijeg ka složenijem problemu.  
+Induktivni pristup omogućava da se rešenje formira logičnim nizom koraka, gde svaka rekurzija rešava manji deo zadatka.
+</p>
+
+<h2>Analiza problema</h2>
+<p>
+Ako želimo da pronađemo najmanju vrednost među n brojeva, možemo to posmatrati ovako:  
+Najmanji od svih n brojeva je onaj koji je manji između poslednjeg učitanog broja i minimuma prethodnih n−1 brojeva.  
+Na taj način, rekurzivno rešavamo manji problem sve dok ne dođemo do osnovnog slučaja.
+</p>
+
+<div class="napomena">
+<p><b>Osnovni slučaj</b> — kada je n = 0, nema više brojeva za poređenje i trenutni minimum je konačan rezultat.</p>
+<p><b>Induktivni korak</b> — uporedi novi broj sa trenutnim minimumom i manju vrednost prosledi sledećem rekurzivnom pozivu.</p>
+</div>
+
+<h2>Pravilan pristup</h2>
+<p>
+Koristićemo repno-rekurzivnu funkciju koja prima:
+</p>
+
+<div class="napomena">
+<p><b>m</b> — trenutni minimum do sada pročitanih brojeva,</p>
+<p><b>n</b> — broj preostalih brojeva koje treba učitati.</p>
+</div>
+
+<p>
+Kada n postane 0, svi brojevi su obrađeni i funkcija vraća konačan minimum.
+</p>
+
+<xmp class="primer_ta">
+int Min(int m, int n)
+{
+    if (n == 0)
+        return m;
+    int t = int.Parse(Console.ReadLine());
+    return Min(Math.Min(m, t), n - 1);
+}
+
+int Min(int n)
+{
+    return Min(int.MaxValue, n);
+}
+
+// Ulaz: broj n (broj merenja) i zatim n temperatura
+// Izlaz: najmanja temperatura
+</xmp>
+
+<h2>Objašnjenje toka izvršavanja</h2>
+<p>
+Tok izvršavanja možemo pratiti na primeru:<br>
+n = 5<br>
+Uneti brojevi: 3, 8, 1, 2, 5
+</p>
+
+<p>
+Min(∞, 5) => učitavamo 3, trenutni minimum = min(∞, 3) = 3<br>
+Min(3, 4) => učitavamo 8, trenutni minimum = min(3, 8) = 3<br>
+Min(3, 3) => učitavamo 1, trenutni minimum = min(3, 1) = 1<br>
+Min(1, 2) => učitavamo 2, trenutni minimum = min(1, 2) = 1<br>
+Min(1, 1) => učitavamo 5, trenutni minimum = min(1, 5) = 1<br>
+Min(1, 0) => n = 0, kraj rekurzije, rezultat = 1<br>
+</p>
+
+<p>
+Dakle, funkcija se završava kada je <b>n = 0</b> i vraća konačnu vrednost <b>1</b>,  
+što znači da je najniža temperatura među unetima 3, 8, 1, 2, 5 jednaka <b>1</b>.
+</p>
+
+<h2>Primeri</h2>
+<table class="tabela">
+<thead>
+<tr><th>Ulaz</th><th>Očekivani izlaz</th></tr>
+</thead>
+<tbody>
+<tr><td>5<br>3 8 1 2 5</td><td>1</td></tr>
+<tr><td>4<br>10 7 15 9</td><td>7</td></tr>
+<tr><td>3<br>-2 -5 0</td><td>-5</td></tr>
+</tbody>
+</table>
+
+<h2>Pitanja za samoproveru</h2>
+<p>Šta predstavlja osnovni slučaj u ovom algoritmu?</p>
+<p>Zašto se parametar m prosleđuje kroz svaki poziv funkcije?</p>
+<p>Kako funkcija zna kada da se zaustavi?</p>
+<p>Šta bi se desilo ako bismo koristili n+1 umesto n−1?</p>
+
+<h2>Zadaci za vežbu</h2>
+<div class="zadatak">
+1. Napiši funkciju koja računa maksimalnu vrednost n brojeva (najvišu temperaturu).<br>
+2. Prilagodi funkciju tako da brojevi budu u nizu, a ne da se unose sa tastature.<br>
+3. Napiši verziju koja računa razliku između maksimalne i minimalne vrednosti.<br>
+4. Objasni kako se u svakom od ovih zadataka koristi induktivni princip.
+</div>
+
+<h2>Pomoć</h2>
+<div class="napomena">
+Ovaj zadatak pokazuje tipičan obrazac induktivnog razmišljanja:  
+svaki novi broj se poredi sa trenutnim minimumom, a manji od njih postaje novi „privremeni rezultat“.  
+Rekurzija se završava tek kada nema više brojeva za poređenje — tada se vraća konačni minimum.
+</div>
