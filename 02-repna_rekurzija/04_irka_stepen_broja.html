@@ -41,8 +41,9 @@ Ovo je suština induktivnog razmišljanja: veći problem rešavamo tako što isk
 
 <h2>Pravilan pristup</h2>
 <p>
-Rešenje možemo zapisati kao rekurzivnu funkciju koja postepeno „gradi“ rezultat.  
-U ovom primeru koristićemo <b>repnu rekurziju</b> (tail recursion), jer funkcija nakon rekurzivnog poziva više ne obavlja nikakve dodatne izračune — samo vraća rezultat.
+Zadatak možemo rešiti i repno-rekurzivnom funkcijom, koja odgovara iterativnom algoritmu. Funkcija
+prima broj x, tekući stepen s i broj n koji određuje koliko još puta broj s treba pomnožiti sa x da bi se
+izračunao traženi stepen.
 </p>
 
 <p>
@@ -60,17 +61,32 @@ Kada n postane 0, to znači da smo uradili sva potrebna množenja i rezultat vra
 </p>
 
 <xmp class="primer_ta">
-double Stepen(double x, double s, int n)
+using System;
+
+class Program
 {
+  // Rekurzivna funkcija sa repnom rekurzijom
+  static double Stepen(double x, double s, int n)
+  {
     if (n == 0)
-        return s;                 // osnovni slučaj
-    return Stepen(x, s * x, n - 1); // induktivni korak
+      return s;
+    return Stepen(x, s * x, n - 1);
+  }
+
+  // Pomoćna funkcija za jednostavno pozivanje
+  static double Stepen(double x, int n)
+  {
+    return Stepen(x, 1.0, n);
+  }
+
+  static void Main()
+  {
+    double x = double.Parse(Console.ReadLine());
+    int n = int.Parse(Console.ReadLine());
+    Console.WriteLine(Stepen(x, n).ToString("0.00000"));
+  }
 }
 
-double Stepen(double x, int n)
-{
-    return Stepen(x, 1.0, n);     // inicijalni poziv
-}
 </xmp>
 
 <h2>Tok izvršavanja</h2>

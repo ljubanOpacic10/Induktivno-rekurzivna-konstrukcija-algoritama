@@ -43,8 +43,13 @@ To je upravo induktivni pristup.
 
 <h2>Pravilan pristup</h2>
 <p>
-Koristićemo <b>repno–rekurzivnu funkciju</b> koja postepeno sabira brojeve dok ih korisnik unosi.  
-Funkcija ima dva parametra:
+Tražena tačka je aritmetička sredina unetih tačaka.
+Zbir možemo izračunati i korišćenjem repno-rekurzivne funkcije, koja odgovara iterativnom algoritmu
+i koju će kompilator verovatno optimizovati tako što će je automatski prevesti u iterativni izvršivi
+program. Funkcija prima zbir obrađenih brojeva do trenutka njenog poziva, kao i broj n preostalih brojeva
+koje treba učitati i sabrati. Kada je n = 0, svi brojevi su sabrani i funkcija vraća taj akumulirani zbir.
+U suprotnom se učitava novi broj i funkcija se rekurzivno poziva, umanjujući broj preostalih sabiraka, a
+uvećavajući zbir za taj učitani broj.
 </p>
 
 <div class="napomena">
@@ -57,21 +62,37 @@ Kada n postane 0, znači da smo uneli sve brojeve i možemo vratiti konačan zbi
 </p>
 
 <xmp class="primer_ta">
-double ZbirUcitanihBrojeva(int n, double zbir)
+using System;
+
+class Program
 {
+  // Učitava n realnih brojeva i izračunava njihov zbir (repna rekurzija)
+  static double ZbirUcitanihBrojeva(int n, double zbir)
+  {
     if (n == 0)
-        return zbir; // osnovni slučaj
+      return zbir;
     double x = double.Parse(Console.ReadLine());
-    return ZbirUcitanihBrojeva(n - 1, zbir + x); // induktivni korak
-}
+    return ZbirUcitanihBrojeva(n - 1, zbir + x);
+  }
 
-double ZbirUcitanihBrojeva(int n)
-{
+  // Preklopljena funkcija za jednostavan poziv
+  static double ZbirUcitanihBrojeva(int n)
+  {
     return ZbirUcitanihBrojeva(n, 0.0);
-}
+  }
 
-// Ulaz: broj n i n realnih brojeva
-// Izlaz: aritmetička sredina unetih brojeva
+  static void Main()
+  {
+    // Broj tačaka
+    int n = int.Parse(Console.ReadLine());
+
+    // Zbir koordinata svih tačaka
+    double s = ZbirUcitanihBrojeva(n);
+
+    // Izračunavamo i ispisujemo prosek koordinata svih tačaka
+    Console.WriteLine((s / n).ToString("0.00000"));
+  }
+}
 </xmp>
 
 <h2>Tok izvršavanja</h2>

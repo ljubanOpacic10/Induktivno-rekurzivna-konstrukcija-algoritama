@@ -9,12 +9,18 @@ U drugim situacijama, zbir može predstavljati ukupan trošak na računu, broj b
 
 <p>
 Na prvi pogled, deluje da je dovoljno samo redom sabirati brojeve.  
-Ali, hajde da problem sagledamo <b>induktivno</b> — korak po korak, kao što to radi računar.
+Ali, hajde da problem sagledamo <b>induktivno</b> — korak po korak.
 </p>
 
 <div class="napomena">
 Kada učimo da razmišljamo induktivno, mi u stvari učimo kako da veliki problem razložimo na više jednostavnih koraka koji se prirodno ponavljaju.
 </div>
+
+<p>
+Zadatak je moguće rešiti i pomoću repno-rekurzivne funkcije, koja je algoritamski veoma slična iterativnom algoritmu. Funkcija je repno-rekurzivna ako se nakon rekurzivnog poziva ne vrše dalja izračunavanja.
+Repna rekurzija je značajna zbog toga je mnogi kompilatori programskih jezika mogu automatski pretvoriti
+i jednostavno prevesti u iteraciju, čime se dobija i vremenski i memorijski efikasniji algoritam.
+</p>
 
 <h2>Naivno rešenje</h2>
 <p>
@@ -56,18 +62,30 @@ Rekurzija ovde ima vrlo prirodnu logiku:
 </ul>
 
 <xmp class="primer_ta">
-static int Zbir(int[] niz, int n)
-{
-    if (n == 1) return niz[0];             // osnovni slučaj
-    return Zbir(niz, n - 1) + niz[n - 1];  // induktivni korak
-}
+using System;
 
-// Primer poziva u Main metodi:
-static void Main()
+class Program
 {
-    int[] brojevi = { 10, -3, 2, 4 };
-    int rezultat = Zbir(brojevi, brojevi.Length);
-    Console.WriteLine(rezultat); // Ispis: 13
+  // Repno-rekurzivna funkcija za zbir n brojeva
+  static int UcitajISaberiNBrojeva(int n, int zbir)
+  {
+    if (n == 0)
+      return zbir;
+    int broj = int.Parse(Console.ReadLine());
+    return UcitajISaberiNBrojeva(n - 1, zbir + broj);
+  }
+
+  // Preklopljena funkcija za inicijalni poziv
+  static int UcitajISaberiNBrojeva(int n)
+  {
+    return UcitajISaberiNBrojeva(n, 0);
+  }
+
+  static void Main()
+  {
+    int n = int.Parse(Console.ReadLine());
+    Console.WriteLine(UcitajISaberiNBrojeva(n));
+  }
 }
 </xmp>
 

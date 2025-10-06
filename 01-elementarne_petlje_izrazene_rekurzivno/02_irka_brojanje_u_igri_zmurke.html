@@ -21,10 +21,6 @@ Zato je ovo više od igre – pomaže nam da naučimo važan obrazac razmišljan
 <h2>Naivno rešenje</h2>
 <p>
 Prva ideja mogla bi biti da sve brojeve ručno napišemo u programu: 5, 10, 15, 20... sve do <i>x</i>.  
-Ali zamislite da je <i>x = 1000</i>!  
-To bi bilo veoma nepraktično.
-
-Potrebno nam je <b>opštije rešenje</b> koje radi za svaki dozvoljeni unos.
 </p>
 
 <xmp class="primer_ta">
@@ -40,12 +36,11 @@ static void Zmurke(int x, int k)
 Zmurke(100, 5);
 </xmp>
 
-<div class="napomena">
-Naivno rešenje nam pomaže da vidimo ograničenja „ručnog” pristupa
-i da shvatimo zašto nam je potreban sistematičan, algoritamski pristup.
-</div>
-
 <h2>Analiza problema</h2>
+<p>
+Iako ovaj kod ispravno računa zbir, ne pomaže nam da shvatimo <b>princip postepenog građenja rešenja</b>.  
+U induktivnim algoritmima, želimo da vidimo kako se rešenje gradi na osnovu manjeg dela problema.
+</p>
 <p>
 Razmislimo pažljivije.  
 Da bismo ispisali sve brojeve deljive sa 5 od 5 do <i>x</i>, možemo reći:

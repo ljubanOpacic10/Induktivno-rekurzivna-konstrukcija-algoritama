@@ -45,22 +45,38 @@ U svakom koraku broj postaje manji, sve dok ne ostane 0.
 </p>
 
 <xmp class="primer_ta">
-int BrojCifara(int n)
-{
-    if (n == 0)
-        return 0;              // osnovni slučaj
-    return 1 + BrojCifara(n / 10); // induktivni korak
-}
+using System;
 
-int ZbirCifara(int n)
+class Program
 {
-    if (n == 0)
-        return 0;                    // osnovni slučaj
-    return (n % 10) + ZbirCifara(n / 10); // induktivni korak
-}
+  // Rekurzivna funkcija za broj i zbir cifara
+  static void brojIZbirCifara_(int n, ref int broj, ref int zbir)
+  {
+    if (n > 0)
+    {
+      broj++;
+      zbir += n % 10;
+      brojIZbirCifara_(n / 10, ref broj, ref zbir);
+    }
+  }
 
-// Ulaz: ceo broj n
-// Izlaz: broj cifara i zbir cifara
+  // Omotač funkcije za lakši poziv
+  static void brojIZbirCifara(int n, out int broj, out int zbir)
+  {
+    broj = 1;
+    zbir = n % 10;
+    brojIZbirCifara_(n / 10, ref broj, ref zbir);
+  }
+
+  // Glavni program
+  static void Main()
+  {
+    int n = int.Parse(Console.ReadLine());
+    int broj, zbir;
+    brojIZbirCifara(n, out broj, out zbir);
+    Console.WriteLine(broj + " " + zbir);
+  }
+}
 </xmp>
 
 <div class="napomena">

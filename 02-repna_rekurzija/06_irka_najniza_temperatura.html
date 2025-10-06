@@ -34,35 +34,65 @@ Dakle, ako znamo minimum za manji skup, lako možemo izračunati minimum za već
 </div>
 
 <h2>Pravilan pristup</h2>
+<h2>Definicija funkcije</h2>
 <p>
-Koristićemo <b>repno–rekurzivnu funkciju</b> koja u svakom koraku obrađuje po jedan broj i prosleđuje trenutni minimum dalje.
+Definisaćemo funkciju koja određuje minimum između vrednosti svog prvog prosleđenog parametra i vrednosti <i>n</i> brojeva koji se učitavaju sa standardnog ulaza.
+Taj prvi parametar predstavlja trenutnu vrednost minimuma tokom iteracije (i može se inicijalizovati na vrednost +∞, tj. vrednost najvećeg podatka celobrojnog tipa).
 </p>
-
+<p>
+Ako je <b>n = 0</b>, ta trenutna vrednost minimuma je ujedno i tražena vrednost minimuma svih brojeva (do tada su svi oni učitani i obrađeni).
+U suprotnom se učitava naredni broj, poredi se sa vrednošću minimuma i manji od njih se prosleđuje sledećem rekurzivnom pozivu (kao trenutna vrednost minimuma svih do tada učitanih brojeva).
+</p>
 <div class="napomena">
-<p><b>m</b> — trenutni minimum do sada pročitanih brojeva,</p>
-<p><b>n</b> — broj preostalih brojeva koje treba učitati.</p>
+Prvi parametar možemo inicijalizovati na „beskonačno“ kao na primer <code>int.MaxValue</code> kod celobrojnih vrednosti.
 </div>
 
+<h2>Primer izračunavanja</h2>
 <p>
-Kada n postane 0, svi brojevi su obrađeni i funkcija vraća konačan minimum.
+Ako se redom učitavaju brojevi 3, 8, 1, 2, 5, izvršiće se sledeće izračunavanje:
 </p>
+<pre>
+Min(5) = Min(∞, 5)
+  = Min(min(∞, 3), 4)
+  = Min(3, 4)
+  = Min(min(3, 8), 3)
+  = Min(3, 3)
+  = Min(min(3, 1), 2)
+  = Min(1, 2)
+  = Min(min(1, 2), 1)
+  = Min(1, 1)
+  = Min(min(1, 5), 0)
+  = Min(1, 0)
+  = 1.
+</pre>
 
 <xmp class="primer_ta">
-int Min(int m, int n)
+using System;
+
+class Program
 {
+  // Rekurzivna funkcija za pronalaženje minimuma
+  static int Min(int m, int n)
+  {
     if (n == 0)
-        return m; // osnovni slučaj
+      return m;
     int t = int.Parse(Console.ReadLine());
-    return Min(Math.Min(m, t), n - 1); // induktivni korak
-}
+    return Min(Math.Min(m, t), n - 1);
+  }
 
-int Min(int n)
-{
+  // Pomoćna funkcija za inicijalizaciju minimuma
+  static int Min(int n)
+  {
     return Min(int.MaxValue, n);
-}
+  }
 
-// Ulaz: broj n (broj merenja) i zatim n temperatura
-// Izlaz: najmanja temperatura
+  // Ulazna tačka programa
+  static void Main()
+  {
+    int n = int.Parse(Console.ReadLine());
+    Console.WriteLine(Min(n));
+  }
+}
 </xmp>
 
 <h2>Objašnjenje toka izvršavanja</h2>

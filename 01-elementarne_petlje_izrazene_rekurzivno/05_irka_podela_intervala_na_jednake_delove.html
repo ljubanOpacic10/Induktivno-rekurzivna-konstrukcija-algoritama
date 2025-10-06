@@ -2,10 +2,22 @@
 
 <h2>Motivacija</h2>
 <p>
-Zamisli da imaš lenjir ili čokoladicu od <i>a</i> do <i>b</i> i želiš da je podeliš
+Zamisli da čokoladicu i želiš da je podeliš
 na jednake delove.  
-Da li bi odmah označio sve podeljene tačke ili bi krenuo od početka i dodavao jednu po jednu?  
-Takvo postupno razmišljanje nam pomaže da problem rešimo sistematski – baš onako kako računar radi.
+Kako bi je podelio?
+Hajde da pogledamo kako bi uradili sličan algoritamski zadatak.
+</p>
+
+<p>
+Zadatak glasi: Napisati program kojim se ispisuju vrednosti n ravnomerno razmaknutih realnih brojeva iz intervala
+[a, b], tako da je prva vrednost a, a poslednja b.
+</p>
+<p>
+<b>Ulaz</b>: Prva linija standardnog ulaza sadrži prirodan broj n (1 < n ≤ 20), druga linija sadrži realan
+broj a, a treća linija realan broj b, pri čemu je a < b.
+</p>
+<p>
+<b>Izlaz</b>: Na standardnom izlazu prikazati redom tražene brojeve, zaokružene na pet decimala, svaki u posebnoj liniji.
 </p>
 
 <div class="napomena">
@@ -35,8 +47,7 @@ Intervali(5, -1, 1);
 </xmp>
 
 <div class="napomena">
-Ovo daje tačan rezultat, ali ne koristi induktivno razmišljanje
-– mi unapred znamo koliko puta treba da ponovimo postupak.
+Ovo daje tačan rezultat, ali ne koristi induktivno razmišljanje. Hajde da vidimo kako možemo da primenimo induktivni pristup.
 </div>
 
 <h2>Analiza problema</h2>
@@ -67,6 +78,12 @@ Rekurzija nam omogućava da problem rešimo postepeno:
 <li><b>Osnovni slučaj:</b> Ako više nema tačaka za ispisivanje (n = 0), zaustavljamo se.</li>
 <li><b>Induktivni korak:</b> Ispišemo trenutnu tačku, pa ponovo pozovemo funkciju za preostale (n-1) tačaka, ali krećemo iz sledeće tačke <b>a + dx</b>.</li>
 </ul>
+
+<p>
+Možemo definisati funkciju koja ispisuje n brojeva na međusobnom rastojanju dx, krenuvši od broja
+a. Ako je broj n strogo pozitivan, ispisujemo broj a, a zatim ispisujemo n − 1 brojeva na rastojanju dx,
+krenuvši od broja a + dx.
+</p>
 
 <h2>Primer koda</h2>
 <xmp class="primer_ta">

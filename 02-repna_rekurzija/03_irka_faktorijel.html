@@ -41,22 +41,38 @@ Kada stignemo do 1, više nemamo šta da množimo — to je osnovni slučaj.
 
 <h2>Pravilan pristup</h2>
 <p>
-Funkciju možemo zapisati rekurzivno.  
-U svakom pozivu funkcija računa faktorijel manjeg broja dok ne dođe do osnovnog slučaja.  
-Postoji i repno–rekurzivna verzija koja je efikasnija, jer se ne mora „pamti“ više poziva.
+Zadatak je moguće rešiti i pomoću repno-rekurzivne funkcije, koja je algoritamski veoma slična iterativnom algoritmu. Funkcija je repno-rekurzivna ako se nakon rekurzivnog poziva ne vrše dalja izračunavanja.
+Repna rekurzija je značajna zbog toga je mnogi kompilatori programskih jezika mogu automatski pretvoriti
+i jednostavno prevesti u iteraciju, čime se dobija i vremenski i memorijski efikasniji algoritam.
+Definisaćemo rekurzivnu funkciju kojoj ćemo prosleđivati trenutnu vrednost broja i, broj n čiji se faktorijel izračunava i trenutnu vrednost proizvoda prirodnih brojeva manjih od i. U trenutku kada se dogodi
+da je i > n taj proizvod je traženi faktorijel. U suprotnom vršimo rekurzivni poziv uvećavajući brojač
+i za 1, i množeći proizvod brojem i.
 </p>
 
 <xmp class="primer_ta">
-int Faktorijel(int i, int n, int f)
-{
-    if (i > n)
-        return f;               // osnovni slučaj: nema više brojeva
-    return Faktorijel(i + 1, n, f * i); // induktivni korak
-}
+using System;
 
-int Faktorijel(int n)
+class Program
 {
+  // Repno–rekurzivna funkcija za faktorijel
+  static int Faktorijel(int i, int n, int f)
+  {
+    if (i > n)
+      return f;
+    return Faktorijel(i + 1, n, f * i);
+  }
+
+  // Poziv funkcije bez pomoćnih parametara
+  static int Faktorijel(int n)
+  {
     return Faktorijel(1, n, 1);
+  }
+
+  static void Main()
+  {
+    int n = int.Parse(Console.ReadLine());
+    Console.WriteLine(Faktorijel(n));
+  }
 }
 </xmp>
 

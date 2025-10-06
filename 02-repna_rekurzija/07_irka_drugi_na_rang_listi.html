@@ -40,33 +40,53 @@ Na taj način svaki korak zavisi samo od prethodnog stanja —
 
 <h2>Pravilan pristup</h2>
 <p>
-Koristićemo <b>repno–rekurzivnu funkciju</b> koja obrađuje po jedan broj i ažurira trenutna dva maksimuma.  
-Funkcija u svakom koraku „pamti“ samo ono što je važno — najveći i drugi najveći broj do tada.
+Zadatak možemo rešiti i repnom rekurzijom (koju neki kompilatori automatski optimizuju i pretvaraju u
+iteraciju). Definisaćemo rekurzivnu funkciju koja prima dva najveća elementa u delu niza koji je obrađen
+pre poziva te funkcije i broj n preostalih elemenata koje treba obraditi. Ako je n = 0 ceo niz je obrađen i
+funkcija može da vrati dotadašnjih drugi element po veličini. U suprotnom, učitava se naredni element
+x i vrši se rekurzivni poziv za preostalih n − 1 elemenata niza, pri čemu se po potrebi ažuriraju dva
+do tada najveća elementa. Ako je učitani element x veći od dotadašnjeg prvog maksimuma, onda je on novi
+prvi maksimum, a dotadašnji prvi maksimum je novi drugi maksimum. U suprotnom, ako je učitani element
+x veći od dotadašnjeg drugog maksimuma, tada se prvi maksimum ne menja, a element x postaje novi drugi
+maksimum. U suprotnom se ne menjaju ni prvi ni drugi maksimum.
 </p>
 
 <xmp class="primer_ta">
-int Drugi(int n, int prviMaks, int drugiMaks)
+using System;
+
+class Program
 {
-    if (n == 0)
-        return drugiMaks;
+    // Rekurzivna funkcija za pronalaženje drugog maksimuma
+    static int Drugi(int n, int prviMaks, int drugiMaks)
+    {
+        if (n == 0)
+            return drugiMaks;
 
-    int x = int.Parse(Console.ReadLine());
+        int x = int.Parse(Console.ReadLine());
 
-    if (x > prviMaks)
-        return Drugi(n - 1, x, prviMaks);      // novi maksimum
-    else if (x > drugiMaks)
-        return Drugi(n - 1, prviMaks, x);      // novi drugi maksimum
-    else
-        return Drugi(n - 1, prviMaks, drugiMaks); // ništa se ne menja
+        if (x > prviMaks)
+            return Drugi(n - 1, x, prviMaks);
+        else if (x > drugiMaks)
+            return Drugi(n - 1, prviMaks, x);
+        else
+            return Drugi(n - 1, prviMaks, drugiMaks);
+    }
+
+    // Pomoćna funkcija za inicijalizaciju
+    static int Drugi(int n)
+    {
+        return Drugi(n, int.MinValue, int.MinValue);
+    }
+
+    static void Main()
+    {
+        // Učitavanje broja elemenata
+        int n = int.Parse(Console.ReadLine());
+
+        // Ispis drugog maksimuma
+        Console.WriteLine(Drugi(n));
+    }
 }
-
-int Drugi(int n)
-{
-    return Drugi(n, int.MinValue, int.MinValue);
-}
-
-// Ulaz: broj n i zatim n rezultata (celih brojeva)
-// Izlaz: drugi najveći broj u listi
 </xmp>
 
 <div class="napomena">

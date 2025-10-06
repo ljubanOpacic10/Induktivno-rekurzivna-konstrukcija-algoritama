@@ -37,7 +37,13 @@ Zadatak možemo izraziti kao niz manjih odluka:
 
 <h2>Pravilan pristup</h2>
 <p>
-Rešenje možemo ostvariti repno–rekurzivnim pristupom, gde svaka funkcija proverava po jedan broj i odlučuje da li da nastavi pretragu.
+Zadatak se može rešiti definisanjem repno-rekurzivne funkcije, koja je veoma bliska iterativnom algoritmu. Funkcija prima tekuću poziciju i i ukupan broj elemenata n i treba da učita n − i + 1 elemenata
+(u intervalu pozicija [i, n]) i odredi poziciju prvog negativnog među njima (ili da vrati -1 ako među njima
+nema negativnih). U inicijalnom pozivu ćemo postaviti vrednost i = 1, da bi funkcija odredila poziciju
+prvog negativnog elementa u intervalu pozicija [1, n]. Ako je i > n, tada nema elemenata, pa funkcija može
+da vrati -1. U suprotnom se učitava prvi element (on je na poziciji i). Ako je on negativan, to je ujedno
+i prvi negativan i funkcija vraća poziciju i. U suprotnom se vrši rekurzivni poziv da bi se odredila
+pozicija prvog negativnog u delu niza između pozicija i + 1 i n.
 </p>
 
 <xmp class="primer_ta">
