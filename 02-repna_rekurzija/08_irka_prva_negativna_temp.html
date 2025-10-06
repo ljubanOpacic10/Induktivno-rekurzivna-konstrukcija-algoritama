@@ -47,22 +47,36 @@ pozicija prvog negativnog u delu niza između pozicija i + 1 i n.
 </p>
 
 <xmp class="primer_ta">
-int PrviNegativan(int i, int n)
+using System;
+
+class Program
 {
+  // Funkcija koja pronalazi poziciju prve negativne temperature
+  static int PrviNegativan(int i, int n)
+  {
     if (i > n)
-        return -1; // osnovni slučaj — kraj unosa
+      return -1;
 
     int x = int.Parse(Console.ReadLine());
-    return x < 0 ? i : PrviNegativan(i + 1, n);
-}
+    if (x < 0)
+      return i;
+    else
+      return PrviNegativan(i + 1, n);
+  }
 
-int PrviNegativan(int n)
-{
+  // Pomoćna funkcija za inicijalni poziv
+  static int PrviNegativan(int n)
+  {
     return PrviNegativan(1, n);
+  }
+
+  static void Main()
+  {
+    int n = int.Parse(Console.ReadLine());
+    Console.WriteLine(PrviNegativan(n));
+  }
 }
 
-// Ulaz: broj n (broj merenja) i n temperatura
-// Izlaz: pozicija prve negativne temperature ili -1 ako nema negativnih
 </xmp>
 
 <p>
